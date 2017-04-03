@@ -80,6 +80,8 @@ void Workspace::dump(StringStream& s) {
 }
 
 void Workspace::readFile(const StrView& filename) {
+	workspace_name = Path::basename(filename, false);
+
 	Path::getAbs(buildFilename, filename);
 	buildFileDir = Path::dirname(buildFilename);
 	buildFileDir += '/';
@@ -119,7 +121,6 @@ void Workspace::readProjectFile(const StrView& filename) {
 void Workspace::readJson(JsonReader& r) {
 	r.beginObject();
 	while (!r.endObject()) {
-		if (r.member("workspace_name",	workspace_name )) continue;
 		if (r.member("build_dir",	build_dir )) continue;
 		if (r.member("startup_project", startup_project)) continue;
 		if (r.member("unite_build",		unite_build)) continue;
