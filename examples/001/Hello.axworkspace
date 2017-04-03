@@ -1,0 +1,99 @@
+{
+	"config_list": ["Debug", "Release"],
+
+	//"multithread_build": false,
+	//"unite_build": false,
+	//"unite_mega_byte_per_file": 1,
+
+	"config": {
+		//TODO condition
+		//"if confing == Debug or os == windows": ......	
+		"config==Debug": {
+			"cpp_defines": ["DEBUG", "_DEBUG"]
+		},
+		"config==Release": {
+			"cpp_defines": ["NDEBUG"]
+		},
+		"cpp_defines": ["_UNICODE", "UNICODE"],
+
+		"warning_as_error": true,
+
+		"generator==vs2015": {
+			"cpp_defines":[]
+		},
+		"os==windows": {
+			"cpp_flags":[]
+		},
+		"os==macosx": {
+			"cpp_flags":[],
+			"link_flags": [	"-ObjC",
+							"-framework Foundation",
+							"-framework AppKit",
+							"-framework OpenGL",
+							"-framework QuartzCore",
+							"-framework AudioToolBox",
+							"-framework OpenAL"],
+			"xcode_settings": {
+				//"MACOSX_DEPLOYMENT_TARGET": 	"10.11",
+				//"SUPPORTED_PLATFORMS":		"macosx",
+				//"SDKROOT":					"macosx",
+			}
+		},
+		"os==ios": {
+			"cpp_flags":[],
+			"link_flags": [	"-ObjC",
+							"-framework Foundation",
+							"-framework OpenGLES",
+							"-framework OpenAL"],
+			"xcode_settings": {
+				//"MACOSX_DEPLOYMENT_TARGET": 	"10.11",
+				//"SUPPORTED_PLATFORMS":		"macosx",
+				//"SDKROOT":					"macosx",
+			}
+		},	
+		"os==linux": {
+			"cpp_flags":[],
+			"link_flags":["-lpthread -lX11 -lGL -lGLU"]
+		},
+		"os==freebsd": {
+			"cpp_flags":["-I/usr/local/include"],
+			"link_flags":["-L/usr/local/lib"]
+		},
+		"os==cygwin": {
+			"cpp_flags":["-I/usr/local/include"],
+			"link_flags":["-lpthread -lX11 -lGL -lGLU"]
+		},
+
+		"compiler==vc": {
+			"cpp_defines": ["_CRT_SECURE_NO_WARNINGS"],
+			"cpp_flags":[],
+			"link_flags":[],
+			"warning_level": "Level4", // "EnableAllWarnings"
+			"disable_warning":[
+				//"4189", // local variable is initialized but not referenced
+				//"4595", // non-member operator new or delete functions may not be declared inline
+				//"4127", // conditional expression is constant
+				"4100"  // unreferenced formal parameter
+			]
+		},
+		"compiler==clang": {
+			"cpp_flags":["-std=c++11", "-Wall", "-Wfatal-errors", "-Werror", "-Wno-switch"], // "-Wundef"
+			"link_flags":["-lstdc++"],
+			"config==Debug": {
+				"cpp_flags":["-g"]
+			}
+		},
+		"compiler==gcc": {
+			"cpp_flags":["-std=c++11", "-Wall", "-Wfatal-errors", "-Werror", "-Wno-switch"], // "-Wundef"
+			"link_flags":["-lstdc++"],
+			"config==Debug": {
+				"cpp_flags":["-g"]
+			}
+		}
+	},
+
+	//"startup_project": "MyProgram",
+	"projects": [
+		"Hello.axproj"
+	]
+}

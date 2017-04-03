@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="src\Generators">
+      <UniqueIdentifier>{6105429c-6ab3-416d-b85b-dff7227def78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Util">
+      <UniqueIdentifier>{a7457f34-c507-4d99-b5c5-2820861b882b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Config">
+      <UniqueIdentifier>{93c0a109-f3f7-4412-aa5b-1ceb08664847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Platform">
+      <UniqueIdentifier>{72009b08-8be4-475e-ab27-8eec72533c24}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\_single_file_build_.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\App.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Generators\Generator_vs2015.cpp">
+      <Filter>src\Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Config\Config.cpp">
+      <Filter>src\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Config\Project.cpp">
+      <Filter>src\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Config\Workspace.cpp">
+      <Filter>src\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Util\Error.cpp">
+      <Filter>src\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Util\FileUtil.cpp">
+      <Filter>src\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Util\JsonReader.cpp">
+      <Filter>src\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Util\Log.cpp">
+      <Filter>src\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Util\String.cpp">
+      <Filter>src\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Util\JsonWriter.cpp">
+      <Filter>src\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Util\XmlWriter.cpp">
+      <Filter>src\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Util\Uuid.cpp">
+      <Filter>src\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Generators\Generator.cpp">
+      <Filter>src\Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Generators\Generator_makefile.cpp">
+      <Filter>src\Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Generators\Generator_xcode.cpp">
+      <Filter>src\Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Generators\XCodePbxWriter.cpp">
+      <Filter>src\Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Config\VirtualFolder.cpp">
+      <Filter>src\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Config\FileEntry.cpp">
+      <Filter>src\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Config\ProjectCategory.cpp">
+      <Filter>src\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Util\Path.cpp">
+      <Filter>src\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Util\Glob.cpp">
+      <Filter>src\Util</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\common.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\App.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Generators\Generator_vs2015.h">
+      <Filter>src\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Generators\Generator.h">
+      <Filter>src\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Config\Project.h">
+      <Filter>src\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Config\Workspace.h">
+      <Filter>src\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Util\Error.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Util\FileUtil.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Util\JsonReader.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Util\Log.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Util\String.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Config\Config.h">
+      <Filter>src\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Util\Vector.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Util\JsonWriter.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Util\XmlWriter.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Util\Uuid.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Util\Dict.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Generators\Generator_makefile.h">
+      <Filter>src\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Generators\Generator_xcode.h">
+      <Filter>src\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Generators\XCodePbxWriter.h">
+      <Filter>src\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Config\ProjectCategory.h">
+      <Filter>src\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Config\VirtualFolder.h">
+      <Filter>src\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Config\FileEntry.h">
+      <Filter>src\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Util\Path.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Util\Glob.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Platform\Compiler_gcc.h">
+      <Filter>src\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Platform\Compiler_vc.h">
+      <Filter>src\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Platform\Platform.h">
+      <Filter>src\Platform</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

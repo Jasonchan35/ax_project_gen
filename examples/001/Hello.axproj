@@ -1,0 +1,30 @@
+{
+	"category": "MyProjects/Categories",
+	"type": "cpp_exe",
+	"dependencies": [],
+	"pch_header": "src/precompiledHeader.h",
+
+	//"unite_build": false,
+	//"unite_mega_byte_per_file": 1,
+	"files" : [
+		"src/*.cpp",
+		"*.axproj"
+	],
+	"exclude_files": [
+	],		
+
+	"config": {
+		"cpp_defines": [],
+		"cpp_flags": [],
+		"include_dirs": ["src"],
+		"link_dirs": [],
+		"link_files": [],
+		"link_flags": [],
+		"compiler==gcc": {
+			"link_flags":["-lm"]			
+		},
+		"compiler==clang": {
+			"link_flags":["-lm"]			
+		}
+	}
+}
