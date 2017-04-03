@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[]) {	
 	int ret = 0;
-	ax_pjgen::App app;
+	ax_gen::App app;
 
 	ret = app.run(argc, argv);
 	std::cout << "==== Program Ended return: " << ret << " ====\n";

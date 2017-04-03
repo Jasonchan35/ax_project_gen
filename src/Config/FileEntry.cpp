@@ -1,6 +1,6 @@
 //
 //  FileEntry.cpp
-//  ax_pjgen
+//  ax_gen
 //
 //  Created by Jason on 2017-04-02.
 //  Copyright © 2017 Jason. All rights reserved.
@@ -8,7 +8,7 @@
 
 #include "FileEntry.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 	
 void FileEntry::init(const StrView& name) {
 	_name = name;

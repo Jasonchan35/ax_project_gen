@@ -40,7 +40,7 @@
 	#include <stdint.h>
 #endif
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 using std::unique_ptr;
 

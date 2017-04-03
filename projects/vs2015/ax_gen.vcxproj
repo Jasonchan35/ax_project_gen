@@ -202,7 +202,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F5601E02-FA92-4DCC-AAF0-8B20127B2A30}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ax_pjgen</RootNamespace>
+    <RootNamespace>ax_gen</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

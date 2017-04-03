@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C++ Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "targetArchitecture": "x64",
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}",
+            "environment": [],
+            "externalConsole": false,
+            "program": "${workspaceRoot}/bin/ax_pjgen",
+            "args": ["gen=makefile", " ws=examples/001/Hello.axworkspace", "-gen"],
+            "linux": {
+                "MIMode": "lldb"
+            },
+            "osx": {
+                "MIMode": "lldb"
+            },
+            "windows": {
+                "MIMode": "gdb",
+                "miDebuggerPath": "c:/cygwin64/bin/gdb.exe"
+            }
+        },
+    ]
+}

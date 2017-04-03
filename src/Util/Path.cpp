@@ -1,7 +1,7 @@
 #include "../common.h"
 #include "Path.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 bool Path::isAbs(const StrView& path) {
 	if (path.size() < 1) return false;

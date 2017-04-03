@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 template<typename T>
 class Vector {
@@ -44,7 +44,7 @@ private:
 };
 
 template<typename T> inline
-int ax_pjgen::Vector<T>::indexOf(const T& v) {
+int ax_gen::Vector<T>::indexOf(const T& v) {
 	int i = 0;
 	for (auto& a : _p) {
 		if (a == v) {

@@ -3,7 +3,7 @@
 #include "../common.h"
 #include "Log.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 class Error : public std::exception {
 public:

@@ -1,6 +1,6 @@
 #include "Uuid.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 Uuid::Uuid() {
 	memset(data, 0, kSize);

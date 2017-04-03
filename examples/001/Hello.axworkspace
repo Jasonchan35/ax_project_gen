@@ -94,6 +94,7 @@
 
 	//"startup_project": "MyProgram",
 	"projects": [
-		"Hello.axproj"
+		"Hello.axproj",
+		"My - Lib/MyLib.axproj"
 	]
 }

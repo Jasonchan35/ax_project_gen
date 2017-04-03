@@ -1,6 +1,6 @@
 #include "XCodePbxWriter.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 XCodePbxWriter::~XCodePbxWriter() {
 	if (_level.size() != 0) {

@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 class String;
 class WString;

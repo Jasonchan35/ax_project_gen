@@ -1,6 +1,6 @@
 //
 //  ProjectCategory.hpp
-//  ax_pjgen
+//  ax_gen
 //
 //  Created by Jason on 2017-04-02.
 //  Copyright © 2017 Jason. All rights reserved.
@@ -8,7 +8,7 @@
 
 #pragma once
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 class Project;
 
@@ -38,4 +38,4 @@ private:
 	ProjectCategory* getOrAddParent(const StrView& path);
 };
 
-} //namespace ax_pjgen
+} //namespace ax_gen

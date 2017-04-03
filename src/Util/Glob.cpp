@@ -1,6 +1,6 @@
 #include "Glob.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 
 #if ax_OS_Windows //------------------------------------------------------------------

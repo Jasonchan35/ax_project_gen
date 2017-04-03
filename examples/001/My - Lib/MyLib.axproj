@@ -1,13 +1,14 @@
 {
-	"category": "MyProjects/Categories",
-	"type": "cpp_exe",
-	"dependencies": ["MyLib"],
-	"pch_header": "src/precompiledHeader.h",
+	"category": "MyProjects/Library",
+	"type": "cpp_lib",
+	"dependencies": [],
+	//"pch_header": "src/precompiledHeader.h",
 
 	//"unite_build": false,
 	//"unite_mega_byte_per_file": 1,
 	"files" : [
-		"src/*.cpp",
+		"**/*.cpp",
+		"include/*.h",
 		"*.axproj"
 	],
 	"exclude_files": [
@@ -16,7 +17,7 @@
 	"config": {
 		"cpp_defines": [],
 		"cpp_flags": [],
-		"include_dirs": ["src"],
+		"include_dirs": ["include"],
 		"link_dirs": [],
 		"link_files": [],
 		"link_flags": [],

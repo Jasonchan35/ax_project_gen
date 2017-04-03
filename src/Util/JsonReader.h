@@ -2,7 +2,7 @@
 
 #include "Log.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 class JsonReader {
 public:

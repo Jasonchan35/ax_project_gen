@@ -2,7 +2,7 @@
 #include "../App.h"
 #include "Generator_vs2015.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 Generator_vs2015::Generator_vs2015() {
 	if (!g_ws->generator) g_ws->generator = "vs2015";
@@ -368,7 +368,7 @@ void Generator_vs2015::gen_workspace() {
 
 	//cache file
 	String cacheFilename;
-	cacheFilename.append(g_ws->outDir, "_ax_pjgen_cache.json");
+	cacheFilename.append(g_ws->outDir, "_ax_gen_cache.json");
 
 	readCacheFile(cacheFilename);
 

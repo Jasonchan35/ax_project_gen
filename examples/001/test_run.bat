@@ -2,6 +2,4 @@
 %~d0
 cd %~dp0
 
-..\..\bin\ax_pjgen.exe ws=Hello.axworkspace -gen
-
-@pause
+..\..\bin\ax_gen.exe ws=Hello.axworkspace -gen

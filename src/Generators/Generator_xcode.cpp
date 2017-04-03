@@ -1,6 +1,6 @@
 #include "Generator_xcode.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 const StrView Generator_xcode::build_config_uuid 			= "B0000000B0000000B0000001";
 const StrView Generator_xcode::build_phase_sources_uuid		= "B0000000B0000000B0000002";

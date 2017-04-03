@@ -2,7 +2,7 @@
 
 #include "Generator.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 class Generator_vs2015 : public Generator {
 public:

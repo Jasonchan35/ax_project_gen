@@ -1,7 +1,7 @@
 #include "../common.h"
 #include "Workspace.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 Workspace* g_ws;
 
@@ -96,7 +96,7 @@ void Workspace::readFile(const StrView& filename) {
 
 	{
 		String logFilename;
-		logFilename.append(outDir, "_ax_build_log.txt");
+		logFilename.append(outDir, "_ax_gen_log.txt");
 		Log::createLogFile(logFilename);
 	}
 

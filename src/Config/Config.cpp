@@ -3,7 +3,7 @@
 #include "Project.h"
 #include "Workspace.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 Config::Config() {
 	#define InitSetting(V) \
@@ -84,17 +84,17 @@ void Config::resolve() {
 	if (name == "Debug") isDebug = true;
 	if (!_project) return;
 
-	cpp_defines._final.uniqueAppend(String("ax_BUILD_CPU_",				g_ws->cpu));
-	cpp_defines._final.uniqueAppend(String("ax_BUILD_OS_",				g_ws->os));
-	cpp_defines._final.uniqueAppend(String("ax_BUILD_GENERATOR_",		g_ws->generator));
-	cpp_defines._final.uniqueAppend(String("ax_BUILD_COMPILER_",		g_ws->compiler));
-	cpp_defines._final.uniqueAppend(String("ax_BUILD_CONFIG_",			this->name));
-	cpp_defines._final.uniqueAppend(String("ax_BUILD_PLATFORM_NAME=\"", g_ws->_platformName,"\""));
+	cpp_defines._final.uniqueAppend(String("ax_GEN_CPU_",				g_ws->cpu));
+	cpp_defines._final.uniqueAppend(String("ax_GEN_OS_",				g_ws->os));
+	cpp_defines._final.uniqueAppend(String("ax_GEN_GENERATOR_",			g_ws->generator));
+	cpp_defines._final.uniqueAppend(String("ax_GEN_COMPILER_",			g_ws->compiler));
+	cpp_defines._final.uniqueAppend(String("ax_GEN_CONFIG_",			this->name));
+	cpp_defines._final.uniqueAppend(String("ax_GEN_PLATFORM_NAME=\"",	g_ws->_platformName,"\""));
 
 	if (_project) {
 		auto& proj = *_project;
-		cpp_defines._final.uniqueAppend(String("ax_BUILD_PROJECT_",		 proj.name));
-		cpp_defines._final.uniqueAppend(String("ax_BUILD_TYPE_",		proj.input.type));
+		cpp_defines._final.uniqueAppend(String("ax_GEN_PROJECT_",		proj.name));
+		cpp_defines._final.uniqueAppend(String("ax_GEN_TYPE_",			proj.input.type));
 
 		if (proj.type_is_exe()) {
 			outputTarget.append(g_ws->outDir, "bin/", name, "/", proj.name, g_ws->exe_target_suffix);

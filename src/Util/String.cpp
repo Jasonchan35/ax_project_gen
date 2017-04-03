@@ -1,7 +1,7 @@
 #include "../common.h"
 #include "String.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 StrView StrView::getFromPrefix(const StrView& prefix) {
 	if (prefix._size <= _size) {

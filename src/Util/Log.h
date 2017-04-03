@@ -2,7 +2,7 @@
 
 #include "String.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 //TODO change to Log::info(), so class Log -> LogImpl
 

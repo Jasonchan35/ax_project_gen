@@ -3,7 +3,7 @@
 #include "Generator.h"
 #include "XCodePbxWriter.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 class Generator_xcode : public Generator {
 public:

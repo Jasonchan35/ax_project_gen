@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 struct Glob {
 

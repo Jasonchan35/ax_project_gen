@@ -1,7 +1,7 @@
 #include "../common.h"
 #include "JsonReader.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 JsonReader::JsonReader() {
 	reset();

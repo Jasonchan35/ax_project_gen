@@ -1,6 +1,6 @@
 //
 //  VirtualFolder.cpp
-//  ax_pjgen
+//  ax_gen
 //
 //  Created by Jason on 2017-04-02.
 //  Copyright © 2017 Jason. All rights reserved.
@@ -9,7 +9,7 @@
 #include "VirtualFolder.h"
 #include "FileEntry.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 VirtualFolder* VirtualFolderDict::getOrAddParent(const StrView& baseDir, const StrView& path) {
 	auto s = path.splitEndByChar('/');

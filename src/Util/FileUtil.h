@@ -2,7 +2,7 @@
 
 #include "String.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 struct FileUtil {
 	static const int kPathMax = 512;

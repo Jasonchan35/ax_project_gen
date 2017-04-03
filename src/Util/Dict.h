@@ -2,7 +2,7 @@
 
 #include "Error.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 // Ordered Dict
 template<typename KEY, typename VALUE, typename IN_KEY = KEY>

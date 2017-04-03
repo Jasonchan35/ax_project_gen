@@ -4,7 +4,7 @@
 #include "Project.h"
 #include "../Generators/Generator.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 class Workspace : public NonCopyable {
 public:

@@ -1,6 +1,6 @@
 //
 //  ProjectCategory.cpp
-//  ax_pjgen
+//  ax_gen
 //
 //  Created by Jason on 2017-04-02.
 //  Copyright © 2017 Jason. All rights reserved.
@@ -9,7 +9,7 @@
 #include "ProjectCategory.h"
 #include "Project.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 ProjectCategory* ProjectCategoryDict::getOrAddCategory(const StrView& path) {
 	auto* v = dict.find(path);

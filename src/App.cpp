@@ -4,7 +4,7 @@
 #include "Generators/Generator_makefile.h"
 #include "Generators/Generator_xcode.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 App* g_app;
 
@@ -26,7 +26,7 @@ int App::run(int argc, char* argv[]) {
 }
 
 int App::_run(int argc, char* argv[]) {
-	Log::info("==== ax_pjgen ====");
+	Log::info("==== ax_gen ====");
 
 	for (int i=1; i<argc; i++) {
 		auto s = StrView_c_str(argv[i]);

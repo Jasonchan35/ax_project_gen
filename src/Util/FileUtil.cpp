@@ -2,7 +2,7 @@
 #include "FileUtil.h"
 #include "Path.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 void FileUtil::readTextFile(const StrView& filename, String& out_str) {
 	String strFilename(filename);

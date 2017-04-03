@@ -6,7 +6,7 @@
 #include "ProjectCategory.h"
 #include "VirtualFolder.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 enum class ProjectType {
 	None,

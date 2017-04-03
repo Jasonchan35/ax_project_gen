@@ -1,6 +1,6 @@
 #include "JsonWriter.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
 JsonWriter::~JsonWriter() {
 	if (_level.size() != 0) {

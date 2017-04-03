@@ -1,9 +1,9 @@
 #include "../common.h"
 #include "XmlWriter.h"
 
-namespace ax_pjgen {
+namespace ax_gen {
 
-void ax_pjgen::XmlWriter::writeHeader() {
+void ax_gen::XmlWriter::writeHeader() {
 	_buf.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 }
 
@@ -16,7 +16,7 @@ void XmlWriter::writeDocType(const StrView& name, const StrView& publicId, const
 	_buf.append(">");
 }
 
-ax_pjgen::XmlWriter::TagScope XmlWriter::tagScope(const StrView& name) {
+ax_gen::XmlWriter::TagScope XmlWriter::tagScope(const StrView& name) {
 	beginTag(name);
 	return TagScope(this);
 }
