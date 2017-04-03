@@ -16,15 +16,15 @@ libax_platform:
 //=========== Detect COMPILER ===============
 #if defined(__clang__) 
 	#define ax_COMPILER_CLANG	1
-	#include "compiler_gcc.h"
+	#include "Compiler_gcc.h"
 
 #elif defined(__GNUC__)
 	#define ax_COMPILER_GCC		1
-	#include "compiler_gcc.h"
+	#include "Compiler_gcc.h"
 
 #elif defined(_MSC_VER)
 	#define ax_COMPILER_VC		1
-	#include "compiler_vc.h"
+	#include "Compiler_vc.h"
 
 #endif
 

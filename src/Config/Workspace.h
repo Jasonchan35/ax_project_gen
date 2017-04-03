@@ -49,6 +49,8 @@ public:
 	String				buildFileDir;
 	String				outDir;
 	
+	bool os_has_objc();
+
 	void dump(StringStream& s);
 	void resolve();
 };

@@ -181,7 +181,7 @@ void Generator_makefile::gen_project(Project& proj) {
 	String o;
 	gen_common_var(o);
 
-	if (proj.input.cpp_as_objcpp) {
+	if (g_ws->os_has_objc() && proj.input.cpp_as_objcpp) {
 		o.append("pch_header_compiler_language = objective-c++-header\n");
 		o.append("cpp_source_compiler_language = objective-c++\n");
 	}else{
@@ -356,7 +356,7 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 		o.append(escapeString(cpp_obj), ":", escapeString(cpp_src), "\n");
 		o.append("\t@echo \"-------------------------------------------------------------\"\n");
 		o.append("\t@echo \"[compile cpp] => $@\"\n");
-		o.append("\t$(cmd_mkdir) ", quoteString(config.genData_makefile.cpp_obj_dir), "\n");
+		o.append("\t$(cmd_mkdir) ", quoteString(Path::dirname(cpp_obj)), "\n");
 		o.append("\t$(cmd_cc) -x $(cpp_source_compiler_language) $(PCH_CC_FLAGS) $(CPP_DEFINES) $(CPP_FLAGS) $(CPP_INCLUDE_DIRS) $(CPP_INCLUDE_FILES) \\\n");
 		o.append("\t\t-o \"$@\" -c ", quoteString(cpp_src), "\\\n");
 		o.append("\t\t-MMD -MQ \"$@\" -MF ", quoteString(cpp_dep), "\\\n");

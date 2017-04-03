@@ -2,9 +2,10 @@
 #!! Works for pmake (FreeBSD), GNUmake (GNU Linux)
 #!! 
 
-.PHONY: build clean
-
 OUTPUT_TARGET = ../../bin/ax_gen
+
+.PHONY: build clean $(OUTPUT_TARGET)
+
 
 CC = g++
 CCFLAGS = -std=c++11 -Wall -Werror -g
