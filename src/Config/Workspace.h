@@ -18,6 +18,7 @@ public:
 	Vector<String>		config_list;
 	StringDict<Config>	configs;
 	String				workspace_name;
+	String				build_dir;
 
 	String&				defaultConfigName() { return config_list.back(); }
 
