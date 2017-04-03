@@ -47,6 +47,8 @@ Workspace::Workspace() {
 	#error "Unknown OS"
 #endif
 
+	build_dir.set("_local_build/");
+
 //====================
 	os  = host_os;
 	cpu = host_cpu;
@@ -82,14 +84,20 @@ void Workspace::readFile(const StrView& filename) {
 	buildFileDir = Path::dirname(buildFilename);
 	buildFileDir += '/';
 
-	workspace_name = Path::basename(filename, false);
-
 	_platformName.clear();
 	_platformName.append(generator, '-', compiler, '-', os, '-', cpu);
 
 	{
+		String json;
+		FileUtil::readTextFile(filename, json);
+
+		JsonReader r(json, buildFilename);
+		readJson(r);
+	}
+
+	{
 		String tmp;
-		tmp.append(buildFileDir, "_local_build/", _platformName);
+		tmp.append(buildFileDir, build_dir, _platformName);
 		Path::getAbs(outDir, tmp);
 		outDir += '/';
 	}
@@ -99,12 +107,6 @@ void Workspace::readFile(const StrView& filename) {
 		logFilename.append(outDir, "_ax_build_log.txt");
 		Log::createLogFile(logFilename);
 	}
-
-	String json;
-	FileUtil::readTextFile(filename, json);
-
-	JsonReader r(json, buildFilename);
-	readJson(r);
 }
 
 void Workspace::readProjectFile(const StrView& filename) {
@@ -117,6 +119,8 @@ void Workspace::readProjectFile(const StrView& filename) {
 void Workspace::readJson(JsonReader& r) {
 	r.beginObject();
 	while (!r.endObject()) {
+		if (r.member("workspace_name",	workspace_name )) continue;
+		if (r.member("build_dir",	build_dir )) continue;
 		if (r.member("startup_project", startup_project)) continue;
 		if (r.member("unite_build",		unite_build)) continue;
 		if (r.member("unite_mega_byte_per_file", unite_mega_byte_per_file )) continue;
