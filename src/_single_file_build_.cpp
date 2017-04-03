@@ -19,7 +19,7 @@
 
 #include "Config/FileEntry.cpp"
 #include "Config/VirtualFolder.cpp"
-#include "Config/ProjectCategory.cpp"
+#include "Config/ProjectGroup.cpp"
 
 #include "Generators/Generator.cpp"
 

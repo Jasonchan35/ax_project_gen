@@ -3,7 +3,7 @@
 #include "../common.h"
 #include "Config.h"
 #include "FileEntry.h"
-#include "ProjectCategory.h"
+#include "ProjectGroup.h"
 #include "VirtualFolder.h"
 
 namespace ax_gen {
@@ -31,7 +31,7 @@ public:
 
 	class Input {
 	public:
-		String				category; // workspace_virtual_path
+		String				group;
 		String				type;
 		bool				gui_app {false};
 
@@ -51,7 +51,7 @@ public:
 	};
 	Input	input;
 
-	ProjectCategory*		category {nullptr};
+	ProjectGroup*			group {nullptr};
 
 	StringDict<FileEntry>	fileEntries;
 	int						_uniteFileCount {0};

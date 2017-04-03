@@ -53,7 +53,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\src\Config\ProjectCategory.cpp">
+    <ClCompile Include="..\..\src\Config\ProjectGroup.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -175,7 +175,7 @@
     <ClInclude Include="..\..\src\Config\Config.h" />
     <ClInclude Include="..\..\src\Config\FileEntry.h" />
     <ClInclude Include="..\..\src\Config\Project.h" />
-    <ClInclude Include="..\..\src\Config\ProjectCategory.h" />
+    <ClInclude Include="..\..\src\Config\ProjectGroup.h" />
     <ClInclude Include="..\..\src\Config\VirtualFolder.h" />
     <ClInclude Include="..\..\src\Config\Workspace.h" />
     <ClInclude Include="..\..\src\Generators\Generator.h" />

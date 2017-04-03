@@ -1,5 +1,5 @@
 {
-	"category": "MyProjects/Categories",
+	"group": "MyGroup",
 	"type": "cpp_exe",
 	"dependencies": ["MyLib"],
 	"pch_header": "src/precompiledHeader.h",

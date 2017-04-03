@@ -52,7 +52,7 @@ void Generator_vs2015::readCacheFile(const StrView& filename) {
 				String m;
 				reader.getMemberName(m);
 
-				auto* cat = g_ws->projectCategories.dict.find(m);
+				auto* cat = g_ws->projectGroups.dict.find(m);
 				if (cat) {
 					reader.beginObject();
 					while (!reader.endObject()) {
@@ -83,9 +83,9 @@ void Generator_vs2015::writeCacheFile(const StrView& filename) {
 		}
 		{
 			auto scope = wr.objectScope("categories");
-			for (auto& cat : g_ws->projectCategories.dict) {
-				auto scope = wr.objectScope(cat.path);
-				wr.write("uuid", cat.genData_vs2015.uuid);
+			for (auto& group : g_ws->projectGroups.dict) {
+				auto scope = wr.objectScope(group.path);
+				wr.write("uuid", group.genData_vs2015.uuid);
 			}
 		}
 	}
@@ -402,9 +402,9 @@ void Generator_vs2015::gen_workspace() {
 		}
 	}
 	{
-		auto* root = g_ws->projectCategories.root;
-		o.append("\n# ---- categories ----\n");
-		for (auto& c : g_ws->projectCategories.dict) {
+		auto* root = g_ws->projectGroups.root;
+		o.append("\n# ---- Groups ----\n");
+		for (auto& c : g_ws->projectGroups.dict) {
 			if (&c == root) continue;
 			genUuid(c.genData_vs2015.uuid);
 
@@ -417,7 +417,7 @@ void Generator_vs2015::gen_workspace() {
 		o.append("\n# ----  (category/project) -> parent ----\n");
 		o.append("Global\n");
 		o.append("\tGlobalSection(NestedProjects) = preSolution\n");
-		for (auto& c : g_ws->projectCategories.dict) {
+		for (auto& c : g_ws->projectGroups.dict) {
 			if (c.parent && c.parent != root) {
 				o.append("\t\t", c.genData_vs2015.uuid, " = ", c.parent->genData_vs2015.uuid, "\n");
 			}

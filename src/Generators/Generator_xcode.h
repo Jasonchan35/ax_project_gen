@@ -13,7 +13,7 @@ public:
 
 private:
 	void gen_workspace();
-	void gen_workspace_category(XmlWriter& wr, ProjectCategory& cat);
+	void gen_workspace_group(XmlWriter& wr, ProjectGroup& group);
 
 	void gen_project(Project& proj);
 	void gen_project_dependencies			(XCodePbxWriter& wr, Project& proj);

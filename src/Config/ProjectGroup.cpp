@@ -1,17 +1,17 @@
 //
-//  ProjectCategory.cpp
+//  ProjectGroup.cpp
 //  ax_gen
 //
 //  Created by Jason on 2017-04-02.
 //  Copyright © 2017 Jason. All rights reserved.
 //
 
-#include "ProjectCategory.h"
+#include "ProjectGroup.h"
 #include "Project.h"
 
 namespace ax_gen {
 
-ProjectCategory* ProjectCategoryDict::getOrAddCategory(const StrView& path) {
+ProjectGroup* ProjectGroupDict::getOrAddGroup(const StrView& path) {
 	auto* v = dict.find(path);
 	if (v) return v;
 	
@@ -23,22 +23,22 @@ ProjectCategory* ProjectCategoryDict::getOrAddCategory(const StrView& path) {
 	return v;
 }
 
-ProjectCategory* ProjectCategoryDict::getOrAddParent(const StrView& path) {
+ProjectGroup* ProjectGroupDict::getOrAddParent(const StrView& path) {
 	auto s = path.splitEndByChar('/');
 	if (!s.second) {
 		return root;
 	}
-	return getOrAddCategory(s.first);
+	return getOrAddGroup(s.first);
 }
 
-ProjectCategoryDict::ProjectCategoryDict() {
+ProjectGroupDict::ProjectGroupDict() {
 	root = dict.add("");
 	root->path = "<category_root>";
 }
 
-void ProjectCategoryDict::add(Project& proj) {
-	auto* p = getOrAddCategory(proj.input.category);
-	proj.category = p;
+void ProjectGroupDict::add(Project& proj) {
+	auto* p = getOrAddGroup(proj.input.group);
+	proj.group = p;
 	p->projects.append(&proj);
 }
 	

@@ -85,14 +85,14 @@
     <ClCompile Include="..\..\src\Config\FileEntry.cpp">
       <Filter>src\Config</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Config\ProjectCategory.cpp">
-      <Filter>src\Config</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Util\Path.cpp">
       <Filter>src\Util</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Util\Glob.cpp">
       <Filter>src\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Config\ProjectGroup.cpp">
+      <Filter>src\Config</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,9 +156,6 @@
     <ClInclude Include="..\..\src\Generators\XCodePbxWriter.h">
       <Filter>src\Generators</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Config\ProjectCategory.h">
-      <Filter>src\Config</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Config\VirtualFolder.h">
       <Filter>src\Config</Filter>
     </ClInclude>
@@ -179,6 +176,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Platform\Platform.h">
       <Filter>src\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Config\ProjectGroup.h">
+      <Filter>src\Config</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

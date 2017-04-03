@@ -45,25 +45,25 @@ void Generator_xcode::gen_workspace() {
 	{
 		auto tag = wr.tagScope("Workspace");
 		wr.attr("version", "1.0");
-		gen_workspace_category(wr, *g_ws->projectCategories.root);
+		gen_workspace_group(wr, *g_ws->projectGroups.root);
 	}
 	
 	String filename(g_ws->outDir, g_ws->workspace_name, ".xcworkspace/contents.xcworkspacedata");
 	FileUtil::writeTextFile(filename, wr.buffer());
 }
 
-void Generator_xcode::gen_workspace_category(XmlWriter& wr, ProjectCategory& cat) {
-	for (auto& c : cat.children) {
+void Generator_xcode::gen_workspace_group(XmlWriter& wr, ProjectGroup& group) {
+	for (auto& c : group.children) {
 		auto tag = wr.tagScope("Group");
 		wr.attr("location", "container:");
 		
 		auto basename = Path::basename(c->path, true);
 		wr.attr("name", basename);
 		
-		gen_workspace_category(wr, *c);
+		gen_workspace_group(wr, *c);
 	}
 
-	for (auto& proj : cat.projects) {
+	for (auto& proj : group.projects) {
 		auto tag = wr.tagScope("FileRef");
 		wr.attr("location", String("container:", proj->genData_xcode.xcodeproj));
 	}

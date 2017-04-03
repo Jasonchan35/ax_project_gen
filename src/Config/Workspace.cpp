@@ -198,7 +198,7 @@ void Workspace::resolve() {
 	}
 
 	for (auto& p : projects) {
-		projectCategories.add(p);
+		projectGroups.add(p);
 		p.resolve();
 	}
 }

@@ -1,5 +1,5 @@
 //
-//  ProjectCategory.hpp
+//  ProjectGroup.hpp
 //  ax_gen
 //
 //  Created by Jason on 2017-04-02.
@@ -12,12 +12,12 @@ namespace ax_gen {
 
 class Project;
 
-class ProjectCategory {
+class ProjectGroup {
 public:
 	String path;
-	Vector<ProjectCategory*> children;
+	Vector<ProjectGroup*> children;
 	Vector<Project*> projects;
-	ProjectCategory* parent {nullptr};
+	ProjectGroup* parent {nullptr};
 	
 	struct GenData_vs2015 {
 		String		uuid;
@@ -25,17 +25,17 @@ public:
 	GenData_vs2015 genData_vs2015;
 };
 
-class ProjectCategoryDict {
+class ProjectGroupDict {
 public:
-	ProjectCategoryDict();
+	ProjectGroupDict();
 	void add(Project& proj);
 	
-	StringDict<ProjectCategory> dict;
-	ProjectCategory* root {nullptr};
+	StringDict<ProjectGroup> dict;
+	ProjectGroup* root {nullptr};
 
-	ProjectCategory* getOrAddCategory(const StrView& path);	
+	ProjectGroup* getOrAddGroup(const StrView& path);	
 private:
-	ProjectCategory* getOrAddParent(const StrView& path);
+	ProjectGroup* getOrAddParent(const StrView& path);
 };
 
 } //namespace ax_gen

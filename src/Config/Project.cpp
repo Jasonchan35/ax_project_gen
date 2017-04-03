@@ -53,7 +53,7 @@ bool Project::type_is_headers() {
 }
 
 void Project::Input::dump(StringStream& s) {
-	ax_dump(s, category);
+	ax_dump(s, group);
 	ax_dump(s, type);
 	
 	if (gui_app) ax_dump(s, gui_app);
@@ -115,7 +115,7 @@ void Project::readFile(const StrView& filename) {
 void Project::readJson(JsonReader& r) {
 	r.beginObject();
 	while (!r.endObject()) {
-		if (r.member("category",		input.category		)) continue;
+		if (r.member("group",			input.group			)) continue;
 		if (r.member("type",			input.type			)) continue;
 		if (r.member("gui_app",			input.gui_app		)) continue;
 

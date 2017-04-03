@@ -39,7 +39,7 @@ public:
 	Project*			_startup_project{nullptr};
 
 	StringDict<Project>	projects;
-	ProjectCategoryDict projectCategories;
+	ProjectGroupDict	projectGroups;
 
 	String				exe_target_suffix;
 	String				dll_target_suffix;
