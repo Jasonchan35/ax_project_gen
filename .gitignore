@@ -4,3 +4,5 @@
 /projects/vs2015/_build_tmp
 /projects/vs2015/ax_gen.VC.db
 /projects/vs2015/.vs
+/projects/xcode/ax_gen.xcodeproj/xcuserdata
+/projects/xcode/ax_gen.xcodeproj/project.xcworkspace/xcuserdata

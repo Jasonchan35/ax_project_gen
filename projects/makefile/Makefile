@@ -19,7 +19,7 @@ else
 endif
 
 $(OUTPUT_TARGET):
-	@mkdir -p ./bin
+	@mkdir -p $(dir $(OUTPUT_TARGET))
 	$(CC) ../../src/_single_file_build_.cpp -o "$@" $(CCFLAGS)
 
 all: build
