@@ -17,6 +17,10 @@ void Generator_vs2015::generate() {
 	}else{
 		throw Error("Unsupported cpu type ", g_ws->cpu);
 	}
+
+	if (g_ws->os != "windows") {
+		throw Error("Unsupported os ", g_ws->os);
+	}
 	gen_workspace();
 }
 
