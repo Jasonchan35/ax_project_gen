@@ -49,10 +49,10 @@ ax_gen.exe gen=vs2015 ws=examples/001/Hello.axworkspace -gen
 | cpu=x86_64 | Intel / AMD 64-bit CPU  |
 |||
 
-### Output exampe: ( Visual Studio / Xcode / Makefile )
+### Output example: ( *Visual Studio / Xcode / Makefile* )
 ![Visual Studio Solution](doc/ScreenShots/2017-04-03.png)
 
-### Input example *Hello.axproj*:
+### Input example: *Hello.axproj*:
 ```
 {
 	"group": "MyGroup/MyProgram",
