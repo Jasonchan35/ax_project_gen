@@ -2,17 +2,18 @@
 C++ Project Generator
 
 ### Feature Highlights:
+* Lightweight - only require C++11 and libuuid to build and good to go! (NO python, java runtime or bunch of libraries / packages needed)
 
-* Support multiple platform ( Windows / MacOSX / Linux / FreeBSD )
+* Able to run on multiple platforms ( Windows / MacOSX / Linux / FreeBSD )
 
 * Auto inherit configuration from depended project, for instance executable project depends on library <br> will inherit all settings by default *( e.g. include_dir, cpp_defines, output_library ...etc )*
 
-* Precompiled header - also apply force-include to all c++ files
+* Precompiled header - also apply force-include to all c++ files<br>
 `(*In vs2015 precompiledHeader.cpp will be auto generated)`
 
-* Unite Build - build multiple C/C++ file at once to improve the compile time
+* Unite Build - build multiple small C/C++ file at once to improve the compile time
 
-* Project Group, Virtual Folder in Visual Studio solution or Xcode workspace
+* Support Project Group, Virtual Folder in Visual Studio solution or Xcode workspace
 
 **Command Line:**
 ```
