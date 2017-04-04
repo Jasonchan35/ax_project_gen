@@ -59,7 +59,7 @@ ax_gen.exe gen=vs2015 ws=examples/001/Hello.axworkspace -gen
 ![Visual Studio Solution](doc/ScreenShots/2017-04-03.png)
 
 ### Input example: *Hello.axproj*:
-```json
+```javascript
 {
 	"group": "MyGroup/MyProgram",
 	"type": "cpp_exe",
