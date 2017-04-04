@@ -2,11 +2,13 @@
 C++ Project Generator
 
 ### Feature Highlights:
-* Lightweight - only require C++11 and libuuid to build and good to go! (NO python, java runtime or bunch of libraries / packages needed)
+* Lightweight - only require C++11, libuuid and good to go! *( No python, java or bunch of libraries / packages required )*
 
-* Able to run on multiple platforms ( Windows / MacOSX / Linux / FreeBSD )
+* Able to run on multiple platforms *( Windows / MacOSX / Linux / FreeBSD )*
 
 * Auto inherit configuration from depended project, for instance executable project depends on library <br> will inherit all settings by default *( e.g. include_dir, cpp_defines, output_library ...etc )*
+
+* Support wildcard, glob with sub-directories *( example: ```src/**/*.cpp```,  means all c++ files within `src` folder including all sub-directories )*
 
 * Precompiled header - also apply force-include to all c++ files<br>
 `(*In vs2015 precompiledHeader.cpp will be auto generated)`
