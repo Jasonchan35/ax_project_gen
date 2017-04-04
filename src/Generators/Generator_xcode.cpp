@@ -19,6 +19,13 @@ Generator_xcode::Generator_xcode() {
 }
 
 void Generator_xcode::generate() {
+	
+	//!TODO CPU check
+
+	if (g_ws->os != " macosx") {
+		throw Error("Unsupported os ", g_ws->os);
+	}
+
 	gen_workspace();
 }
 
