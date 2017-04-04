@@ -10,6 +10,7 @@ Generator_vs2015::Generator_vs2015() {
 }
 
 void Generator_vs2015::generate() {
+
 	if (g_ws->cpu == "x86") {
 		vcxproj_cpu = "Win32";
 	}else if (g_ws->cpu == "x86_64") {
@@ -18,9 +19,6 @@ void Generator_vs2015::generate() {
 		throw Error("Unsupported cpu type ", g_ws->cpu);
 	}
 
-	if (g_ws->os != "windows") {
-		throw Error("Unsupported os ", g_ws->os);
-	}
 	gen_workspace();
 }
 
@@ -181,7 +179,12 @@ void Generator_vs2015::gen_project(Project& proj) {
 			wr.tagWithBody("ConfigurationType", productType);
 		
 			wr.tagWithBody("CharacterSet",    "Unicode");
-			wr.tagWithBody("PlatformToolset", "v140_xp");
+
+			if (g_ws->generator == "vs2015_linux") {
+				wr.tagWithBody("PlatformToolset", "Remote_GCC_1_0");
+			}else {
+				wr.tagWithBody("PlatformToolset", "v140_xp");
+			}
 		}
 
 		//-----------
@@ -193,6 +196,19 @@ void Generator_vs2015::gen_project(Project& proj) {
 			auto tag = wr.tagScope("ImportGroup");
 			wr.attr("Label", "PropertySheets");
 		}
+
+		if (g_ws->generator == "vs2015_linux") {
+			{
+				auto tag = wr.tagScope("ImportGroup");
+				wr.attr("Label", "ExtensionSettings");
+			}
+
+			{
+				auto tag = wr.tagScope("ImportGroup");
+				wr.attr("Label", "Shared");
+			}
+		}
+		
 		{
 			auto tag = wr.tagScope("PropertyGroup");
 			wr.attr("Label", "UserMacros");

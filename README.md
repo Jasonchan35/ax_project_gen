@@ -37,10 +37,11 @@ ax_gen.exe ws=examples/001/Hello.axworkspace -gen
 | -verbose  | more detail in console / log |
 
 |**Generators:**|||
-|--------------|-------------------------|---|
-| gen=vs2015   | Visual Studio 2015      ||
-| gen=xcode    | Xcode                   ||
-| gen=makefile | GNU/BSD makefile format | `*support file path with space` <br>`(Which handwritten Makefile might have problem`<br>`during 2nd degree variable evaluation)` |
+|------------------|-----------------------------------------|---|
+| gen=vs2015       | Visual Studio 2015                      ||
+| gen=vs2015_linux | Visual Studio 2015 Linux Remote Compile ||
+| gen=xcode        | Xcode                                   ||
+| gen=makefile     | GNU/BSD makefile format | `*support file path with space` <br>`(Which handwritten Makefile might have problem`<br>`during 2nd degree variable evaluation)` |
 
 |**OS options:**||
 |------------|------------|

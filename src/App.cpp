@@ -67,7 +67,17 @@ int App::_run(int argc, char* argv[]) {
 		throw Error("please specific generator");
 
 	}else if (workspace.generator == "vs2015"  ) { 
+
+		if (g_ws->os != "windows") {
+			throw Error("Unsupported os ", g_ws->os);
+		}
+
 		_generator.reset(new Generator_vs2015());
+
+	}else if (workspace.generator == "vs2015_linux") {
+
+		g_ws->os = "linux";
+		_generator.reset(new Generator_vs2015() );
 
 	}else if (workspace.generator == "makefile") { 
 		_generator.reset(new Generator_makefile());
