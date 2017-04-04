@@ -62,8 +62,6 @@
 		961AAE2D1E8F775600A2C441 /* Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		961AAE2E1E8F775600A2C441 /* String.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = String.cpp; sourceTree = "<group>"; };
 		961AAE2F1E8F775600A2C441 /* String.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = String.h; sourceTree = "<group>"; };
-		961AAE301E8F775600A2C441 /* Uuid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Uuid.cpp; sourceTree = "<group>"; };
-		961AAE311E8F775600A2C441 /* Uuid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Uuid.h; sourceTree = "<group>"; };
 		961AAE321E8F775600A2C441 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
 		961AAE331E8F775600A2C441 /* XmlWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XmlWriter.cpp; sourceTree = "<group>"; };
 		961AAE341E8F775600A2C441 /* XmlWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XmlWriter.h; sourceTree = "<group>"; };
@@ -192,8 +190,6 @@
 				961AAE2E1E8F775600A2C441 /* String.cpp */,
 				961AAE2F1E8F775600A2C441 /* String.h */,
 				96DA8F751E944C5700625579 /* UtfUtil.h */,
-				961AAE301E8F775600A2C441 /* Uuid.cpp */,
-				961AAE311E8F775600A2C441 /* Uuid.h */,
 				961AAE321E8F775600A2C441 /* Vector.h */,
 				961AAE331E8F775600A2C441 /* XmlWriter.cpp */,
 				961AAE341E8F775600A2C441 /* XmlWriter.h */,
