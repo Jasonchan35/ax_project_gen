@@ -4,7 +4,16 @@
 
 namespace ax_gen {
 
-using UniChar = uint32_t;
+class UniChar {
+public:
+	UniChar(char v)    : value((Value)v) {}
+	UniChar(wchar_t v) : value((Value)v) {}
+	UniChar(unsigned int v) : value((Value)v) {}
+
+	using Value = uint32_t;
+	Value value;
+};
+
 
 struct UtfUtil {
 
@@ -45,9 +54,13 @@ int UtfUtil::getConvertedCount(const SRC* src, int src_len) {
 template< typename SRC, typename DST > inline
 void UtfUtil::_convert(DST* dst, int dst_len, const SRC* src, int src_len) {
 	if (sizeof(DST) == sizeof(SRC)) {
-		memcpy(dst, reinterpret_cast<const DST*>(src), src_len);
+		if (dst_len != src_len) throw Error("Convert UTF");
+		auto e  = src + src_len;
+		for (; src < e; src++, dst++) {
+			*dst = static_cast<DST>(*src);
+		}
 	} else {
-		auto e = src + src_len;
+		auto e  = src + src_len;
 		auto de = dst + dst_len;
 		for (; src < e; src++, dst++) {
 			_encodeUtf(dst, de, _decodeUtf(src, e));
@@ -57,49 +70,49 @@ void UtfUtil::_convert(DST* dst, int dst_len, const SRC* src, int src_len) {
 
 template<> inline
 UniChar UtfUtil::_decodeUtf<char>( const char* & src, const char* end ) {
-	auto a = static_cast<UniChar>(*src);
+	auto a = UniChar(*src);
 
-	if( ( a & 0x80 ) == 0 ) return a;
+	if( ( a.value & 0x80 ) == 0 ) return a;
 
-	if( ( a & 0xE0 ) == 0xC0 ) {
+	if( ( a.value & 0xE0 ) == 0xC0 ) {
 		if( src+2 > end ) throw Error("Convert UTF");
 		auto b = static_cast<UniChar>(*src); src++;
-		return ( ( a & 0x1F ) << 6 ) | ( b & 0x3F );
+		return ( ( a.value & 0x1F ) << 6 ) | ( b.value & 0x3F );
 	}
 
-	if( ( a & 0xF0 ) == 0xE0 ) {
+	if( ( a.value & 0xF0 ) == 0xE0 ) {
 		if( src+3 > end ) throw Error("Convert UTF");
-		auto b = static_cast<UniChar>(*src); src++;
-		auto c = static_cast<UniChar>(*src); src++;
-		return ( (a & 0x0F) << 12 ) | ( (b & 0x3F) << 6 ) | ( c & 0x3F );
+		auto b = UniChar(*src); src++;
+		auto c = UniChar(*src); src++;
+		return ( (a.value & 0x0F) << 12 ) | ( (b.value & 0x3F) << 6 ) | ( c.value & 0x3F );
 	}
 
-	if( ( a & 0xF8 ) == 0xF0 ) {
+	if( ( a.value & 0xF8 ) == 0xF0 ) {
 		if( src+4 > end ) throw Error("Convert UTF");
-		auto b = static_cast<UniChar>(*src); src++;
-		auto c = static_cast<UniChar>(*src); src++;
-		auto d = static_cast<UniChar>(*src); src++;
-		return ( (a & 0x07) << 18 ) | ( (b & 0x3F) << 12 ) | ( (c & 0x3F) << 6 ) | ( d & 0x3F );
+		auto b = UniChar(*src); src++;
+		auto c = UniChar(*src); src++;
+		auto d = UniChar(*src); src++;
+		return ( (a.value & 0x07) << 18 ) | ( (b.value & 0x3F) << 12 ) | ( (c.value & 0x3F) << 6 ) | ( d.value & 0x3F );
 	}
 
 
-	if( ( a & 0xFC ) == 0xF8 ) {
+	if( ( a.value & 0xFC ) == 0xF8 ) {
 		if( src+5 > end ) throw Error("Convert UTF");
-		auto b = static_cast<UniChar>(*src); src++;
-		auto c = static_cast<UniChar>(*src); src++;
-		auto d = static_cast<UniChar>(*src); src++;
-		auto e = static_cast<UniChar>(*src); src++;
-		return ( (a & 0x03) << 24 ) | ( (b & 0x3F) << 18 ) | ( (c & 0x3F) << 12 ) | ( (d & 0x3F) << 6 ) | ( e & 0x3F );
+		auto b = UniChar(*src); src++;
+		auto c = UniChar(*src); src++;
+		auto d = UniChar(*src); src++;
+		auto e = UniChar(*src); src++;
+		return ( (a.value & 0x03) << 24 ) | ( (b.value & 0x3F) << 18 ) | ( (c.value & 0x3F) << 12 ) | ( (d.value & 0x3F) << 6 ) | ( e.value & 0x3F );
 	}
 
-	if( ( a & 0xFE ) == 0xFC ) {
+	if( ( a.value & 0xFE ) == 0xFC ) {
 		if( src+6 > end ) throw Error("Convert UTF");
-		auto b = static_cast<UniChar>(*src); src++;
-		auto c = static_cast<UniChar>(*src); src++;
-		auto d = static_cast<UniChar>(*src); src++;
-		auto e = static_cast<UniChar>(*src); src++;
-		auto f = static_cast<UniChar>(*src); src++;
-		return ( (a & 0x01) << 30 ) | ( (b & 0x3F) << 24 ) | ( (c & 0x3F) << 18 ) | ( (d & 0x3F) << 12 ) | ( (e & 0x3F) << 6 ) | ( f & 0x3F );
+		auto b = UniChar(*src); src++;
+		auto c = UniChar(*src); src++;
+		auto d = UniChar(*src); src++;
+		auto e = UniChar(*src); src++;
+		auto f = UniChar(*src); src++;
+		return ( (a.value & 0x01) << 30 ) | ( (b.value & 0x3F) << 24 ) | ( (c.value & 0x3F) << 18 ) | ( (d.value & 0x3F) << 12 ) | ( (e.value & 0x3F) << 6 ) | ( f.value & 0x3F );
 	}
 
 	throw Error("Convert UTF");
@@ -108,13 +121,13 @@ UniChar UtfUtil::_decodeUtf<char>( const char* & src, const char* end ) {
 template<> inline
 UniChar UtfUtil::_decodeUtf<wchar_t>( const wchar_t* & src, const wchar_t* end ) {
 	UniChar a = *src;
-	if( a >= 0xD800 && a <= 0xDBFF ) {
+	if( a.value >= 0xD800 && a.value <= 0xDBFF ) {
 		src++;
 		if( src >= end ) throw Error("Convert UTF");
 
 		UniChar b = *src;
-		if( b >= 0xDC00 && b <= 0xDFFF ) {
-			return ( a << 10 ) + b - 0x35FDC00;
+		if( b.value >= 0xDC00 && b.value <= 0xDFFF ) {
+			return ( a.value << 10 ) + b.value - 0x35FDC00;
 		}else{
 			src--; // push back
 		}
@@ -126,20 +139,20 @@ UniChar UtfUtil::_decodeUtf<wchar_t>( const wchar_t* & src, const wchar_t* end )
 
 template<> inline
 int UtfUtil::_utfCount< char >( UniChar v ) {
-	if( v <       0x80 ) return 1;
-	if( v <    0x00800 ) return 2;
-	if( v <    0x10000 ) return 3;
-	if( v <   0x200000 ) return 4;
+	if( v.value <       0x80 ) return 1;
+	if( v.value <    0x00800 ) return 2;
+	if( v.value <    0x10000 ) return 3;
+	if( v.value <   0x200000 ) return 4;
 // The patterns below are not part of UTF-8, but were part of the first specification.
-	if( v <  0x4000000 ) return 5;
-	if( v < 0x80000000 ) return 6;
+	if( v.value <  0x4000000 ) return 5;
+	if( v.value < 0x80000000 ) return 6;
 	throw Error("Convert UTF");
 }
 
 template<> inline
 int UtfUtil::_utfCount< wchar_t >( UniChar v ) {
-	if( v <  0x10000 ) return 1;
-	if( v < 0x110000 ) return 2;
+	if( v.value <  0x10000 ) return 1;
+	if( v.value < 0x110000 ) return 2;
 	throw Error("Convert UTF");
 }
 
@@ -147,54 +160,54 @@ int UtfUtil::_utfCount< wchar_t >( UniChar v ) {
 
 template<> inline
 void UtfUtil::_encodeUtf< char >( char* & dst, const char* end, UniChar v ) {
-	if( v <       0x80 ) {
-		*dst = static_cast<char>(v);
+	if( v.value <       0x80 ) {
+		*dst = static_cast<char>(v.value);
 		return;
 	}
 
-	if( v <    0x00800 ) {
+	if( v.value <    0x00800 ) {
 		if( dst + 2 > end ) throw Error("Convert UTF");
-		*dst = static_cast<char>(( v >> 6   ) | 0xC0); dst++;
-		*dst = static_cast<char>(( v & 0x3F ) | 0x80); dst++;
+		*dst = static_cast<char>(( v.value >> 6   ) | 0xC0); dst++;
+		*dst = static_cast<char>(( v.value & 0x3F ) | 0x80); dst++;
 		return;
 	}
 
-	if( v <    0x10000 ) {
+	if( v.value <    0x10000 ) {
 		if( dst + 3 > end ) throw Error("Convert UTF");
-		*dst = static_cast<char>(( (v >> 12)        ) | 0xC0); dst++;
-		*dst = static_cast<char>(( (v >> 6 ) & 0x3F ) | 0x80); dst++;
-		*dst = static_cast<char>((  v        & 0x3F ) | 0x80); dst++;
+		*dst = static_cast<char>(( (v.value >> 12)        ) | 0xC0); dst++;
+		*dst = static_cast<char>(( (v.value >> 6 ) & 0x3F ) | 0x80); dst++;
+		*dst = static_cast<char>((  v.value        & 0x3F ) | 0x80); dst++;
 		return;
 	}
 
-	if( v <   0x200000 ) {
+	if( v.value <   0x200000 ) {
 		if( dst + 4 > end ) throw Error("Convert UTF");
-		*dst = static_cast<char>(( (v >> 18)        ) | 0xC0); dst++;
-		*dst = static_cast<char>(( (v >> 12) & 0x3F ) | 0x80); dst++;
-		*dst = static_cast<char>(( (v >> 6 ) & 0x3F ) | 0x80); dst++;
-		*dst = static_cast<char>((  v        & 0x3F ) | 0x80); dst++;
+		*dst = static_cast<char>(( (v.value >> 18)        ) | 0xC0); dst++;
+		*dst = static_cast<char>(( (v.value >> 12) & 0x3F ) | 0x80); dst++;
+		*dst = static_cast<char>(( (v.value >> 6 ) & 0x3F ) | 0x80); dst++;
+		*dst = static_cast<char>((  v.value        & 0x3F ) | 0x80); dst++;
 		return;
 	}
 
 // The patterns below are not part of UTF-8, but were part of the first specification.
-	if( v <  0x4000000 ) {
+	if( v.value <  0x4000000 ) {
 		if( dst + 5 > end ) throw Error("Convert UTF");
-		*dst = static_cast<char>(((v >> 24)        ) | 0xC0); dst++;
-		*dst = static_cast<char>(((v >> 18) & 0x3F ) | 0x80); dst++;
-		*dst = static_cast<char>(((v >> 12) & 0x3F ) | 0x80); dst++;
-		*dst = static_cast<char>(((v >> 6 ) & 0x3F ) | 0x80); dst++;
-		*dst = static_cast<char>(( v        & 0x3F ) | 0x80); dst++;
+		*dst = static_cast<char>(((v.value >> 24)        ) | 0xC0); dst++;
+		*dst = static_cast<char>(((v.value >> 18) & 0x3F ) | 0x80); dst++;
+		*dst = static_cast<char>(((v.value >> 12) & 0x3F ) | 0x80); dst++;
+		*dst = static_cast<char>(((v.value >> 6 ) & 0x3F ) | 0x80); dst++;
+		*dst = static_cast<char>(( v.value        & 0x3F ) | 0x80); dst++;
 		return;
 	}
 
-	if( v < 0x80000000 ) {
+	if( v.value < 0x80000000 ) {
 		if( dst + 6 > end ) throw Error("Convert UTF");
-		*dst = static_cast<char>(((v >> 30)        ) | 0xC0); dst++;
-		*dst = static_cast<char>(((v >> 24) & 0x3F ) | 0x80); dst++;
-		*dst = static_cast<char>(((v >> 18) & 0x3F ) | 0x80); dst++;
-		*dst = static_cast<char>(((v >> 12) & 0x3F ) | 0x80); dst++;
-		*dst = static_cast<char>(((v >> 6 ) & 0x3F ) | 0x80); dst++;
-		*dst = static_cast<char>(( v        & 0x3F ) | 0x80); dst++;
+		*dst = static_cast<char>(((v.value >> 30)        ) | 0xC0); dst++;
+		*dst = static_cast<char>(((v.value >> 24) & 0x3F ) | 0x80); dst++;
+		*dst = static_cast<char>(((v.value >> 18) & 0x3F ) | 0x80); dst++;
+		*dst = static_cast<char>(((v.value >> 12) & 0x3F ) | 0x80); dst++;
+		*dst = static_cast<char>(((v.value >> 6 ) & 0x3F ) | 0x80); dst++;
+		*dst = static_cast<char>(( v.value        & 0x3F ) | 0x80); dst++;
 		return;
 	}
 
@@ -203,16 +216,16 @@ void UtfUtil::_encodeUtf< char >( char* & dst, const char* end, UniChar v ) {
 
 template<> inline
 void UtfUtil::_encodeUtf< wchar_t >( wchar_t* & dst, const wchar_t* end, UniChar v ) {
-	if( v <  0x10000 ) {
+	if( v.value <  0x10000 ) {
 		if( dst + 1 > end ) throw Error("Convert UTF");
-		*dst = static_cast<wchar_t>(v);
+		*dst = static_cast<wchar_t>(v.value);
 		return;
 	}
 
-	if( v < 0x110000 ) {
+	if( v.value < 0x110000 ) {
 		if( dst + 2 > end ) throw Error("Convert UTF");
-		*dst = static_cast<wchar_t>(( v >> 10   ) + 0xD7C0); dst++;
-		*dst = static_cast<wchar_t>(( v & 0x3FF ) + 0xDC00); dst++;
+		*dst = static_cast<wchar_t>(( v.value >> 10   ) + 0xD7C0); dst++;
+		*dst = static_cast<wchar_t>(( v.value & 0x3FF ) + 0xDC00); dst++;
 		return;
 	}
 

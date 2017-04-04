@@ -156,7 +156,7 @@ void WString::appendUtf(const StrView& v) {
 	buf.resize(newSize);
 
 	UtfUtil::convert(buf.data(), buf.size(), v.data(), v.size());	
-	_p.append(buf.data(), buf.size()); 
+	_p.append(buf.data(), (size_t)buf.size());
 }
 
 } //namespace

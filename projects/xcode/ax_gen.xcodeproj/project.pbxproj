@@ -77,6 +77,7 @@
 		96C812621E916EF0008B34C6 /* Path.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Path.h; sourceTree = "<group>"; };
 		96C812C71E91965E008B34C6 /* Glob.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Glob.cpp; sourceTree = "<group>"; };
 		96C812C81E91965E008B34C6 /* Glob.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Glob.h; sourceTree = "<group>"; };
+		96DA8F751E944C5700625579 /* UtfUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UtfUtil.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,22 +175,23 @@
 			isa = PBXGroup;
 			children = (
 				961AAE231E8F775600A2C441 /* Dict.h */,
-				96C812C71E91965E008B34C6 /* Glob.cpp */,
-				96C812C81E91965E008B34C6 /* Glob.h */,
 				961AAE241E8F775600A2C441 /* Error.cpp */,
 				961AAE251E8F775600A2C441 /* Error.h */,
-				96C812611E916EF0008B34C6 /* Path.cpp */,
-				96C812621E916EF0008B34C6 /* Path.h */,
 				961AAE261E8F775600A2C441 /* FileUtil.cpp */,
 				961AAE271E8F775600A2C441 /* FileUtil.h */,
+				96C812C71E91965E008B34C6 /* Glob.cpp */,
+				96C812C81E91965E008B34C6 /* Glob.h */,
 				961AAE281E8F775600A2C441 /* JsonReader.cpp */,
 				961AAE291E8F775600A2C441 /* JsonReader.h */,
 				961AAE2A1E8F775600A2C441 /* JsonWriter.cpp */,
 				961AAE2B1E8F775600A2C441 /* JsonWriter.h */,
 				961AAE2C1E8F775600A2C441 /* Log.cpp */,
 				961AAE2D1E8F775600A2C441 /* Log.h */,
+				96C812611E916EF0008B34C6 /* Path.cpp */,
+				96C812621E916EF0008B34C6 /* Path.h */,
 				961AAE2E1E8F775600A2C441 /* String.cpp */,
 				961AAE2F1E8F775600A2C441 /* String.h */,
+				96DA8F751E944C5700625579 /* UtfUtil.h */,
 				961AAE301E8F775600A2C441 /* Uuid.cpp */,
 				961AAE311E8F775600A2C441 /* Uuid.h */,
 				961AAE321E8F775600A2C441 /* Vector.h */,
