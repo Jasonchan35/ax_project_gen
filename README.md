@@ -2,20 +2,22 @@
 C++ Project Generator
 
 ### Feature Highlights:
-* Lightweight - only require C++11, libuuid and good to go! *( No lua, python, java or bunch of libraries / packages dependencies )*
+* Lightweight - only require C++11 and good to go! *( No lua, python, java or any of libraries / packages dependencies )*
 
-* Able to run on multiple platforms *( Windows / MacOSX / Linux / FreeBSD )*
+* Run on multiple platforms *( Windows / MacOSX / Linux / FreeBSD )*
 
 * Auto inherit configuration from depended project, for instance executable project depends on library <br> will inherit all settings by default *( e.g. include_dir, cpp_defines, output_library ...etc )*
 
 * Support wildcard, glob with sub-directories *( example: ```src/**/*.cpp```,  means all c++ files within `src` folder including all sub-directories )*
 
-* Support Unicode file Path with space and non-Latin characters
+* Support file path with space and Unicode for non-Latin characters
 
-* Precompiled header - also apply force-include to all c++ files<br>
+* Precompiled header - auto apply force-include to c++ files<br>
 `(*In vs2015 precompiledHeader.cpp will be auto generated)`
 
 * Unite Build - build multiple small C/C++ file at once to improve the compile time
+
+* Generate proejcts / Makefile with multi-thread build support
 
 * Support Project Group, Virtual Folder in Visual Studio solution or Xcode workspace
 
