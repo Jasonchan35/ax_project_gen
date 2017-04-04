@@ -5,6 +5,7 @@
 	//"multithread_build": false,
 	//"unite_build": false,
 	//"unite_mega_byte_per_file": 1,
+	//"build_dir" : "./",
 
 	"config": {
 		//TODO condition

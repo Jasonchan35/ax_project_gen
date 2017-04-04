@@ -204,5 +204,10 @@ void Workspace::resolve() {
 	}
 }
 
+bool Workspace::os_has_objc() {
+	if (os=="macosx")	return true;
+	if (os=="ios")		return true;
+	return false;
+}
 
 } //namespace

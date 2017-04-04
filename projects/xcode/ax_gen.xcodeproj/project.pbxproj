@@ -67,8 +67,8 @@
 		961AAE321E8F775600A2C441 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
 		961AAE331E8F775600A2C441 /* XmlWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XmlWriter.cpp; sourceTree = "<group>"; };
 		961AAE341E8F775600A2C441 /* XmlWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XmlWriter.h; sourceTree = "<group>"; };
-		96C80CA31E90CF89008B34C6 /* ProjectCategory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProjectCategory.cpp; sourceTree = "<group>"; };
-		96C80CA41E90CF89008B34C6 /* ProjectCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectCategory.h; sourceTree = "<group>"; };
+		9645160B1E93159F00331DA0 /* ProjectGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProjectGroup.cpp; sourceTree = "<group>"; };
+		9645160C1E93159F00331DA0 /* ProjectGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectGroup.h; sourceTree = "<group>"; };
 		96C80CA61E90CFE4008B34C6 /* VirtualFolder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualFolder.cpp; sourceTree = "<group>"; };
 		96C80CA71E90CFE4008B34C6 /* VirtualFolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualFolder.h; sourceTree = "<group>"; };
 		96C80CA91E90D02E008B34C6 /* FileEntry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileEntry.cpp; sourceTree = "<group>"; };
@@ -143,8 +143,8 @@
 				961AAE131E8F775600A2C441 /* Project.h */,
 				961AAE141E8F775600A2C441 /* Workspace.cpp */,
 				961AAE151E8F775600A2C441 /* Workspace.h */,
-				96C80CA31E90CF89008B34C6 /* ProjectCategory.cpp */,
-				96C80CA41E90CF89008B34C6 /* ProjectCategory.h */,
+				9645160B1E93159F00331DA0 /* ProjectGroup.cpp */,
+				9645160C1E93159F00331DA0 /* ProjectGroup.h */,
 				96C80CA61E90CFE4008B34C6 /* VirtualFolder.cpp */,
 				96C80CA71E90CFE4008B34C6 /* VirtualFolder.h */,
 				96C80CA91E90D02E008B34C6 /* FileEntry.cpp */,
