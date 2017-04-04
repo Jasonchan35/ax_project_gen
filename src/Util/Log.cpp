@@ -29,6 +29,8 @@ void Log::onOutput(Level lv, const StrView& s) {
 void Log::createLogFile(const StrView& filename_) {
 	String filename = filename_;
 
+	Path::makeDir(Path::dirname(filename_));
+
 	g_log.file.open(filename.c_str(), std::ios::binary);
 	g_log.fileBuffer.reserve(4096);
 }
