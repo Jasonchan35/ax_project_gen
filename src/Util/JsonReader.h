@@ -51,7 +51,8 @@ public:
 	void getValue(String&	out_value);
 	void getValue(bool&		out_value);
 	void getValue(double&	out_value);
-	void getValue(int&		out_value) { double tmp; getValue(tmp); out_value = (int)tmp; }
+	void getValue(int&		out_value) { double tmp; getValue(tmp); out_value = static_cast<int>(tmp); }
+	void getValue(uint32_t& out_value) { double tmp; getValue(tmp); out_value = static_cast<uint32_t>(tmp); }
 
 	template<typename T>
 	void getValue(Vector<T>& out_value);

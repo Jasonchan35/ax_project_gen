@@ -84,12 +84,19 @@ void JsonWriter::write(bool value) {
 
 void JsonWriter::write(int value) {
 	writeComma();
-
 	const int kTempBufSize = 100;
 	char tmp[kTempBufSize+1];
 	snprintf(tmp, kTempBufSize, "%d", value);
 	tmp[kTempBufSize] = 0;
+	_buf.append(StrView_c_str(tmp));
+}
 
+void JsonWriter::write(uint32_t value) {
+	writeComma();
+	const int kTempBufSize = 100;
+	char tmp[kTempBufSize+1];
+	snprintf(tmp, kTempBufSize, "%u", value);
+	tmp[kTempBufSize] = 0;
 	_buf.append(StrView_c_str(tmp));
 }
 

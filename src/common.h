@@ -22,19 +22,10 @@
 
 #if ax_OS_Windows
 	#include <Windows.h>
-
-	//UuidCreate
-	#include <Rpcdce.h>
-	#pragma comment( lib, "Rpcrt4.lib")
-
-	//PathRelativePathTo
-	#include <Shlwapi.h>
-	#pragma comment( lib, "Shlwapi.lib")
 #else
 	#include <dirent.h>
 	#include <sys/stat.h>
  	#include <unistd.h>	
-	#include <uuid/uuid.h>
 	#include <stdint.h>
 #endif
 
@@ -71,4 +62,3 @@ public:
 #include "Util/JsonReader.h"
 #include "Util/JsonWriter.h"
 #include "Util/XmlWriter.h"
-#include "Util/Uuid.h"

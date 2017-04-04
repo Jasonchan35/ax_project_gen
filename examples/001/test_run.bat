@@ -2,5 +2,4 @@
 %~d0
 cd %~dp0
 
-..\..\bin\ax_gen.exe ws=Hello.axworkspace os=linux -gen 
-pause
+..\..\bin\ax_gen.exe ws=Hello.axworkspace -gen

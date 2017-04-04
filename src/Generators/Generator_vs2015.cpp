@@ -31,6 +31,9 @@ void Generator_vs2015::readCacheFile(const StrView& filename) {
 	JsonReader reader(json, filename);
 	reader.beginObject();
 	while (!reader.endObject()) {
+		if (reader.member("lastGenId.a", _lastGenId.a)) continue;
+		if (reader.member("lastGenId.b", _lastGenId.b)) continue;
+
 		if (reader.beginObject("projects")) {
 			while (!reader.endObject()) {
 				String m;
@@ -49,7 +52,7 @@ void Generator_vs2015::readCacheFile(const StrView& filename) {
 			}
 			continue;
 		}
-		if (reader.beginObject("categories")) {
+		if (reader.beginObject("groups")) {
 			while (!reader.endObject()) {
 				String m;
 				reader.getMemberName(m);
@@ -76,6 +79,10 @@ void Generator_vs2015::writeCacheFile(const StrView& filename) {
 	JsonWriter wr;
 	{
 		auto scope = wr.objectScope();
+
+		wr.write("lastGenId.a", _lastGenId.a);
+		wr.write("lastGenId.b", _lastGenId.b);
+
 		{
 			auto scope = wr.objectScope("projects");
 			for (auto& proj : g_ws->projects) {
@@ -84,7 +91,7 @@ void Generator_vs2015::writeCacheFile(const StrView& filename) {
 			}
 		}
 		{
-			auto scope = wr.objectScope("categories");
+			auto scope = wr.objectScope("groups");
 			for (auto& group : g_ws->projectGroups.dict) {
 				auto scope = wr.objectScope(group.path);
 				wr.write("uuid", group.genData_vs2015.uuid);
@@ -97,13 +104,13 @@ void Generator_vs2015::writeCacheFile(const StrView& filename) {
 void Generator_vs2015::genUuid(String& outStr) {
 	if (outStr) return;
 
-	Uuid uuid;
-	uuid.generate();
+	_lastGenId.v64++;
 
-	String tmp;
-	uuid.toString(tmp);
-	outStr.clear();
-	outStr.append("{", tmp, "}");
+	char tmp[100+1];
+	snprintf(tmp, 100, "{%04X%04X-%04X-%04X-%04X-%04X%04X%04X}", 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, _lastGenId.a, _lastGenId.b);
+	tmp[100] = 0;
+
+	outStr.set(StrView_c_str(tmp));
 }
 
 void Generator_vs2015::gen_project(Project& proj) {
@@ -434,7 +441,7 @@ void Generator_vs2015::gen_workspace() {
 			o.append("EndProject\n");
 		}
 
-		o.append("\n# ----  (category/project) -> parent ----\n");
+		o.append("\n# ----  (ProjectGroups) -> parent ----\n");
 		o.append("Global\n");
 		o.append("\tGlobalSection(NestedProjects) = preSolution\n");
 		for (auto& c : g_ws->projectGroups.dict) {

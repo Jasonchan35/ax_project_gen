@@ -64,9 +64,6 @@
     <ClCompile Include="..\..\src\Util\XmlWriter.cpp">
       <Filter>src\Util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Util\Uuid.cpp">
-      <Filter>src\Util</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Generators\Generator.cpp">
       <Filter>src\Generators</Filter>
     </ClCompile>
@@ -139,9 +136,6 @@
       <Filter>src\Util</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Util\XmlWriter.h">
-      <Filter>src\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Util\Uuid.h">
       <Filter>src\Util</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Util\Dict.h">

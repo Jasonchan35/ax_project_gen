@@ -19,6 +19,7 @@ int App::run(int argc, char* argv[]) {
 		Log::info("======== End ========");
 	}catch(...){
 		ret = -1;
+		Log::error("Error !!!!!");
 	}
 
 	Log::closeLogFile();

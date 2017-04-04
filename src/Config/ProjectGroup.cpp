@@ -33,7 +33,7 @@ ProjectGroup* ProjectGroupDict::getOrAddParent(const StrView& path) {
 
 ProjectGroupDict::ProjectGroupDict() {
 	root = dict.add("");
-	root->path = "<category_root>";
+	root->path = "<group_root>";
 }
 
 void ProjectGroupDict::add(Project& proj) {

@@ -10,7 +10,6 @@
 #include "Util/XmlWriter.cpp"
 #include "Util/Log.cpp"
 #include "Util/String.cpp"
-#include "Util/Uuid.cpp"
 #include "Util/Glob.cpp"
 #include "Util/UtfUtil.h"
 

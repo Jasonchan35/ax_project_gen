@@ -28,6 +28,19 @@ private:
 	void genUuid(String& outStr);
 
 	String vcxproj_cpu;
+
+	class GenId {
+	public:
+		GenId() { v64 = 0; }
+		union {
+			struct {
+				uint32_t	a;
+				uint32_t	b;
+			};
+			uint64_t v64;
+		};
+	};
+	GenId _lastGenId;
 };
 
 } //namespace
