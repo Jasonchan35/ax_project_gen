@@ -20,7 +20,7 @@ void Log::onOutput(Level lv, const StrView& s) {
 
 	g_log.fileBuffer.append(s);
 
-	const int kMaxBufferSize = 4 * 1024;
+	const int kMaxBufferSize = 512 * 1024;
 	if (lv == Level::Error || g_log.fileBuffer.size() >= kMaxBufferSize) {
 		flushLogFile();
 	}

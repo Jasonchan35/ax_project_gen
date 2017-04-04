@@ -321,7 +321,7 @@ void Generator_xcode::gen_project_PBXGroup(XCodePbxWriter& wr, Project& proj) {
 		}
 		
 		wr.member("sourceTree", "SOURCE_ROOT");
-		wr.member("path", quoteString(proj.buildFileDir));
+		wr.member("path", quoteString(proj.axprojDir));
 		wr.member("name", "MainGroup");
 	}
 	
@@ -604,7 +604,7 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 				
 				if (proj.pch_header) {
 					String pch_header;
-					Path::makeFullPath(pch_header, proj.buildFileDir, proj.pch_header);
+					Path::makeFullPath(pch_header, proj.axprojDir, proj.pch_header);
 					wr.member("GCC_PREFIX_HEADER", quoteString(pch_header));
 					wr.member("GCC_PRECOMPILE_PREFIX_HEADER", "YES");
 				}

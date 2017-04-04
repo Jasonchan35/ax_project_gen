@@ -15,15 +15,20 @@ public:
 
 	void readProjectFile(const StrView& filename);
 
-	Vector<String>		config_list;
-	StringDict<Config>	configs;
+	class Input {
+	public:
+		Vector<String>		config_list;
+		String				build_dir;
+		String				startup_project;
+		bool				unite_build {true};
+		double				unite_mega_byte_per_file {1};
+	};
+	Input	input;
+
 	String				workspace_name;
-	String				build_dir;
+	StringDict<Config>	configs;
 
-	String&				defaultConfigName() { return config_list.back(); }
-
-	bool				unite_build {true};
-	double				unite_mega_byte_per_file {1};
+	String&				defaultConfigName() { return input.config_list.back(); }
 
 	String				generator;
 
@@ -35,7 +40,6 @@ public:
 	String				cpu;
 	String				_platformName;
 
-	String				startup_project;
 	Project*			_startup_project{nullptr};
 
 	StringDict<Project>	projects;
@@ -45,8 +49,8 @@ public:
 	String				dll_target_suffix;
 	String				lib_target_suffix;
 
-	String				buildFilename;
-	String				buildFileDir;
+	String				axworkspaceFilename;
+	String				axworkspaceDir;
 	String				outDir;
 	
 	void dump(StringStream& s);

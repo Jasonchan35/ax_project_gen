@@ -1,8 +1,9 @@
+*.vcxproj.user
+*.VC.VC.opendb
+*.VC.db
+_build_tmp
+xcuserdata
+.vs
+
 /bin
-/examples/001/_local_build
-/projects/vs2015/ax_gen.VC.VC.opendb
-/projects/vs2015/_build_tmp
-/projects/vs2015/ax_gen.VC.db
-/projects/vs2015/.vs
-/projects/xcode/ax_gen.xcodeproj/xcuserdata
-/projects/xcode/ax_gen.xcodeproj/project.xcworkspace/xcuserdata
+/examples/001/_build

@@ -47,7 +47,7 @@ Workspace::Workspace() {
 	#error "Unknown OS"
 #endif
 
-	build_dir.set("_local_build/");
+	input.build_dir = "_build";
 
 //====================
 	os  = host_os;
@@ -56,19 +56,20 @@ Workspace::Workspace() {
 
 void Workspace::dump(StringStream& s) {
 	s << "\n======== Workspace [" << workspace_name << "] ===============\n";
-	ax_dump(s, config_list);
-
+	ax_dump(s, input.build_dir);
+	ax_dump(s, input.config_list);
 	ax_dump(s, generator);
 	ax_dump(s, compiler);
 	ax_dump(s, os);
 	ax_dump(s, cpu);
 	ax_dump(s, _platformName);
 
-	if (unite_build)	 ax_dump(s, unite_build);
+	if (input.unite_build) {
+		ax_dump(s, input.unite_build);
+		ax_dump(s, input.unite_mega_byte_per_file);
+	}
 
-	ax_dump(s, unite_mega_byte_per_file);
-
-	ax_dump(s, startup_project);
+	ax_dump(s, input.startup_project);
 
 	for (auto& c : configs) {
 		c.dump(s);
@@ -82,9 +83,9 @@ void Workspace::dump(StringStream& s) {
 void Workspace::readFile(const StrView& filename) {
 	workspace_name = Path::basename(filename, false);
 
-	Path::getAbs(buildFilename, filename);
-	buildFileDir = Path::dirname(buildFilename);
-	buildFileDir += '/';
+	Path::getAbs(axworkspaceFilename, filename);
+	axworkspaceDir.set(Path::dirname(axworkspaceFilename), '/');
+
 
 	_platformName.clear();
 	_platformName.append(generator, '-', compiler, '-', os, '-', cpu);
@@ -93,13 +94,13 @@ void Workspace::readFile(const StrView& filename) {
 		String json;
 		FileUtil::readTextFile(filename, json);
 
-		JsonReader r(json, buildFilename);
+		JsonReader r(json, axworkspaceFilename);
 		readJson(r);
 	}
 
 	{
 		String tmp;
-		tmp.append(buildFileDir, build_dir, _platformName);
+		tmp.append(axworkspaceDir, input.build_dir, '/', _platformName);
 		Path::getAbs(outDir, tmp);
 		outDir += '/';
 	}
@@ -121,13 +122,13 @@ void Workspace::readProjectFile(const StrView& filename) {
 void Workspace::readJson(JsonReader& r) {
 	r.beginObject();
 	while (!r.endObject()) {
-		if (r.member("build_dir",	build_dir )) continue;
-		if (r.member("startup_project", startup_project)) continue;
-		if (r.member("unite_build",		unite_build)) continue;
-		if (r.member("unite_mega_byte_per_file", unite_mega_byte_per_file )) continue;
+		if (r.member("build_dir",			input.build_dir )) continue;
+		if (r.member("startup_project",		input.startup_project)) continue;
+		if (r.member("unite_build",			input.unite_build)) continue;
+		if (r.member("unite_mega_byte_per_file", input.unite_mega_byte_per_file )) continue;
 
-		if (r.member("config_list", config_list)) {
-			for (auto& config_name : config_list) {
+		if (r.member("config_list", input.config_list)) {
+			for (auto& config_name : input.config_list) {
 				auto* c = configs.add(config_name);
 				c->name = config_name;
 			}
@@ -175,8 +176,8 @@ void Workspace::readJson(JsonReader& r) {
 }
 
 void Workspace::resolve() {	
-	if (startup_project) {
-		_startup_project = projects.find(startup_project);
+	if (input.startup_project) {
+		_startup_project = projects.find(input.startup_project);
 	}
 
 	if (os == "windows") {

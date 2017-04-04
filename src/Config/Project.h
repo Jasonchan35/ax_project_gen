@@ -62,8 +62,8 @@ public:
 
 	FileEntry				pch_cpp; //only for msvc
 
-	String				buildFilename;
-	String				buildFileDir;
+	String				axprojFilename;
+	String				axprojDir;
 
 	bool				multithreadBuild {true};
 

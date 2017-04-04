@@ -89,8 +89,8 @@ void Project::init(const StrView& name_) {
 	name = name_;
 	
 	//carry workspace global setting as project default
-	input.unite_build = g_ws->unite_build;
-	input.unite_mega_byte_per_file = g_ws->unite_mega_byte_per_file;
+	input.unite_build = g_ws->input.unite_build;
+	input.unite_mega_byte_per_file = g_ws->input.unite_mega_byte_per_file;
 	
 	for (auto& src : g_ws->configs) {
 		auto* dst = configs.add(src.name);
@@ -101,9 +101,8 @@ void Project::init(const StrView& name_) {
 }
 	
 void Project::readFile(const StrView& filename) {
-	Path::getAbs(buildFilename, filename);
-	buildFileDir = Path::dirname(buildFilename);
-	buildFileDir += '/';
+	Path::getAbs(axprojFilename, filename);
+	axprojDir.set(Path::dirname(axprojFilename), '/');
 
 	String json;
 	FileUtil::readTextFile(filename, json);
@@ -225,13 +224,12 @@ void Project::resolve_internal() {
 	}
 
 	if (input.pch_header) {
-		Path::makeFullPath(pch_header, buildFileDir, input.pch_header);
+		Path::makeFullPath(pch_header, axprojDir, input.pch_header);
 	}
 }
 
 void Project::resolve_files() {
-	_generatedFileDir.clear();
-	_generatedFileDir.append(g_ws->outDir, "_generated_/", name, "/");
+	_generatedFileDir.set(g_ws->outDir, "_generated_/", name, "/");
 
 	fileEntries.clear();
 
@@ -239,7 +237,7 @@ void Project::resolve_files() {
 	String tmp;
 
 	for (auto& f : input.files) {
-		Path::makeFullPath(tmp, buildFileDir, f);
+		Path::makeFullPath(tmp, axprojDir, f);
 		Glob::search(globResult, tmp, false);
 
 		for (auto& r : globResult) {
@@ -250,7 +248,7 @@ void Project::resolve_files() {
 	}
 
 	for (auto& f : input.exclude_files) {
-		Path::makeFullPath(tmp, buildFileDir, f);
+		Path::makeFullPath(tmp, axprojDir, f);
 		Glob::search(globResult, tmp, false);
 
 		for (auto& r : globResult) {
@@ -268,7 +266,7 @@ void Project::resolve_files() {
 		if (f.generated) {
 			virtualFolders.add(g_ws->outDir, f);
 		}else{
-			virtualFolders.add(buildFileDir, f);
+			virtualFolders.add(axprojDir, f);
 		}
 	}
 }

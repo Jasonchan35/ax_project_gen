@@ -25,9 +25,7 @@ int App::run(int argc, char* argv[]) {
 	return ret;
 }
 
-int App::_run(int argc, char* argv[]) {
-	Log::info("==== ax_gen ====");
-
+void App::readArgs(int argc, char* argv[]) {
 	for (int i=1; i<argc; i++) {
 		auto s = StrView_c_str(argv[i]);
 		Log::info("\targ[", i, "]: ", s);
@@ -58,6 +56,12 @@ int App::_run(int argc, char* argv[]) {
 			Log::info("Unknown arg ", s);
 		}
 	}
+}
+
+int App::_run(int argc, char* argv[]) {
+	Log::info("==== ax_gen ====");
+
+	readArgs(argc, argv);
 
 	if (!workspace.generator) { 
 		throw Error("please specific generator");
@@ -88,9 +92,7 @@ int App::_run(int argc, char* argv[]) {
 	StringStream ss;
 
 	workspace.resolve();
-	if (options.verbose) {
-		workspace.dump(ss);
-	}
+	workspace.dump(ss);
 
 	Log::info(ss.str());
 

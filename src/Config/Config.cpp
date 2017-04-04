@@ -1,4 +1,5 @@
 #include "../common.h"
+#include "App.h"
 #include "Config.h"
 #include "Project.h"
 #include "Workspace.h"
@@ -27,6 +28,8 @@ Config::Config() {
 }
 
 void Config::dump(StringStream& s) {
+	if (!g_app->options.verbose) return;
+
 	s << "\n-- Config [";
 	if (_project) {
 		s << _project->name;

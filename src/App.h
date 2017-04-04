@@ -27,7 +27,8 @@ public:
 	unique_ptr<Generator>	_generator;
 
 private:
-	int _run(int argc, char* argv[]);
+	int  _run(int argc, char* argv[]);
+	void readArgs(int argc, char* argv[]);
 };
 
 extern App* g_app;

@@ -261,7 +261,7 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 	//------- pre-compiled header
 	if (proj.pch_header) {
 		pch_basename = Path::basename(proj.pch_header, true);
-		Path::makeFullPath(pch_header, proj.buildFileDir, proj.pch_header);
+		Path::makeFullPath(pch_header, proj.axprojDir, proj.pch_header);
 
 		pch_header_pch.set(config._build_tmp_dir, "cpp_pch/", pch_basename, pch_suffix);
 		pch_header_dep.set(pch_header_pch, ".d");
