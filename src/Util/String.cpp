@@ -1,5 +1,6 @@
 #include "../common.h"
 #include "String.h"
+#include "UtfUtil.h"
 
 namespace ax_gen {
 
@@ -128,14 +129,17 @@ void String::_append(double v) {
 	_append(StrView_c_str(buf));
 }
 
-void String::appendUtf(const wchar_t* w, int size) {
-	try{
-		std::wstring_convert<std::codecvt_utf8<wchar_t>> c;
-		auto a = c.to_bytes(w, w + size);
-		_p.append(a.data(), a.size());
-	}catch(std::exception e){
-		throw Error("error convert wchar to utf8");
-	}
+void String::appendUtf(const wchar_t* wc, int wc_len) {
+	int oldSize = size();
+	int n = UtfUtil::getConvertedCount<wchar_t, char>(wc, wc_len);
+
+	int newSize = oldSize + n;
+
+	Vector<char> buf;
+	buf.resize(newSize);
+
+	UtfUtil::convert(buf.data(), buf.size(), wc, wc_len);
+	_append( StrView(buf.data(), buf.size()) );
 }
 
 void String::appendUtf(const WString& w) {
@@ -143,13 +147,16 @@ void String::appendUtf(const WString& w) {
 }
 
 void WString::appendUtf(const StrView& v) {
-	try{
-		std::wstring_convert<std::codecvt_utf8<wchar_t>> c;
-		auto w = c.from_bytes(v.begin(), v.end());
-		_p.append(w.data(), w.size()); 
-	}catch(std::exception e){
-		throw Error("error convert utf8 to wchar");
-	}
+	int oldSize = size();
+	int n = UtfUtil::getConvertedCount<char, wchar_t>(v.data(), v.size());
+
+	int newSize = oldSize + n;
+	
+	Vector<wchar_t> buf;
+	buf.resize(newSize);
+
+	UtfUtil::convert(buf.data(), buf.size(), v.data(), v.size());	
+	_p.append(buf.data(), buf.size()); 
 }
 
 } //namespace

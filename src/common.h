@@ -14,8 +14,6 @@
 #include <string>
 #include <memory>
 #include <exception>
-#include <locale>
-#include <codecvt>
 #include <assert.h>
 #include <stdint.h>
 

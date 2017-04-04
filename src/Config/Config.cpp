@@ -1,5 +1,5 @@
 #include "../common.h"
-#include "App.h"
+#include "../App.h"
 #include "Config.h"
 #include "Project.h"
 #include "Workspace.h"

@@ -12,6 +12,7 @@
 #include "Util/String.cpp"
 #include "Util/Uuid.cpp"
 #include "Util/Glob.cpp"
+#include "Util/UtfUtil.h"
 
 #include "Config/Config.cpp"
 #include "Config/Project.cpp"

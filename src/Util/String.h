@@ -71,6 +71,14 @@ private:
 
 inline StrView StrView_c_str(const char* sz) { return StrView(sz, (int)strlen(sz)); }
 
+
+class WStrView {
+public:
+	const wchar_t* _data {nullptr};
+	      int      _size {0};
+};
+
+
 class String {
 public:
 	String() {}
@@ -143,13 +151,13 @@ public:
 	StrView view() const { return StrView(_p.data(), (int)_p.size()); }
 
 private:
-	void _append(char    ch)			{ _p.push_back(ch); }
+	void _append(char    ch)						{ _p.push_back(ch); }
 	void _append(int     v);
 	void _append(double  v);
-	void _append(const StrView& v)		{ _p.append(v.data(), (size_t)v.size()); }
+	void _append(const StrView& v)					{ _p.append(v.data(), (size_t)v.size()); }
 
 	template<int N>
-	void _append(const char (&v)[N])	{ _append(StrView(v)); }
+	void _append(const char (&v)[N])				{ _append(StrView(v)); }
 
 	std::string	_p;
 };
