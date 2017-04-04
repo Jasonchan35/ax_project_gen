@@ -5,22 +5,24 @@ C++ Project Generator
 
 * Support multiple platform ( Windows / MacOSX / Linux / FreeBSD )
 
-* Auto inherit configuration from depended project, for instance executable project depends on library <br> will inherit all settings by default ( include_dir, cpp_defines, output_library ...etc )
+* Auto inherit configuration from depended project, for instance executable project depends on library <br> will inherit all settings by default *( e.g. include_dir, cpp_defines, output_library ...etc )*
 
-* Support precompiled header ( auto generate precompiledHeader.cpp in vs2015 )
+* Precompiled header - also apply force-include to all c++ files
+`(*In vs2015 precompiledHeader.cpp will be auto generated)`
 
 * Unite Build - build multiple C/C++ file at once to improve the compile time
 
+* Project Group, Virtual Folder in Visual Studio solution or Xcode workspace
 
-Command Line:
+**Command Line:**
 ```
-ax_gen.exe gen=<Geneartor> ws=<Workspace File> os=<target OS> cpu=<target CPU> [-gen] [-build] [-ide] [-run] [-verbose] 
+ax_gen.exe ws=<Workspace File> [gen=<Geneartor>] [os=<target OS>] [cpu=<target CPU>] [-gen] [-build] [-ide] [-run] [-verbose] 
 ```
 - `arguments can be in random order`
 
-Example:
+**Example:**
 ```
-ax_gen.exe gen=vs2015 ws=examples/001/Hello.axworkspace -gen
+ax_gen.exe ws=examples/001/Hello.axworkspace -gen
 ```
 
 |**Actions:**||
@@ -35,7 +37,7 @@ ax_gen.exe gen=vs2015 ws=examples/001/Hello.axworkspace -gen
 |--------------|-------------------------|---|
 | gen=vs2015   | Visual Studio 2015      ||
 | gen=xcode    | Xcode                   ||
-| gen=makefile | GNU/BSD makefile format | `*support file path with space` <br>`(handwritten Makefile might have problem`<br>`during 2nd degree variable evaluation)` |
+| gen=makefile | GNU/BSD makefile format | `*support file path with space` <br>`(Which handwritten Makefile might have problem`<br>`during 2nd degree variable evaluation)` |
 
 |**OS options:**||
 |------------|------------|
@@ -55,10 +57,10 @@ ax_gen.exe gen=vs2015 ws=examples/001/Hello.axworkspace -gen
 
 --------
 
-### Output example: ( *Visual Studio / Xcode / Makefile* )
+### Example output: ( *Visual Studio / Xcode / Makefile* )
 ![Visual Studio Solution](doc/ScreenShots/2017-04-03.png)
 
-### Input example: *Hello.axproj*:
+### Example Input: *Hello.axproj*:
 ```javascript
 {
 	"group": "MyGroup/MyProgram",
