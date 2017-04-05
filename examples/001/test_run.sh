@@ -12,4 +12,4 @@ echo pwd = `pwd`
 # build ax_gen
 make --directory=../../projects/makefile
 
-../../bin/ax_gen ws=Hello.axworkspace -gen -build -run
+../../bin/ax_gen ws=Hello.axworkspace gen=makefile -gen -build -run
