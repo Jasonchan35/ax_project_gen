@@ -22,6 +22,89 @@ void Generator_vs2015::generate() {
 	gen_workspace();
 }
 
+void Generator_vs2015::ide() {
+	Log::info("=========== Open IDE ===============");
+#if ax_OS_Windows
+	WString sln;
+	sln.setUtf(g_ws->genData_vs2015.sln);
+	::ShellExecute(nullptr, L"open", sln.c_str(), nullptr, nullptr, SW_SHOW);
+#else
+
+#endif
+}
+
+void Generator_vs2015::run() {
+	Log::info("=========== Run ===============");
+
+	if (!g_ws->_startup_project) {
+		Log::error("no startup project to run");
+		return;
+	}
+
+	auto& config = g_ws->_startup_project->defaultConfig();
+	if (!config.outputTarget) {
+		Log::error("no output target to run in startup project ", g_ws->_startup_project->name);
+		return;
+	}
+
+	createProcess(config.outputTarget, "");
+}
+
+void Generator_vs2015::build() {
+	Log::info("=========== Build ===============");
+
+	auto* proj = g_ws->_startup_project;
+	if (!proj) {
+		Log::error("no startup project to build");
+		return;
+	}
+
+	String target(proj->input.group);
+	target.replaceChars('/', '\\');
+	target.append('\\', proj->name);
+
+	StrView configName = g_ws->defaultConfigName();
+
+	String args("\"", g_ws->genData_vs2015.sln, "\"",
+				" /build \"", configName, "\"",
+				" /project \"", proj->name, "\"");
+	createProcess("C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\IDE\\devenv.exe", args);
+}
+
+void Generator_vs2015::createProcess(const StrView& exe, const StrView& args) {
+#if ax_OS_Windows
+
+	WString exeW;
+	exeW.setUtf(exe);
+
+	String cmd("\"", exe, "\" ", args);
+
+	Log::info("cmd: ", cmd);
+
+	WString cmdW;
+	cmdW.appendUtf(cmd);
+
+	STARTUPINFOW si; 
+	ZeroMemory(&si, sizeof(STARTUPINFO));
+    si.cb = sizeof(STARTUPINFO);
+
+	PROCESS_INFORMATION pi; 
+	ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
+
+	if (!::CreateProcess(exeW.c_str(), cmdW.data(), nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi)) {
+		Log::error("Error run MSBuild");
+		auto dw = GetLastError();
+		return;
+	}
+
+    WaitForSingleObject(pi.hProcess, INFINITE);
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+#else
+	Log::error("Doesn't support createProcess on this platform");
+#endif
+}
+
 void Generator_vs2015::readCacheFile(const StrView& filename) {
 	if (!Path::fileExists(filename)) return;		
 
@@ -329,7 +412,7 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 			wr.tagWithBody("DebugInformationFormat", "ProgramDatabase");
 			wr.tagWithBody("SDLCheck", "true");
 
-			wr.tagWithBodyBool("MultiProcessorCompilation", proj.multithreadBuild);
+			wr.tagWithBodyBool("MultiProcessorCompilation", proj.multithread_build());
 
 			if (config.isDebug) {
 				wr.tagWithBody("Optimization",				"Disabled");
@@ -392,6 +475,8 @@ void Generator_vs2015::gen_config_option(XmlWriter& wr, const StrView& name, Vec
 
 void Generator_vs2015::gen_workspace() {
 	Log::info("gen_workspace ", g_ws->workspace_name);
+
+	g_ws->genData_vs2015.sln.set(g_ws->outDir, g_ws->workspace_name, ".sln");
 
 	//cache file
 	String cacheFilename;
@@ -459,9 +544,7 @@ void Generator_vs2015::gen_workspace() {
 	
 	writeCacheFile(cacheFilename);
 
-	String filename;
-	filename.append(g_ws->outDir, g_ws->workspace_name, ".sln");
-	FileUtil::writeTextFile(filename, o);
+	FileUtil::writeTextFile(g_ws->genData_vs2015.sln, o);
 }
 
 void Generator_vs2015::gen_vcxproj_filters(Project& proj) {

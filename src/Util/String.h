@@ -176,6 +176,8 @@ public:
 
 	void reserve(int n) { _p.reserve((size_t)n); }
 
+		wchar_t*	data	() { return &_p[0]; }
+
 private:
 	std::wstring _p;
 };

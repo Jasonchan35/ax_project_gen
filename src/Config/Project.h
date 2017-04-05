@@ -40,7 +40,7 @@ public:
 		Vector<String>		files;
 		Vector<String>		exclude_files;
 
-		bool				multithreadBuild {true};
+		bool				multithread_build {true};
 		bool				unite_build {true};
 		double				unite_mega_byte_per_file {1};
 
@@ -50,6 +50,8 @@ public:
 		void dump(StringStream& s);
 	};
 	Input	input;
+
+	bool	multithread_build() { return input.multithread_build; }
 
 	ProjectGroup*			group {nullptr};
 
@@ -64,8 +66,6 @@ public:
 
 	String				axprojFilename;
 	String				axprojDir;
-
-	bool				multithreadBuild {true};
 
 	String				name;
 

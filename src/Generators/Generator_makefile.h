@@ -7,8 +7,9 @@ class Generator_makefile : public Generator {
 public:
 	Generator_makefile();
 
-	void generate() override;
-	void build() override;
+	void generate	() override;
+	void build		() override;
+	void run		() override;
 
 private:
 	void gen_workspace();

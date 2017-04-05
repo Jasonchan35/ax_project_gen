@@ -57,6 +57,12 @@ public:
 
 	void dump(StringStream& s);
 	void resolve();
+
+	struct GenData_vs2015 {
+		String		sln;
+	};
+	GenData_vs2015 genData_vs2015;
+
 };
 
 extern Workspace* g_ws;

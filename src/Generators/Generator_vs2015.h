@@ -9,6 +9,9 @@ public:
 	Generator_vs2015();
 
 	void generate() override;
+	void build() override;
+	void ide() override;
+	void run() override;
 
 private:
 
@@ -26,6 +29,8 @@ private:
 	void writeCacheFile(const StrView& filename);
 
 	void genUuid(String& outStr);
+
+	void createProcess(const StrView& exe, const StrView& args);
 
 	String vcxproj_cpu;
 

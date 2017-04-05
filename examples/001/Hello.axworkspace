@@ -94,7 +94,7 @@
 		}
 	},
 
-	//"startup_project": "MyProgram",
+	"startup_project": "Hello",
 	"projects": [
 		"Hello.axproj",
 		"My - Lib/MyLib.axproj"

@@ -123,9 +123,11 @@ void Project::readJson(JsonReader& r) {
 		if (r.member("exclude_files",	input.exclude_files	)) continue;
 		if (r.member("pch_header",		input.pch_header	)) continue;
 
-		if (r.member("unite_build",		input.unite_build		)) continue;
+
+		if (r.member("unite_build",					input.unite_build				)) continue;
 		if (r.member("unite_mega_byte_per_file",	input.unite_mega_byte_per_file	)) continue;
 
+		if (r.member("multithread_build",			input.multithread_build			)) continue;
 		if (r.member("xcode_bundle_identifier",		input.xcode_bundle_identifier	)) continue;
 		
 		if (r.member("config")) {
@@ -161,8 +163,6 @@ void Project::resolve() {
 
 void Project::resolve_internal() {
 	resolve_files();
-
-	multithreadBuild = input.multithreadBuild;
 
 	if (     input.type == "cpp_exe"    ) { hasOutputTarget = true; type = ProjectType::cpp_exe; }
 	else if (input.type == "c_exe"      ) { hasOutputTarget = true; type = ProjectType::c_exe; }

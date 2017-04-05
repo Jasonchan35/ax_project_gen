@@ -12,12 +12,30 @@ void Generator_makefile::build() {
 
 #if ax_OS_Windows
 #else
-	//int ret = ::system(String("make -C ", g_ws->outDir).c_str());
-	int ret = ::execlp("make", "-C", g_ws->outDir.c_str());
+	int ret = ::system(String("make --directory=\"", g_ws->outDir, "\"").c_str());
+	//int ret = ::execlp("make", "-C", g_ws->outDir.c_str());
 	if (ret < 0) {
-		throw Error("execute build process");
+		throw Error("Error Build");
 	}
 #endif
+}
+
+void Generator_makefile::run() {
+	Log::info("=========== Run ===============");
+
+	if (!g_ws->_startup_project) {
+		Log::error("no startup project to run");
+		return;
+	}
+
+	auto& config = g_ws->_startup_project->defaultConfig();
+	if (!config.outputTarget) {
+		Log::error("no output target to run in startup project ", g_ws->_startup_project->name);
+		return;
+	}
+
+	int ret = ::system(config.outputTarget.c_str());
+	Log::info("====== Finish Run return: ", ret, " =========");
 }
 
 void Generator_makefile::generate() {
@@ -94,9 +112,12 @@ void Generator_makefile::gen_workspace() {
 
 		if (!proj.hasOutputTarget) continue;
 
+		StrView mt_build;
+		if (proj.multithread_build()) mt_build = " --jobs";
+
 		o.append("\t@echo \"==============================================================\"\n");
 		o.append("\t@echo \"[build project] ", proj.name, "\"\n");
-		o.append("\t$(MAKE) -f ", quoteString(proj.genData_makefile.makefile), " build $(.MAKEFLAGS)\n");
+		o.append("\t$(MAKE) ", mt_build," --file=", quoteString(proj.genData_makefile.makefile), " build $(.MAKEFLAGS)\n");
 		o.append("\n");
 	}
 

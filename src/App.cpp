@@ -33,9 +33,14 @@ void App::readArgs(int argc, char* argv[]) {
 
 		if (s == "-gen") {
 			options.gen = true;
+
 		}else if (s == "-build") {
 			options.build = true;
-		}else if (s == "ide") {
+
+		}else if (s == "-run") {
+			options.run = true;
+
+		}else if (s == "-ide") {
 			options.ide = true;
 
 		}else if (s == "-verbose") {

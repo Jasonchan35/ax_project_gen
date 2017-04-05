@@ -22,6 +22,9 @@
 
 #if ax_OS_Windows
 	#include <Windows.h>
+	#include <Shlwapi.h> // wnsprintf
+	#pragma comment(lib, "Shlwapi.lib")
+
 #else
 	#include <dirent.h>
 	#include <sys/stat.h>
