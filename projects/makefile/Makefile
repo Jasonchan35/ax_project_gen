@@ -8,7 +8,8 @@ OUTPUT_TARGET = ../../bin/ax_gen
 
 
 CC = g++
-CCFLAGS = -std=c++11 -Wall -Werror -g
+CCFLAGS = -std=c++11 -Wall -Werror 
+# CCFLAGS += -g  # Debug
 
 $(OUTPUT_TARGET):
 	@mkdir -p $(dir $(OUTPUT_TARGET))
