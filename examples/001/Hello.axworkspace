@@ -55,7 +55,8 @@
 		},	
 		"os==linux": {
 			"cpp_flags":[],
-			"link_flags":["-lpthread -lX11 -lGL -lGLU"]
+			//"link_flags":["-lpthread -lX11 -lGL -lGLU"]
+			"link_flags":["-lpthread"]
 		},
 		"os==freebsd": {
 			"cpp_flags":["-I/usr/local/include"],
