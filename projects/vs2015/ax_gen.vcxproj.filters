@@ -91,6 +91,9 @@
     <ClCompile Include="..\..\src\Config\ProjectGroup.cpp">
       <Filter>src\Config</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Util\System.cpp">
+      <Filter>src\Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\common.h">
@@ -175,6 +178,9 @@
       <Filter>src\Config</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Util\UtfUtil.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Util\System.h">
       <Filter>src\Util</Filter>
     </ClInclude>
   </ItemGroup>

@@ -14,7 +14,7 @@ class System {
 public:
 	static void shellOpen(const StrView& path);
 	
-	static void createProcess(const StrView& exe, const Vector<StrView>& argv);
+	static void createProcess(const StrView& exe, const StrView& args);
 
 private:
 	System() = delete;

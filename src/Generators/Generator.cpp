@@ -20,8 +20,7 @@ void Generator::run() {
 		return;
 	}
 
-	Vector<StrView> argv;
-	System::createProcess(config.outputTarget, argv);
+	System::createProcess(config.outputTarget, "");
 }
 
 } //namespace ax_gen

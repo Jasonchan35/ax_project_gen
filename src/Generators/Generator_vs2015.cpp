@@ -24,13 +24,7 @@ void Generator_vs2015::generate() {
 
 void Generator_vs2015::ide() {
 	Log::info("=========== Open IDE ===============");
-#if ax_OS_Windows
-	WString sln;
-	sln.setUtf(g_ws->genData_vs2015.sln);
-	::ShellExecute(nullptr, L"open", sln.c_str(), nullptr, nullptr, SW_SHOW);
-#else
-	Log::error("doesn't support on this platform");
-#endif
+	System::shellOpen(g_ws->genData_vs2015.sln);
 }
 
 void Generator_vs2015::build() {
@@ -48,12 +42,12 @@ void Generator_vs2015::build() {
 
 	StrView configName = g_ws->defaultConfigName();
 
-	Vector<StrView> argv;
-	argv.append(g_ws->genData_vs2015.sln);
-	argv.append("/build");   argv.append(configName);
-	argv.append("/project"); argv.append(proj->name);
+	String args("\"", g_ws->genData_vs2015.sln, "\"",
+				" /project \"", proj->name, "\"",
+				" /ProjectConfig \"", configName, "\"",
+				" /build");
 
-	System::createProcess("C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\IDE\\devenv.exe", argv);
+	System::createProcess("C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\IDE\\devenv.exe", args);
 }
 
 void Generator_vs2015::readCacheFile(const StrView& filename) {
@@ -139,7 +133,7 @@ void Generator_vs2015::genUuid(String& outStr) {
 	_lastGenId.v64++;
 
 	char tmp[100+1];
-	snprintf(tmp, 100, "{AAAAAAAA-AAAA-AAAA-AAAA-%02X%02X-%02X%02X%02X%02X%02X%02X}",
+	snprintf(tmp, 100, "{AAAAAAAA-0000-0000-0000-%02X%02X-%02X%02X%02X%02X%02X%02X}",
 						_lastGenId.c[7],
 						_lastGenId.c[6],
 						_lastGenId.c[5],

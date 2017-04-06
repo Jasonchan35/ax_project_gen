@@ -80,6 +80,7 @@ public:
 
 	bool unhandledMember();
 	bool warningAndSkipUnhandledMember();
+	bool errorOnUnhandledMemeber();
 
 private:
 

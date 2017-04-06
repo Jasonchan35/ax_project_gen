@@ -58,14 +58,10 @@ bool JsonReader::beginObject(const StrView& name) {
 
 bool JsonReader::endObject() {
 	if (_valueType != ValueType::EndObject) {
+		errorOnUnhandledMemeber();		
 		if (!_levels) {
-			throw Error("calling unknowMember from root");
+			throw Error("calling endObject from root");
 		}
-
-		if (warningAndSkipUnhandledMember()) {
-			assert(false);
-		}
-		
 		_levels.back().pos = _r;
 		if (_valueType != ValueType::EndObject) { // valueType may changed after skipValue
 			return false;
@@ -97,6 +93,14 @@ bool JsonReader::unhandledMember() {
 bool JsonReader::warningAndSkipUnhandledMember() {
 	if (!unhandledMember()) return false;
 	warning("Unhandled member \"", _token.str, "\"");
+	skipValue();
+	return true;
+}
+
+bool JsonReader::errorOnUnhandledMemeber() {
+	if (!unhandledMember()) return false;
+	error("Unhandled member \"", _token.str, "\"");
+	throw Error("Unhandled member");
 	skipValue();
 	return true;
 }

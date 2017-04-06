@@ -142,10 +142,6 @@ void Project::readJson(JsonReader& r) {
 			r.skipValue();
 			continue;
 		}
-
-		String memberName;
-		r.getMemberName(memberName);
-		r.error("Unknown member ", memberName);
 	}
 }
 

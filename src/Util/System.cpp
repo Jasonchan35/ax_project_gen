@@ -29,15 +29,12 @@ void System::shellOpen(const StrView& path) {
 
 }
 
-void System::createProcess(const StrView& exe, const Vector<StrView>& argv) {
-	String cmd("\"", exe, "\"");
-	for (auto& v : argv) {
-		cmd.append(" \"", v,"\"");
-	}
-
-	Log::info("createProcess> ", cmd);
+void System::createProcess(const StrView& exe, const StrView& args) {
+	String cmd("\"", exe, "\" ", args);
+	Log::info("run> ", cmd);
 
 #if ax_OS_Windows
+
 	WString exeW;
 	exeW.setUtf(exe);
 
@@ -58,6 +55,9 @@ void System::createProcess(const StrView& exe, const Vector<StrView>& argv) {
 	}
 
     WaitForSingleObject(pi.hProcess, INFINITE);
+
+	DWORD exit_code = -1;
+	GetExitCodeProcess(pi.hProcess, &exit_code);
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
 #else
@@ -82,7 +82,7 @@ void System::createProcess(const StrView& exe, const Vector<StrView>& argv) {
 			}
 		}
 
-		pclose(fs);
+		int exit_code = pclose(fs);
 	#else
 
 		Vector<String> argv_str; // holding null-terminated string for char* in argv_p
@@ -154,12 +154,11 @@ void System::createProcess(const StrView& exe, const Vector<StrView>& argv) {
 		
 		int exit_code = -1;
 		waitpid(pid,&exit_code,0);
-		Log::info("process exit return: ", exit_code);
-
 		posix_spawn_file_actions_destroy(&action);
 	#endif
-
 #endif //ax_OS
+
+	Log::info("process exit return: ", exit_code);
 }
 
 	

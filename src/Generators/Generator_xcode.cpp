@@ -38,13 +38,12 @@ void Generator_xcode::build() {
 	}
 
 	StrView configName = g_ws->defaultConfigName();
-	Vector<StrView> argv;
 
-	argv.append("-workspace");		argv.append(g_ws->genData_xcode.xcworkspace);
-	argv.append("-configuration");	argv.append(configName);
-	argv.append("-scheme");			argv.append(proj->name);
-	argv.append("build");
-	System::createProcess("xcodebuild", argv);
+	String args(" -workspace \"", g_ws->genData_xcode.xcworkspace,
+				" -configuration \"", configName, "\"",
+				" -scheme \"", proj->name, "\"",
+				" build");
+	System::createProcess("xcodebuild", args);
 	
 }
 
