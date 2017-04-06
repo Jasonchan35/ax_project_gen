@@ -34,10 +34,10 @@ ax_gen.exe ws=examples/001/Hello.axworkspace -gen
 
 |**Actions:**||
 |-----------|------------------------------|
-| -gen		| generate target projects     |
-| -build	| build projects               |
-| -ide		| open IDE                     |
-| -run		| run startup project          |
+| -gen	    | generate target projects     |
+| -build    | build projects               |
+| -ide	    | open IDE                     |
+| -run	    | run startup project          |
 | -verbose  | more detail in console / log |
 
 |**OS options:**||
@@ -55,16 +55,16 @@ ax_gen.exe ws=examples/001/Hello.axworkspace -gen
 
 |**Generators:**|||
 |------------------|-----------------------------------------|---|
-| gen=vs2015       | (default on Windows) Visual Studio 2015  ||
+| gen=vs2015       | Visual Studio 2015<br>*(default on Windows)*  ||
 | gen=vs2015_linux | Visual Studio 2015 Linux Remote Compile ||
-| gen=xcode        | (default on MacOSX) Xcode ||
-| gen=makefile     | (default on Linux/FreeBSD) GNU/BSD makefile format | `*support file path with space` <br>`(Which handwritten Makefile might have problem`<br>`during 2nd degree variable evaluation)` |
+| gen=xcode        | Xcode<br>*(default on MacOSX)* ||
+| gen=makefile     | GNU/BSD makefile format<br>*(default on Linux/FreeBSD)* | `*support file path with space` <br>`(Which handwritten Makefile might have problem`<br>`during 2nd degree variable evaluation)` |
 
 |**Compiler options:**||
 |----------------|-----------------|
-| compiler=vc    | (default in gen=vs2015) MS Visual C++   |
-| compiler=gcc   | (default in gen=makefile) GNU C/C++       |
-| compiler=clang | (default in gen=xcode) clang from LLVM |
+| compiler=vc    | MS Visual C++<br>*(default in gen=vs2015)*   |
+| compiler=gcc   | GNU C/C++<br>*(default in gen=makefile)*       |
+| compiler=clang | clang from LLVM<br>*(default in gen=xcode)* |
 
 
 <br>
