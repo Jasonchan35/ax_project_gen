@@ -29,25 +29,8 @@ void Generator_vs2015::ide() {
 	sln.setUtf(g_ws->genData_vs2015.sln);
 	::ShellExecute(nullptr, L"open", sln.c_str(), nullptr, nullptr, SW_SHOW);
 #else
-
+	Log::error("doesn't support on this platform");
 #endif
-}
-
-void Generator_vs2015::run() {
-	Log::info("=========== Run ===============");
-
-	if (!g_ws->_startup_project) {
-		Log::error("no startup project to run");
-		return;
-	}
-
-	auto& config = g_ws->_startup_project->defaultConfig();
-	if (!config.outputTarget) {
-		Log::error("no output target to run in startup project ", g_ws->_startup_project->name);
-		return;
-	}
-
-	createProcess(config.outputTarget, "");
 }
 
 void Generator_vs2015::build() {
@@ -65,44 +48,12 @@ void Generator_vs2015::build() {
 
 	StrView configName = g_ws->defaultConfigName();
 
-	String args("\"", g_ws->genData_vs2015.sln, "\"",
-				" /build \"", configName, "\"",
-				" /project \"", proj->name, "\"");
-	createProcess("C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\IDE\\devenv.exe", args);
-}
+	Vector<StrView> argv;
+	argv.append(g_ws->genData_vs2015.sln);
+	argv.append("/build");   argv.append(configName);
+	argv.append("/project"); argv.append(proj->name);
 
-void Generator_vs2015::createProcess(const StrView& exe, const StrView& args) {
-#if ax_OS_Windows
-
-	WString exeW;
-	exeW.setUtf(exe);
-
-	String cmd("\"", exe, "\" ", args);
-
-	Log::info("cmd: ", cmd);
-
-	WString cmdW;
-	cmdW.appendUtf(cmd);
-
-	STARTUPINFOW si; 
-	ZeroMemory(&si, sizeof(STARTUPINFO));
-    si.cb = sizeof(STARTUPINFO);
-
-	PROCESS_INFORMATION pi; 
-	ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
-
-	if (!::CreateProcess(exeW.c_str(), cmdW.data(), nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi)) {
-		Log::error("Error run MSBuild");
-		auto dw = GetLastError();
-		return;
-	}
-
-    WaitForSingleObject(pi.hProcess, INFINITE);
-    CloseHandle(pi.hProcess);
-    CloseHandle(pi.hThread);
-#else
-	Log::error("Doesn't support createProcess on this platform");
-#endif
+	System::createProcess("C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\IDE\\devenv.exe", argv);
 }
 
 void Generator_vs2015::readCacheFile(const StrView& filename) {
@@ -113,25 +64,28 @@ void Generator_vs2015::readCacheFile(const StrView& filename) {
 
 	JsonReader reader(json, filename);
 	reader.beginObject();
+	
+	double lastGenIdTmp;
+	
 	while (!reader.endObject()) {
-		if (reader.member("lastGenId.a", _lastGenId.a)) continue;
-		if (reader.member("lastGenId.b", _lastGenId.b)) continue;
-
+		if (reader.member("lastGenId", lastGenIdTmp)) {
+			_lastGenId.v64 = static_cast<uint64_t>(lastGenIdTmp);
+			continue;
+		}
 		if (reader.beginObject("projects")) {
 			while (!reader.endObject()) {
 				String m;
 				reader.getMemberName(m);
-
 				auto* proj = g_ws->projects.find(m);
-				if (proj) {
-					reader.beginObject();
-					while (!reader.endObject()) {
-						if (reader.member("uuid", proj->genData_vs2015.uuid)) continue;
-						reader.skipValue();
-					}
+				if (!proj) {
+					reader.skipValue();
 					continue;
 				}
-				reader.skipValue();
+				
+				reader.beginObject();
+				while (!reader.endObject()) {
+					if (reader.member("uuid", proj->genData_vs2015.uuid)) continue;
+				}
 			}
 			continue;
 		}
@@ -141,20 +95,18 @@ void Generator_vs2015::readCacheFile(const StrView& filename) {
 				reader.getMemberName(m);
 
 				auto* cat = g_ws->projectGroups.dict.find(m);
-				if (cat) {
-					reader.beginObject();
-					while (!reader.endObject()) {
-						if (reader.member("uuid", cat->genData_vs2015.uuid)) continue;
-						reader.skipValue();
-					}
+				if (!cat) {
+					reader.skipValue();
 					continue;
 				}
 
-				reader.skipValue();
+				reader.beginObject();
+				while (!reader.endObject()) {
+					if (reader.member("uuid", cat->genData_vs2015.uuid)) continue;
+				}
 			}
 			continue;
 		}
-		reader.skipValue();
 	}
 }
 
@@ -162,10 +114,7 @@ void Generator_vs2015::writeCacheFile(const StrView& filename) {
 	JsonWriter wr;
 	{
 		auto scope = wr.objectScope();
-
-		wr.write("lastGenId.a", _lastGenId.a);
-		wr.write("lastGenId.b", _lastGenId.b);
-
+		wr.write("lastGenId", (double)_lastGenId.v64);
 		{
 			auto scope = wr.objectScope("projects");
 			for (auto& proj : g_ws->projects) {
@@ -190,7 +139,15 @@ void Generator_vs2015::genUuid(String& outStr) {
 	_lastGenId.v64++;
 
 	char tmp[100+1];
-	snprintf(tmp, 100, "{%04X%04X-%04X-%04X-%04X-%04X%04X%04X}", 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, _lastGenId.a, _lastGenId.b);
+	snprintf(tmp, 100, "{AAAAAAAA-AAAA-AAAA-AAAA-%02X%02X-%02X%02X%02X%02X%02X%02X}",
+						_lastGenId.c[7],
+						_lastGenId.c[6],
+						_lastGenId.c[5],
+						_lastGenId.c[4],
+						_lastGenId.c[3],
+						_lastGenId.c[2],
+						_lastGenId.c[1],
+						_lastGenId.c[0]);
 	tmp[100] = 0;
 
 	outStr.set(StrView_c_str(tmp));

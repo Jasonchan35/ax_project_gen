@@ -10,12 +10,15 @@ public:
 	Generator_xcode();
 
 	void generate() override;
+	void build() override;
+	void ide() override;
 
 private:
 	void gen_workspace();
 	void gen_workspace_group(XmlWriter& wr, ProjectGroup& group);
 
 	void gen_project(Project& proj);
+	void gen_project_genUuid(Project& proj);
 	void gen_project_dependencies			(XCodePbxWriter& wr, Project& proj);
 	void gen_project_PBXBuildFile			(XCodePbxWriter& wr, Project& proj);
 	void gen_project_PBXProject				(XCodePbxWriter& wr, Project& proj);
@@ -34,8 +37,19 @@ private:
 
 	String quoteString (const StrView& v);
 	String quoteString2(const StrView& v);
+	
+	void readCacheFile(const StrView& filename);
+	void writeCacheFile(const StrView& filename);	
 
-	int64_t _last_gen_uuid {0};
+	class GenId {
+	public:
+		GenId() { v64 = 0; }
+		union {
+			uint8_t  c[8];
+			uint64_t v64;
+		};
+	};
+	GenId _lastGenId;
 
 	static const StrView build_config_uuid;
 	static const StrView build_phase_sources_uuid;

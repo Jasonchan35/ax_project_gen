@@ -76,6 +76,8 @@
 		96C812C71E91965E008B34C6 /* Glob.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Glob.cpp; sourceTree = "<group>"; };
 		96C812C81E91965E008B34C6 /* Glob.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Glob.h; sourceTree = "<group>"; };
 		96DA8F751E944C5700625579 /* UtfUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UtfUtil.h; sourceTree = "<group>"; };
+		96DFFE241E9596DA00AA02DF /* System.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = System.cpp; sourceTree = "<group>"; };
+		96DFFE251E9596DA00AA02DF /* System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = System.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,6 +195,8 @@
 				961AAE321E8F775600A2C441 /* Vector.h */,
 				961AAE331E8F775600A2C441 /* XmlWriter.cpp */,
 				961AAE341E8F775600A2C441 /* XmlWriter.h */,
+				96DFFE241E9596DA00AA02DF /* System.cpp */,
+				96DFFE251E9596DA00AA02DF /* System.h */,
 			);
 			path = Util;
 			sourceTree = "<group>";

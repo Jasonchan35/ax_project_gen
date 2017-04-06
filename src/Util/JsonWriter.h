@@ -43,7 +43,6 @@ public:
 	void memberName(const StrView& name);
 
 	void write(int      value);
-	void write(uint32_t value);
 	void write(double   value);
 	void write(bool     value);
 	void write(const StrView& value);

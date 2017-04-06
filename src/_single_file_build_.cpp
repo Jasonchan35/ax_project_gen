@@ -11,7 +11,7 @@
 #include "Util/Log.cpp"
 #include "Util/String.cpp"
 #include "Util/Glob.cpp"
-#include "Util/UtfUtil.h"
+#include "Util/System.cpp"
 
 #include "Config/Config.cpp"
 #include "Config/Project.cpp"

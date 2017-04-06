@@ -9,7 +9,6 @@ public:
 
 	void generate	() override;
 	void build		() override;
-	void run		() override;
 
 private:
 	void gen_workspace();

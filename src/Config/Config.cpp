@@ -174,7 +174,6 @@ void Config::readJson(JsonReader& r) {
 		}
 
 		r.error("Unknown member ", memberName);
-		r.skipValue();
 	}
 }
 

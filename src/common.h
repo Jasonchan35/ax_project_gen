@@ -30,6 +30,8 @@
 	#include <sys/stat.h>
  	#include <unistd.h>	
 	#include <stdint.h>
+	#include <spawn.h>
+	#include <poll.h>
 #endif
 
 namespace ax_gen {
@@ -65,3 +67,5 @@ public:
 #include "Util/JsonReader.h"
 #include "Util/JsonWriter.h"
 #include "Util/XmlWriter.h"
+#include "Util/System.h"
+

@@ -11,7 +11,6 @@ public:
 	void generate() override;
 	void build() override;
 	void ide() override;
-	void run() override;
 
 private:
 
@@ -30,18 +29,13 @@ private:
 
 	void genUuid(String& outStr);
 
-	void createProcess(const StrView& exe, const StrView& args);
-
 	String vcxproj_cpu;
 
 	class GenId {
 	public:
 		GenId() { v64 = 0; }
 		union {
-			struct {
-				uint32_t	a;
-				uint32_t	b;
-			};
+			uint8_t  c[8];
 			uint64_t v64;
 		};
 	};

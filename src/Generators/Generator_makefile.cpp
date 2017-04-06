@@ -20,24 +20,6 @@ void Generator_makefile::build() {
 #endif
 }
 
-void Generator_makefile::run() {
-	Log::info("=========== Run ===============");
-
-	if (!g_ws->_startup_project) {
-		Log::error("no startup project to run");
-		return;
-	}
-
-	auto& config = g_ws->_startup_project->defaultConfig();
-	if (!config.outputTarget) {
-		Log::error("no output target to run in startup project ", g_ws->_startup_project->name);
-		return;
-	}
-
-	int ret = ::system(config.outputTarget.c_str());
-	Log::info("====== Finish Run return: ", ret, " =========");
-}
-
 void Generator_makefile::generate() {
 	gen_workspace();
 }

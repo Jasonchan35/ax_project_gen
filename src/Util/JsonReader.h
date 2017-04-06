@@ -78,6 +78,9 @@ public:
 
 	JsonReader	clone() const { return JsonReader(*this); }
 
+	bool unhandledMember();
+	bool warningAndSkipUnhandledMember();
+
 private:
 
 	JsonReader(const JsonReader& rhs) { operator=(rhs); }
@@ -107,7 +110,7 @@ private:
 	int _findNextNewlineLocation(const char* &out_pos, int maxNumLines);
 
 	TokenType _currentLevel() {
-		return _level.size() ? _level.back() : TokenType::Invalid;
+		return _levels ? _levels.back().type : TokenType::Invalid;
 	}
 
 	char _ch;
@@ -125,7 +128,15 @@ private:
 	int			_lineNumber;
 	Token		_token;
 	ValueType	_valueType;
-	Vector<TokenType>	_level; //object or array
+	
+	struct Level {
+		Level(TokenType type_, const char* pos_) : type(type_), pos(pos_) {}
+	
+		TokenType	type;
+		const char* pos;
+	};
+	
+	Vector<Level>	_levels;
 };
 
 template<typename T>

@@ -28,19 +28,48 @@ void Generator_xcode::generate() {
 	gen_workspace();
 }
 
+void Generator_xcode::build() {
+	Log::info("=========== Build ===============");
+
+	auto* proj = g_ws->_startup_project;
+	if (!proj) {
+		Log::error("no startup project to build");
+		return;
+	}
+
+	StrView configName = g_ws->defaultConfigName();
+	Vector<StrView> argv;
+
+	argv.append("-workspace");		argv.append(g_ws->genData_xcode.xcworkspace);
+	argv.append("-configuration");	argv.append(configName);
+	argv.append("-scheme");			argv.append(proj->name);
+	argv.append("build");
+	System::createProcess("xcodebuild", argv);
+	
+}
+
+void Generator_xcode::ide() {
+	Log::info("=========== Open IDE ===============");
+#if ax_OS_MacOSX
+	String cmd("open \"", g_ws->genData_xcode.xcworkspace, "\"");
+	Log::info("cmd> ", cmd);
+	::system(cmd.c_str());
+#else
+	Log::error("doesn't support on this platform");
+#endif
+}
+
 void Generator_xcode::gen_workspace() {
+	g_ws->genData_xcode.xcworkspace.set(g_ws->outDir, g_ws->workspace_name, ".xcworkspace");
+
+	//cache file
+	String cacheFilename;
+	cacheFilename.append(g_ws->outDir, "_ax_gen_cache.json");
+
+	readCacheFile(cacheFilename);
 
 	for (auto& proj : g_ws->projects) {
-		auto& gd = proj.genData_xcode;
-		gd.xcodeproj.set(g_ws->outDir, proj.name, ".xcodeproj");
-		gd.pbxproj.set(gd.xcodeproj, "/", "project.pbxproj");
-		genUuid(gd.uuid);
-		genUuid(gd.targetUuid);
-		genUuid(gd.targetProductUuid);
-		genUuid(gd.configListUuid);
-		genUuid(gd.dependencyProxyUuid);
-		genUuid(gd.dependencyTargetUuid);
-		genUuid(gd.dependencyTargetProxyUuid);	
+		gen_project_genUuid(proj);
 	}
 	
 	for (auto& proj : g_ws->projects) {
@@ -54,7 +83,9 @@ void Generator_xcode::gen_workspace() {
 		gen_workspace_group(wr, *g_ws->projectGroups.root);
 	}
 	
-	String filename(g_ws->outDir, g_ws->workspace_name, ".xcworkspace/contents.xcworkspacedata");
+	writeCacheFile(cacheFilename);	
+	
+	String filename(g_ws->genData_xcode.xcworkspace, "/contents.xcworkspacedata");
 	FileUtil::writeTextFile(filename, wr.buffer());
 }
 
@@ -75,6 +106,34 @@ void Generator_xcode::gen_workspace_group(XmlWriter& wr, ProjectGroup& group) {
 	}
 }
 
+void Generator_xcode::gen_project_genUuid(Project& proj) {
+	auto& gd = proj.genData_xcode;
+	gd.xcodeproj.set(g_ws->outDir, proj.name, ".xcodeproj");
+	gd.pbxproj.set(gd.xcodeproj, "/", "project.pbxproj");
+	genUuid(gd.uuid);
+	genUuid(gd.targetUuid);
+	genUuid(gd.targetProductUuid);
+	genUuid(gd.configListUuid);
+	genUuid(gd.dependencyProxyUuid);
+	genUuid(gd.dependencyTargetUuid);
+	genUuid(gd.dependencyTargetProxyUuid);	
+
+	for (auto& f : proj.fileEntries) {
+		genUuid(f.genData_xcode.uuid);
+		genUuid(f.genData_xcode.buildUuid);
+	}
+
+	for (auto& f : proj.virtualFolders.dict) {
+		genUuid(f.genData_xcode.uuid);
+	}
+
+	for (auto& config : proj.configs) {
+		genUuid(config.genData_xcode.projectConfigUuid);
+		genUuid(config.genData_xcode.targetUuid);
+		genUuid(config.genData_xcode.targetConfigUuid);
+	}
+}
+
 void Generator_xcode::gen_project(Project& proj) {
 	auto& gd = proj.genData_xcode;
 	
@@ -85,17 +144,6 @@ void Generator_xcode::gen_project(Project& proj) {
 		gen_info_plist(proj);
 	}
 	
-	for (auto& f : proj.fileEntries) {
-		genUuid(f.genData_xcode.uuid);
-		genUuid(f.genData_xcode.buildUuid);		
-	}
-
-	for (auto& config : proj.configs) {
-		genUuid(config.genData_xcode.projectConfigUuid);
-		genUuid(config.genData_xcode.targetUuid);
-		genUuid(config.genData_xcode.targetConfigUuid);
-	}
-
 	XCodePbxWriter wr;
 	wr.buffer().append("// !$*UTF8*$!\n");
 	{
@@ -271,10 +319,6 @@ void Generator_xcode::gen_project_PBXGroup(XCodePbxWriter& wr, Project& proj) {
 		}
 		wr.member("sourceTree", kSourceTreeGroup);
 		wr.member("name", "_products_");
-	}
-
-	for (auto& v : proj.virtualFolders.dict) {
-		genUuid(v.genData_xcode.uuid);
 	}
 
 	auto* root = proj.virtualFolders.root;
@@ -726,14 +770,19 @@ void Generator_xcode::gen_info_plist(Project& proj) {
 void Generator_xcode::genUuid(String& o) {
 	if (o) return;
 
-	o.set("AEEEEEEE");
-	_last_gen_uuid += 1;
-
-	auto hi  = (uint32_t)(_last_gen_uuid >> 32);
-	auto low = (uint32_t)(_last_gen_uuid);
-
+	o.set("AAAAAAAA");
+	_lastGenId.v64++;
+	
 	char tmp[100 + 1];
-	snprintf(tmp, 100, "%08X%08X", hi, low);
+	snprintf(tmp, 100, "%02X%02X%02X%02X%02X%02X%02X%02X",
+						_lastGenId.c[7],
+						_lastGenId.c[6],
+						_lastGenId.c[5],
+						_lastGenId.c[4],
+						_lastGenId.c[3],
+						_lastGenId.c[2],
+						_lastGenId.c[1],
+						_lastGenId.c[0]);
 	tmp[100] = 0;
 
 	o.append(StrView_c_str(tmp));
@@ -755,6 +804,158 @@ String Generator_xcode::quoteString(const StrView& v) {
 	}
 	o.append('\"');
 	return o;
+}
+
+
+void Generator_xcode::readCacheFile(const StrView& filename) {
+	if (!Path::fileExists(filename)) return;		
+
+	String json;
+	FileUtil::readTextFile(filename, json);
+
+	JsonReader reader(json, filename);
+	reader.beginObject();
+	
+	double lastGenIdTmp;
+	
+	while (!reader.endObject()) {
+		if (reader.member("lastGenId", lastGenIdTmp)) {
+			_lastGenId.v64 = static_cast<uint64_t>(lastGenIdTmp);
+			continue;
+		}
+		if (reader.beginObject("projects")) {
+			while (!reader.endObject()) {
+				String m;
+				reader.getMemberName(m);
+
+				auto* proj = g_ws->projects.find(m);
+				if (!proj) {
+					reader.skipValue();
+					continue;
+				};
+				
+				reader.beginObject();
+				while (!reader.endObject()) {
+					#define ENTRY(T) reader.member(#T, proj->genData_xcode.T);
+					ENTRY(uuid);
+					ENTRY(targetUuid);
+					ENTRY(targetProductUuid);
+					ENTRY(configListUuid);
+					ENTRY(dependencyProxyUuid);
+					ENTRY(dependencyTargetUuid);
+					ENTRY(dependencyTargetProxyUuid);
+					#undef ENTRY
+					
+					if (reader.member("configs")) {
+						reader.beginObject();
+						while(!reader.endObject()) {
+							String configName;
+							reader.getMemberName(configName);
+							auto* config = proj->configs.find(configName);
+							if (!config) {
+								reader.skipValue();
+								continue;
+							}
+						
+							reader.beginObject();
+							while(!reader.endObject()) {
+								reader.member("projectConfigUuid",	config->genData_xcode.projectConfigUuid);
+								reader.member("targetUuid",			config->genData_xcode.targetUuid);
+								reader.member("targetConfigUuid",	config->genData_xcode.targetConfigUuid);
+							}
+						}
+					}
+					
+					if (reader.member("fileEntries")) {
+						reader.beginObject();
+						while(!reader.endObject()) {
+							String path;
+							reader.getMemberName(path);
+							auto* f = proj->fileEntries.find(path);
+							if (!f) {
+								reader.skipValue();
+								continue;
+							}
+							
+							reader.beginObject();
+							while(!reader.endObject()) {
+								reader.member("uuid",		f->genData_xcode.uuid);
+								reader.member("buildUuid",	f->genData_xcode.buildUuid);
+							}
+						}
+					}
+					
+					if (reader.member("virtualFolders")) {
+						reader.beginObject();
+						while(!reader.endObject()) {
+							String path;
+							reader.getMemberName(path);
+							auto* v = proj->virtualFolders.dict.find(path);
+							if (!v) {
+								reader.skipValue();
+								continue;
+							}
+							reader.beginObject();
+							while(!reader.endObject()) {
+								reader.member("uuid", v->genData_xcode.uuid);
+							}
+						}
+					}
+				}
+			}
+			continue;
+		}
+	}
+}
+
+void Generator_xcode::writeCacheFile(const StrView& filename) {
+	JsonWriter wr;
+	{
+		auto scope = wr.objectScope();
+		wr.write("lastGenId", (double)_lastGenId.v64);
+		{
+			auto scope = wr.objectScope("projects");
+			for (auto& proj : g_ws->projects) {
+				auto scope = wr.objectScope(proj.name);
+				#define ENTRY(T) wr.write(#T, proj.genData_xcode.T);
+				ENTRY(uuid);
+				ENTRY(targetUuid);
+				ENTRY(targetProductUuid);
+				ENTRY(configListUuid);
+				ENTRY(dependencyProxyUuid);
+				ENTRY(dependencyTargetUuid);
+				ENTRY(dependencyTargetProxyUuid);
+				#undef ENTRY
+
+				{
+					auto scope = wr.objectScope("configs");
+					for (auto& f : proj.configs) {
+						auto scope = wr.objectScope(f.name);
+						wr.write("projectConfigUuid",	f.genData_xcode.projectConfigUuid);
+						wr.write("targetUuid",			f.genData_xcode.targetUuid);
+						wr.write("targetConfigUuid",	f.genData_xcode.targetConfigUuid);
+					}
+				}
+				
+				{
+					auto scope = wr.objectScope("fileEntries");
+					for (auto& f : proj.fileEntries) {
+						auto scope = wr.objectScope(f.name());
+						wr.write("uuid",		f.genData_xcode.uuid);
+						wr.write("buildUuid",	f.genData_xcode.buildUuid);
+					}
+				}
+				{
+					auto scope = wr.objectScope("virtualFolders");
+					for (auto& f : proj.virtualFolders.dict) {
+						auto scope = wr.objectScope(f.path);
+						wr.write("uuid", f.genData_xcode.uuid);
+					}
+				}
+			}
+		}
+	}
+	FileUtil::writeTextFile(filename, wr.buffer());
 }
 	
 } //namespace

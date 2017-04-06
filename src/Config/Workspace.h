@@ -58,6 +58,11 @@ public:
 	void dump(StringStream& s);
 	void resolve();
 
+	struct GenData_xcode {
+		String		xcworkspace;
+	};
+	GenData_xcode genData_xcode;
+
 	struct GenData_vs2015 {
 		String		sln;
 	};

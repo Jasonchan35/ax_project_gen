@@ -21,12 +21,12 @@ void JsonReader::operator=(const JsonReader& rhs) {
 	_lineNumber = rhs._lineNumber;
 	_token 		= rhs._token;
 	_valueType 	= rhs._valueType;
-	_level 		= rhs._level;
+	_levels		= rhs._levels;
 }
 
 void JsonReader::reset() {
 	_token.str.reserve(512);
-	_level.reserve(64);
+	_levels.reserve(32);
 	_lineNumber = 0;
 	_valueType = ValueType::Invalid;
 
@@ -57,8 +57,47 @@ bool JsonReader::beginObject(const StrView& name) {
 }
 
 bool JsonReader::endObject() {
-	if (_valueType != ValueType::EndObject) return false;
+	if (_valueType != ValueType::EndObject) {
+		if (!_levels) {
+			throw Error("calling unknowMember from root");
+		}
+
+		if (warningAndSkipUnhandledMember()) {
+			assert(false);
+		}
+		
+		_levels.back().pos = _r;
+		if (_valueType != ValueType::EndObject) { // valueType may changed after skipValue
+			return false;
+		}
+	}		
 	next();
+	return true;
+}
+
+bool JsonReader::unhandledMember() {
+	if (_valueType == ValueType::EndObject) return false;
+	if (_valueType != ValueType::Member) error("value is not member");
+
+	if (!_levels) {
+		throw Error("calling unknowMember from root");
+	}
+	
+	auto& lv = _levels.back();
+	if (lv.type != TokenType::BeginObject) {
+		throw Error("calling unknowMember outside of object scope");
+	}
+	
+	if (lv.pos == _r) {
+		return true;
+	}
+	return false;
+}
+
+bool JsonReader::warningAndSkipUnhandledMember() {
+	if (!unhandledMember()) return false;
+	warning("Unhandled member \"", _token.str, "\"");
+	skipValue();
 	return true;
 }
 
@@ -74,7 +113,21 @@ bool JsonReader::beginArray(const StrView& name) {
 }
 
 bool JsonReader::endArray() {
-	if (_valueType != ValueType::EndArray) return false;
+	if (_valueType != ValueType::EndArray) {
+		if (!_levels) {
+			throw Error("endArray out of arrange");
+		}
+		auto& lv = _levels.back();
+		if (lv.pos == _r) {
+			assert(false);
+			skipValue(); // unread value
+		}
+		lv.pos = _r;
+		
+		if (_valueType != ValueType::EndArray) { // valueType may changed after skipValue
+			return false;
+		}
+	}
 	next();
 	return true;
 }
@@ -161,7 +214,7 @@ bool JsonReader::next() {
 	if (_currentLevel() == TokenType::BeginObject) {
 		if (lastValueType != ValueType::Member) {
 			if (_token.type == TokenType::EndObject) {
-				_level.popBack();
+				_levels.popBack();
 				_valueType = ValueType::EndObject;
 				return true;
 			}
@@ -188,7 +241,7 @@ bool JsonReader::next() {
 
 	} else if (_currentLevel() == TokenType::BeginArray) {
 		if (_token.type == TokenType::EndArray) {
-			_level.popBack();
+			_levels.popBack();
 			_valueType = ValueType::EndArray;
 			return true;
 		}
@@ -205,14 +258,14 @@ bool JsonReader::next() {
 	switch (_token.type) {
 		case TokenType::BeginObject:
 		{
-			_level.append(_token.type);
+			_levels.emplaceBack(_token.type, _r);
 			_valueType = ValueType::BeginObject;
 			return true;
 		}break;
 
 		case TokenType::BeginArray:
 		{
-			_level.append(_token.type);
+			_levels.emplaceBack(_token.type, _r);
 			_valueType = ValueType::BeginArray;
 			return true;
 		}break;
