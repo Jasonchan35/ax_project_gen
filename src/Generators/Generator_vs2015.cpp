@@ -133,7 +133,7 @@ void Generator_vs2015::genUuid(String& outStr) {
 	_lastGenId.v64++;
 
 	char tmp[100+1];
-	snprintf(tmp, 100, "{AAAAAAAA-0000-0000-0000-%02X%02X-%02X%02X%02X%02X%02X%02X}",
+	snprintf(tmp, 100, "{AAAAAAAA-0000-0000-%02X%02X-%02X%02X%02X%02X%02X%02X}",
 						_lastGenId.c[7],
 						_lastGenId.c[6],
 						_lastGenId.c[5],
