@@ -1,7 +1,7 @@
 
 # Why not CMake
 CMake is powerful and popular, it supports almost all platform you need 
-and works pretty well in open source community, it's a solution to replace Automake 
+and works pretty well in open source community, it's a solution as replacement GNU build systen (Autotools, Autoconf, Automake) 
 to help people manage project easier, but at the end I found that it's not as easy as what I expected, 
 I had to spend quite some time to spot the syntax or logical error.
 
