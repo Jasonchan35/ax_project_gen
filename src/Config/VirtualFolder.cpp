@@ -33,8 +33,9 @@ VirtualFolder* VirtualFolderDict::getOrAddParent(const StrView& baseDir, const S
 }
 
 VirtualFolderDict::VirtualFolderDict() {
-	root = dict.add("");
-	root->path = "<virtual_root>";
+	StrView name = "<virtual_root>";
+	root = dict.add(name);
+	root->path = name;
 }
 
 void VirtualFolderDict::add(const StrView& baseDir, FileEntry& file) {

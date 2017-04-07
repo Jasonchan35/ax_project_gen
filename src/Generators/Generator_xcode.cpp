@@ -2,7 +2,6 @@
 
 namespace ax_gen {
 
-const StrView Generator_xcode::build_config_uuid 			= "B0000000B0000000B0000001";
 const StrView Generator_xcode::build_phase_sources_uuid		= "B0000000B0000000B0000002";
 const StrView Generator_xcode::build_phase_frameworks_uuid	= "B0000000B0000000B0000003";
 const StrView Generator_xcode::build_phase_headers_uuid 	= "B0000000B0000000B0000004";
@@ -113,6 +112,7 @@ void Generator_xcode::gen_project_genUuid(Project& proj) {
 	genUuid(gd.targetUuid);
 	genUuid(gd.targetProductUuid);
 	genUuid(gd.configListUuid);
+	genUuid(gd.targetConfigListUuid);
 	genUuid(gd.dependencyProxyUuid);
 	genUuid(gd.dependencyTargetUuid);
 	genUuid(gd.dependencyTargetProxyUuid);	
@@ -483,7 +483,7 @@ void Generator_xcode::gen_project_PBXNativeTarget(XCodePbxWriter& wr, Project& p
 		wr.member("productName", quoteString(proj.name));
 		wr.member("productReference", proj.genData_xcode.targetProductUuid);
 		wr.member("productType", productType);
-		wr.member("buildConfigurationList", proj.genData_xcode.configListUuid);
+		wr.member("buildConfigurationList", proj.genData_xcode.targetConfigListUuid);
 		{
 			auto scope = wr.arrayScope("buildPhases");
 			wr.write(build_phase_sources_uuid);
@@ -543,8 +543,8 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 				wr.member("EXECUTABLE_EXTENSION",			quoteString(targetExt));
 				wr.member("CONFIGURATION_BUILD_DIR",		quoteString(targetDir));
 				wr.member("CONFIGURATION_TEMP_DIR",			quoteString(config._build_tmp_dir));
-				wr.member("STRIP_STYLE",						quoteString("all"));
-				wr.member("DEAD_CODE_STRIPPING",				"YES");
+				wr.member("STRIP_STYLE",					quoteString("all"));
+				wr.member("DEAD_CODE_STRIPPING",			"YES");
 				
 				if (g_ws->os == "ios") {
 					wr.member("SDKROOT",					quoteString("iphoneos"));
@@ -554,13 +554,14 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 				}else if (g_ws->os == "macosx"){
 					wr.member("SDKROOT",					quoteString("macosx"));
 					wr.member("SUPPORTED_PLATFORMS",		quoteString("macosx"));
-					wr.member("IPHONEOS_DEPLOYMENT_TARGET",	quoteString("10.11"));
+					wr.member("MACOSX_DEPLOYMENT_TARGET",	quoteString("10.7"));
 				}else{
 					throw Error("Unsupported OS type ", g_ws->os);
 				}
 				
-				wr.member("CLANG_CXX_LANGUAGE_STANDARD",		quoteString("c++11"));
+				wr.member("CLANG_CXX_LANGUAGE_STANDARD",	quoteString("c++11"));
 				wr.member("GCC_SYMBOLS_PRIVATE_EXTERN",		"YES");
+				wr.member("CLANG_ENABLE_OBJC_ARC",			"YES");
 				
 				if (config.isDebug) {
 					wr.member("DEBUG_INFORMATION_FORMAT",		"dwarf");
@@ -581,8 +582,6 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 					wr.member("ONLY_ACTIVE_ARCH",				"YES");
 					wr.member("ENABLE_TESTABILITY",				"YES");
 				}
-				
-				wr.member("CLANG_ENABLE_OBJC_ARC", "YES");
 				
 				
 				{
@@ -672,7 +671,7 @@ void Generator_xcode::gen_project_XCConfigurationList(XCodePbxWriter& wr, Projec
 	wr.commentBlock("----- XCConfigurationList -----------------");
 	{
 		wr.newline(); wr.commentBlock("Build configuration list for PBXProject");
-		auto scope = wr.objectScope(build_config_uuid);
+		auto scope = wr.objectScope(proj.genData_xcode.configListUuid);
 		wr.member("isa", "XCConfigurationList");
 		{
 			auto scope = wr.arrayScope("buildConfigurations");
@@ -688,7 +687,7 @@ void Generator_xcode::gen_project_XCConfigurationList(XCodePbxWriter& wr, Projec
 	}
 	{
 		wr.newline(); wr.commentBlock("Build configuration list for PBXNativeTarget");
-		auto scope = wr.objectScope(proj.genData_xcode.configListUuid);
+		auto scope = wr.objectScope(proj.genData_xcode.targetConfigListUuid);
 		wr.member("isa", "XCConfigurationList");
 		{
 			auto scope = wr.arrayScope("buildConfigurations");
@@ -700,6 +699,7 @@ void Generator_xcode::gen_project_XCConfigurationList(XCodePbxWriter& wr, Projec
 		}
 		
 		wr.member("defaultConfigurationIsVisible", "0");
+		wr.member("defaultConfigurationName", g_ws->defaultConfigName());
 	}
 }
 
@@ -769,7 +769,7 @@ void Generator_xcode::gen_info_plist(Project& proj) {
 void Generator_xcode::genUuid(String& o) {
 	if (o) return;
 
-	o.set("AAAAAAAA");
+	o.set("AEEEEEEE");
 	_lastGenId.v64++;
 	
 	char tmp[100 + 1];
@@ -805,7 +805,6 @@ String Generator_xcode::quoteString(const StrView& v) {
 	return o;
 }
 
-
 void Generator_xcode::readCacheFile(const StrView& filename) {
 	if (!Path::fileExists(filename)) return;		
 
@@ -836,13 +835,14 @@ void Generator_xcode::readCacheFile(const StrView& filename) {
 				reader.beginObject();
 				while (!reader.endObject()) {
 					#define ENTRY(T) reader.member(#T, proj->genData_xcode.T);
-					ENTRY(uuid);
-					ENTRY(targetUuid);
-					ENTRY(targetProductUuid);
-					ENTRY(configListUuid);
-					ENTRY(dependencyProxyUuid);
-					ENTRY(dependencyTargetUuid);
-					ENTRY(dependencyTargetProxyUuid);
+						ENTRY(uuid);
+						ENTRY(targetUuid);
+						ENTRY(targetProductUuid);
+						ENTRY(configListUuid);
+						ENTRY(targetConfigListUuid);
+						ENTRY(dependencyProxyUuid);
+						ENTRY(dependencyTargetUuid);
+						ENTRY(dependencyTargetProxyUuid);
 					#undef ENTRY
 					
 					if (reader.member("configs")) {
@@ -916,14 +916,15 @@ void Generator_xcode::writeCacheFile(const StrView& filename) {
 			auto scope = wr.objectScope("projects");
 			for (auto& proj : g_ws->projects) {
 				auto scope = wr.objectScope(proj.name);
-				#define ENTRY(T) wr.write(#T, proj.genData_xcode.T);
-				ENTRY(uuid);
-				ENTRY(targetUuid);
-				ENTRY(targetProductUuid);
-				ENTRY(configListUuid);
-				ENTRY(dependencyProxyUuid);
-				ENTRY(dependencyTargetUuid);
-				ENTRY(dependencyTargetProxyUuid);
+				#define ENTRY(T) do{ wr.write(#T, proj.genData_xcode.T); }while(false)
+					ENTRY(uuid);
+					ENTRY(targetUuid);
+					ENTRY(targetProductUuid);
+					ENTRY(configListUuid);
+					ENTRY(targetConfigListUuid);
+					ENTRY(dependencyProxyUuid);
+					ENTRY(dependencyTargetUuid);
+					ENTRY(dependencyTargetProxyUuid);
 				#undef ENTRY
 
 				{

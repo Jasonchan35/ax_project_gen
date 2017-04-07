@@ -106,7 +106,9 @@ public:
 		String		uuid;
 		String		targetUuid;
 		String		targetProductUuid;
+		
 		String		configListUuid;
+		String		targetConfigListUuid;
 		
 		String		dependencyProxyUuid;
 		String		dependencyTargetUuid;

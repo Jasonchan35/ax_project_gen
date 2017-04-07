@@ -51,7 +51,6 @@ private:
 	};
 	GenId _lastGenId;
 
-	static const StrView build_config_uuid;
 	static const StrView build_phase_sources_uuid;
 	static const StrView build_phase_frameworks_uuid;
 	static const StrView build_phase_headers_uuid;
