@@ -22,3 +22,10 @@ when I try to maintain a project which have to compile on Windows, Mac, Linux, F
 
 Therefore I make this project generator, just read a json file for all information is 
 needed then output target IDE project for my actual work.
+
+## See Also
+* [List of build automation software](https://en.wikipedia.org/wiki/List_of_build_automation_software#Build_script_generation_tools)
+* [SCons](http://scons.org/)
+* [CMake](https://cmake.org/)
+* [gyp](https://gyp.gsrc.io/)
+* [premake](https://github.com/premake/premake-core)
