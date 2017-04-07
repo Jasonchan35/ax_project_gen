@@ -50,11 +50,11 @@ then if I have some cpp files excluded from the result above, I only have to do 
 ```
 simple and clean, it should be enough to describe what file I want, so why I have to do programming in my project file ?
 
-# Virtual Folder in IDE
+## Virtual Folder in IDE
 
 One thing I expected is generated project should follow folder sturcture as same as on the disk
 
-`Image below shows generated Xcode projects (Left: what I expected by ax_gen, Right: by CMake)`
+### Image below shows generated Xcode projects `(Left: what I expected by ax_gen, Right: by CMake)`
 
 ![Xcode](ScreenShots/CMake_xcode.png)
 
@@ -62,15 +62,13 @@ As you can see CMake flattened all files in one single folder, for some project 
 
 And I also timing xcode project generation, even I don't generate project that often
 
-| CMake          | ax_gen       |
-|----------------|--------------|
-|real	0m10.830s|real	0m0.012s|
-|user	0m8.478s |user	0m0.005s|
-|sys	0m3.049s |sys	0m0.005s|
+| ax_gen        | CMake          |
+|---------------|----------------|
+|real	0m0.012s|real	0m10.830s|
+|user	0m0.005s|user	0m8.478s |
+|sys	0m0.005s|sys	0m3.049s |
 
-
-
-## Precompiled Header
+## About Precompiled Header
 Precompiled Header (PCH) is a basic feature supported almost all compiler, which really can improve compile time.
 
 In Xcode, you only have to set PCH filename in project, then just add include "pch.h" at the top for all cpp files.
