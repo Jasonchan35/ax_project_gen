@@ -119,10 +119,4 @@ and it will
 My point is why we need so many options or steps to setup PCH, I just need a header file which will compile and consumed by other cpp files to save compile time, what else you need to tell other than the pch file name ?
 
 ## Conclusion
-I think at the end it's about how to get the job done, CMake is powerful and flexible, but when writing CMakefile.txt just like coding, it sounds a bit over-engineering to me.
-
-In fact if you see how people using Visual C++ or Xcode, they don't have any problem about how to manage files or compile option in project, and it's all the information compiler need.
-
-For me I'm happy with those IDE, but the only problem I have is cross-platform, when I try to maintain a project which have to compile on Windows, Mac, Linux, FreeBSD, iOS, Android ...etc, and they all using different IDE, it became a nightmare to me
-
-Therefore I make this project generator, just read a json file for all information is needed then output target IDE project for my actual work.
+I think at the end it's about how to get the job done, CMake is powerful and flexible, but when writing CMakefile.txt just like coding, it sounds a bit over-engineering to me. is it really necessary ?
