@@ -54,18 +54,20 @@ simple and clean, it should be enough to describe what file I want, so why I hav
 
 One thing I expected is generated project should follow folder sturcture as same as on the disk
 
-`Image below shows generated Xcode projects (Right: what I expected by ax_gen, Left: by CMake)`
+`Image below shows generated Xcode projects (Left: what I expected by ax_gen, Right: by CMake)`
 
 ![Xcode](ScreenShots/CMake_xcode.png)
 
-As you can see CMake flattened all files in one single folder, for some project contains 100+ files, it makes folder/file tree un-usable, of cause it can copmile the program without problem, but the point to having IDE is make programmer's life easier not pain
+As you can see CMake flattened all files in one single folder, for some project contains 100+ files, it makes virtual folders un-usable, of cause the project can compile without any problem, but the point to having IDE is make programmer's life easier not more painful !
 
 And I also timing xcode project generation, even I don't generate project that often
+
 | CMake          | ax_gen       |
 |----------------|--------------|
 |real	0m10.830s|real	0m0.012s|
 |user	0m8.478s |user	0m0.005s|
 |sys	0m3.049s |sys	0m0.005s|
+
 
 
 ## Precompiled Header
