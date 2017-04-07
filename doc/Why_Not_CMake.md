@@ -59,15 +59,17 @@ One thing I expected is generated project should follow folder sturcture as same
 
 ![Xcode](ScreenShots/CMake_xcode.png)
 
-As you can see CMake flattened all files in one single folder, for some project contains 100+ files, it makes virtual folders un-usable, of cause the project can compile without any problem, but the point to having IDE is make programmer's life easier not more painful !
+As you can see CMake flattened all files in one single folder, for some project contains 100+ files, it makes virtual folders un-usable, of cause the project can compile without any problem, but the point to having IDE is making programmer's life easier not more painful !
 
-And I also timing xcode project generation, even I don't generate project that often
+And I also do timing of xcode project generation, even I don't generate project that often
 
 | ax_gen        | CMake          |
 |---------------|----------------|
 |real	0m0.012s|real	0m10.830s|
 |user	0m0.005s|user	0m8.478s |
 |sys	0m0.005s|sys	0m3.049s |
+
+0.12 seconds vs 10 seconds - fair enough
 
 ## About Precompiled Header
 Precompiled Header (PCH) is a basic feature supported almost all compiler, which really can improve compile time.
