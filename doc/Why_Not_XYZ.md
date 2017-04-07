@@ -29,3 +29,4 @@ needed then output target IDE project for my actual work.
 * [CMake](https://cmake.org/)
 * [gyp](https://gyp.gsrc.io/)
 * [premake](https://github.com/premake/premake-core)
+- [GENie](https://github.com/bkaradzic/GENie)
