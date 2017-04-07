@@ -6,9 +6,11 @@ C++ Project Generator
 
 * Run on multiple platforms *( Windows / MacOSX / Linux / FreeBSD )*
 
-* Auto inherit configuration from depended project, for instance executable project depends on library <br> will inherit all settings by default *( e.g. include_dir, cpp_defines, output_library ...etc )*
+* Auto inherit configuration from depended project, for instance executable project depends on library <br>
+will inherit all settings by default *( e.g. include_dir, cpp_defines, output_library ...etc )*
 
-* Support wildcard, glob with sub-directories *( example: ```src/**/*.cpp```,  means all c++ files within `src` folder including all sub-directories )*
+* Support wildcard, glob with sub-directories *( example: ```src/**/*.cpp```,
+means all c++ files within `src` folder including all sub-directories )*
 
 * Support file path with space and Unicode for non-Latin characters
 
