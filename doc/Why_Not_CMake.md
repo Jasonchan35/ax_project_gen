@@ -54,7 +54,8 @@ simple and clean, it should be enough to describe what file I want, so why I hav
 
 One thing I expected is generated project should follow folder sturcture as same as on the disk
 
-### Image below shows generated Xcode projects `(Left: what I expected by ax_gen, Right: by CMake)`
+### Image below shows generated Xcode projects
+`(Left: what I expected by ax_gen, Right: by CMake)`
 
 ![Xcode](ScreenShots/CMake_xcode.png)
 
