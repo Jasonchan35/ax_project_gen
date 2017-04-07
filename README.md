@@ -109,3 +109,6 @@ ax_gen.exe ws=examples/001/Hello.axworkspace -gen
 }
 
 ```
+
+# If you're interested to
+* [Another generator again ? Why Not XYZ ... please click here](doc/Why_Not_XYZ.md)

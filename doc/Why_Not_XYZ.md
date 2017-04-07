@@ -9,4 +9,4 @@ After years of looking for my favourite generator, I still couldn't find single 
 And I'm not trying let it replace others, so if you happy with what you are using, then just keep doing, but if not, you can try to take a look of this one.
 
 ## Comparsion to other generator
-[Why not CMake](Why_Not_CMake.md)
+* [Why not CMake](Why_Not_CMake.md)

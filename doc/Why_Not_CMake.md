@@ -50,18 +50,22 @@ then if I have some cpp files excluded from the result above, I only have to do 
 ```
 simple and clean, it should be enough to describe what file I want, so why I have to do programming in my project file ?
 
-# Virtual Folder
+# Virtual Folder in IDE
 
-CMake - gen xcode timing
-real	0m10.830s
-user	0m8.478s
-sys	0m3.049s
+One thing I expected is generated project should follow folder sturcture as same as on the disk
 
-ax_gen - gen xcode timing
-real	0m0.012s
-user	0m0.005s
-sys	0m0.005s
+`Image below shows generated Xcode projects (Right: what I expected by ax_gen, Left: by CMake)`
 
+![Xcode](ScreenShots/CMake_xcode.png)
+
+As you can see CMake flattened all files in one single folder, for some project contains 100+ files, it makes folder/file tree un-usable, of cause it can copmile the program without problem, but the point to having IDE is make programmer's life easier not pain
+
+And I also timing xcode project generation, even I don't generate project that often
+| CMake          | ax_gen       |
+|----------------|--------------|
+|real	0m10.830s|real	0m0.012s|
+|user	0m8.478s |user	0m0.005s|
+|sys	0m3.049s |sys	0m0.005s|
 
 
 ## Precompiled Header
