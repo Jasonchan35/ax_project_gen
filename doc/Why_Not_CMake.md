@@ -138,3 +138,5 @@ which will compile and consumed by other cpp files to save compile time, what el
 I think at the end it's about how to get the job done, CMake is powerful and flexible,
 but when writing CMakefile.txt just like coding, it sounds a bit over-engineering to me. is it really necessary ?
 
+## See Also
+[Why not CMake from GENie - CppCon 2016](https://onedrive.live.com/view.aspx?cid=171ee76e679935c8&page=view&resid=171EE76E679935C8!139573&parId=171EE76E679935C8!18835&authkey=!AKv_SGrgJwxDGDg&app=PowerPoint)
