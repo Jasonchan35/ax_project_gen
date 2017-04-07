@@ -14,6 +14,7 @@ ADD_EXECUTABLE(MyExecutable ${MyCSources})
 or 
 ```
 FILE(GLOB_RECURSE  MyCSources *.cpp)
+ADD_EXECUTABLE(MyExecutable ${MyCSources})
 ```
 if you want files in all sub-directories as well
 
@@ -48,6 +49,20 @@ then if I have some cpp files excluded from the result above, I only have to do 
 }
 ```
 simple and clean, it should be enough to describe what file I want, so why I have to do programming in my project file ?
+
+# Virtual Folder
+
+CMake - gen xcode timing
+real	0m10.830s
+user	0m8.478s
+sys	0m3.049s
+
+ax_gen - gen xcode timing
+real	0m0.012s
+user	0m0.005s
+sys	0m0.005s
+
+
 
 ## Precompiled Header
 Precompiled Header (PCH) is a basic feature supported almost all compiler, which really can improve compile time.
@@ -85,7 +100,7 @@ It's just for VC, what about gcc or clang ? you need more lines of CMake script
 
 And I still have to add #include "pch.h" in every single cpp file. Ok no problem, VC can do force-inline header by compile option.
 
-If you don't why to do such CMake script yourself, you can try to find some 3rd party module, but the question is which one is good ? what compile or platform they support ? do they support force-include header for all compilers ?
+If you don't want to do such CMake script yourself, you can try to find some 3rd party module, but the question is which one is good ? what compiler or platform they support ? do they support force-include header for all compilers ? it's the problem when it doesn't support out of the box
 
 And at the end of the day, I just want to tell compiler this is my precompiled header, so in ax_gen here is the only line you need
 ```
@@ -96,7 +111,7 @@ and it will
 - force-include for all cpp files
 - generate pch.cpp to create PCH object file for Visual C++
 
-My point is why we need some many option or step to setup PCH, I just need a header file which will compile and consumed by other cpp files to save compile time, what else you need to tell other than the pch file name ?
+My point is why we need so many options or steps to setup PCH, I just need a header file which will compile and consumed by other cpp files to save compile time, what else you need to tell other than the pch file name ?
 
 ## Conclusion
 I think at the end it's about how to get the job done, CMake is powerful and flexible, but when writing CMakefile.txt just like coding, it sounds a bit over-engineering to me.
