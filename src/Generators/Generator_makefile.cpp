@@ -12,7 +12,7 @@ void Generator_makefile::build() {
 
 #if ax_OS_Windows
 #else
-	int ret = ::system(String("make --directory=\"", g_ws->outDir, "\"").c_str());
+	int ret = ::system(String("make -C \"", g_ws->outDir, "\"").c_str());
 	//int ret = ::execlp("make", "-C", g_ws->outDir.c_str());
 	if (ret < 0) {
 		throw Error("Error Build");
@@ -94,12 +94,14 @@ void Generator_makefile::gen_workspace() {
 
 		if (!proj.hasOutputTarget) continue;
 
-		StrView mt_build;
-		if (proj.multithread_build()) mt_build = " --jobs";
+		String mt_build;
+		if (proj.multithread_build()) {
+			mt_build.append(" -j ", System::cpuCount());
+		}
 
 		o.append("\t@echo \"==============================================================\"\n");
 		o.append("\t@echo \"[build project] ", proj.name, "\"\n");
-		o.append("\t$(MAKE) ", mt_build," --file=", quoteString(proj.genData_makefile.makefile), " build $(.MAKEFLAGS)\n");
+		o.append("\t$(MAKE)", mt_build," -f ", quoteString(proj.genData_makefile.makefile), " build $(.MAKEFLAGS)\n");
 		o.append("\n");
 	}
 

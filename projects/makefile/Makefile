@@ -2,7 +2,8 @@
 #!! Works for pmake (FreeBSD), GNUmake (GNU Linux)
 #!! 
 
-OUTPUT_TARGET = ../../bin/ax_gen
+OUTPUT_DIR = ../../bin
+OUTPUT_TARGET = $(OUTPUT_DIR)/ax_gen
 
 .PHONY: build clean $(OUTPUT_TARGET)
 
@@ -12,7 +13,7 @@ CCFLAGS = -std=c++11 -Wall -Werror
 # CCFLAGS += -g  # Debug
 
 $(OUTPUT_TARGET):
-	@mkdir -p $(dir $(OUTPUT_TARGET))
+	@mkdir -p $(OUTPUT_DIR)
 	$(CC) ../../src/_single_file_build_.cpp -o "$@" $(CCFLAGS)
 
 all: build

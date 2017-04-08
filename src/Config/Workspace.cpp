@@ -43,6 +43,10 @@ Workspace::Workspace() {
 	host_os = "cygwin";
 	generator = "makefile";
 
+#elif ax_OS_FreeBSD
+	host_os = "freebsd";
+	generator = "makefile";
+
 #else
 	#error "Unknown OS"
 #endif

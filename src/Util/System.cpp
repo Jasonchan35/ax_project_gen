@@ -10,6 +10,10 @@
 
 namespace ax_gen {
 
+int System::cpuCount() {
+	return (int)std::thread::hardware_concurrency();
+}
+
 void System::shellOpen(const StrView& path) {
 	Log::info("shellOpen> ", path);
 

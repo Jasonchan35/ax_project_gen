@@ -16,6 +16,7 @@
 #include <exception>
 #include <assert.h>
 #include <stdint.h>
+#include <thread>
 
 //#define ax_fallthrough [[fallthrough]]
 #define ax_fallthrough //nothing
@@ -29,6 +30,7 @@
 	#include <dirent.h>
 	#include <sys/stat.h>
  	#include <unistd.h>	
+	#include <stdlib.h>
 	#include <stdint.h>
 	#include <spawn.h>
 	#include <poll.h>

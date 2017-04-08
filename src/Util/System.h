@@ -16,6 +16,8 @@ public:
 	
 	static void createProcess(const StrView& exe, const StrView& args);
 
+	static int cpuCount();
+
 private:
 	System() = delete;
 };
