@@ -1,6 +1,7 @@
 {
 	"build_dir": "_build",
 	"config_list": ["Debug"],
+	"unite_build": false,
 
 	"config": {
 		//TODO condition

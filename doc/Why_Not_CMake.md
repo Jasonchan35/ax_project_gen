@@ -65,6 +65,8 @@ One thing I expected is generated project should follow folder sturcture as same
 
 ![Xcode](ScreenShots/CMake_xcode.png)
 
+![vs2015](ScreenShots/CMake_vs2015.png)
+
 As you can see CMake flattened all files in one single folder, for some project contains 100+ files,
 it makes virtual folders un-usable, of cause the project can compile without any problem,
 but the point to having IDE is making programmer's life easier not more painful !
