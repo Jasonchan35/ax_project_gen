@@ -12,11 +12,13 @@ public:
 	int		run(int argc, char* argv[]);
 
 	struct Options {
+		bool help	{false};
 		bool gen    {false};
 		bool build  {false};
 		bool ide	{false};
 		bool run    {false};
 		bool verbose{false};
+		bool _hasAction{false};
 
 		String	workspaceFile;
 	};

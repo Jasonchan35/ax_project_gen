@@ -31,16 +31,22 @@ void App::readArgs(int argc, char* argv[]) {
 		auto s = StrView_c_str(argv[i]);
 		Log::info("\targ[", i, "]: ", s);
 
-		if (s == "-gen") {
+		if (s == "-help" || s == "--help") {
+			options.help = true;
+		}else if (s == "-gen") {
+			options._hasAction = true;
 			options.gen = true;
 
 		}else if (s == "-build") {
+			options._hasAction = true;
 			options.build = true;
 
 		}else if (s == "-run") {
+			options._hasAction = true;
 			options.run = true;
 
 		}else if (s == "-ide") {
+			options._hasAction = true;
 			options.ide = true;
 
 		}else if (s == "-verbose") {
@@ -81,7 +87,6 @@ int App::_run(int argc, char* argv[]) {
 		_generator.reset(new Generator_vs2015());
 
 	}else if (workspace.generator == "vs2015_linux") {
-
 		g_ws->os = "linux";
 		_generator.reset(new Generator_vs2015() );
 
@@ -111,6 +116,36 @@ int App::_run(int argc, char* argv[]) {
 	workspace.dump(ss);
 
 	Log::info(ss.str());
+
+	if (options.help || !options._hasAction) {
+		Log::info("\n===== Help ===================\n"
+			"\n"
+			"Command line:\n"
+			"  ax_gen ws=<Workspace File> [Options] [Actions] [Others]\n"
+			"\n"
+			"Example:"
+			"  ax_gen ws=my.axworkspace gen=vs2015 -gen\n"
+			"\n"
+			"Options:\n"
+			"  gen=<Geneartor>  - [vs2015, xcode, makefile]\n"
+			"  os=<target OS>   - [windows, macosx, ios, linux]\n"
+			"  cpu=<target CPU> - [x86_64, x86] \n"
+			"\n"
+			"Actions:\n"
+			"  -gen     - generate output workspace / projects\n"
+			"  -build   - build projects\n"
+			"  -ide     - open IDE such as Visual Studio, Xcode\n"
+			"  -run     - run startup project\n"
+			"\n"
+			"Others:\n"
+			"  -verbose - more detail in log\n"
+			"");
+
+		if (!options._hasAction) {
+			throw Error("no action specified, e.g. -gen, -build");
+		}
+		return -1;
+	}
 
 	if (options.gen) {
 		_generator->generate();	
