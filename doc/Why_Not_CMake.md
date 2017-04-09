@@ -41,18 +41,18 @@ but why I need to take so much time for just adding file to my project, I probab
 
 And what I really want is:
 ```
-"files":{"./src/**/*.cpp"}
+"files":["./src/**/*.cpp"]
 ```
 for all cpp file under `src` including sub-directories, this `**` glob is quite common now,
 you can find it from python, visual studio code ...etc.
 
 then if I have some cpp files excluded from the result above, I only have to do this:
 ```
-"files":{"./src/**/*.cpp"},
-"exclude_files":{
+"files":["./src/**/*.cpp"],
+"exclude_files":[
     "./src/bad_code/*.cpp",
     "./src/something_else/*.*"
-}
+]
 ```
 simple and clean, it should be enough to describe what file I want, so why I have to do programming in my project file ?
 
