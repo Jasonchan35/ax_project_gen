@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 namespace ax_gen {
 
 template<typename T>

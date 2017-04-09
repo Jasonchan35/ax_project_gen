@@ -1,4 +1,6 @@
+#include "../common.h"
 #include "Glob.h"
+#include "Path.h"
 
 namespace ax_gen {
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <assert.h>
 
 namespace ax_gen {
 

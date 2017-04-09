@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Vector.h"
 #include "Error.h"
 
 namespace ax_gen {

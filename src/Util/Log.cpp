@@ -1,5 +1,6 @@
 #include "../common.h"
 #include "Log.h"
+#include "Path.h"
 
 namespace ax_gen {
 

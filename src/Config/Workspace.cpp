@@ -92,7 +92,7 @@ void Workspace::readFile(const StrView& filename) {
 
 
 	_platformName.clear();
-	_platformName.append(generator, '-', compiler, '-', os, '-', cpu);
+	_platformName.append(workspace_name, '-', generator, '-', compiler, '-', os, '-', cpu);
 
 	{
 		String json;

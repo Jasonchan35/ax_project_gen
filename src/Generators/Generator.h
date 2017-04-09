@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../common.h"
+#include "../Config/Workspace.h"
 
 namespace ax_gen {
 

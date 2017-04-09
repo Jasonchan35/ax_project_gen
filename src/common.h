@@ -70,4 +70,6 @@ public:
 #include "Util/JsonWriter.h"
 #include "Util/XmlWriter.h"
 #include "Util/System.h"
+#include "Util/Path.h"
+#include "Util/Glob.h"
 

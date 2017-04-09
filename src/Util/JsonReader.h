@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Log.h"
+#include "Vector.h"
 
 namespace ax_gen {
 

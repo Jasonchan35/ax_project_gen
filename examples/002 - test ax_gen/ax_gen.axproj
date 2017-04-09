@@ -1,12 +1,15 @@
 {
 	"type": "cpp_exe",
 
-	"pch_header": "src/precompiledHeader.h",
+	//"pch_header": "src/precompiledHeader.h",
 
 	//"unite_build": false,
 	//"unite_mega_byte_per_file": 1,
 	"files" : [
 		"../../src/**/*.cpp"
+	],
+	"exclude_files": [
+		"../../src/_single_file_build_.cpp"
 	],
 	"config": {
 		"cpp_defines": [],

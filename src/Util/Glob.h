@@ -1,5 +1,8 @@
 #pragma once
 
+#include "String.h"
+#include "Vector.h"
+
 namespace ax_gen {
 
 struct Glob {

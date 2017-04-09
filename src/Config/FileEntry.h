@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "../common.h"
+
 namespace ax_gen {
 
 enum class FileType {
