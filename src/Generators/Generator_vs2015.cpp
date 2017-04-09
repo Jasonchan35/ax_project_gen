@@ -515,11 +515,11 @@ void Generator_vs2015::gen_vcxproj_filters(Project& proj) {
 		//------------
 		{
 			auto tag = wr.tagScope("ItemGroup");
-			for (auto& d : proj.virtualFolders.dict.keys()) {
-				if (!d) continue;
+			for (auto& d : proj.virtualFolders.dict) {
+				if (&d == proj.virtualFolders.root) continue;
 				auto tag = wr.tagScope("Filter");
 				String winPath;
-				Path::windowsPath(winPath, d);
+				Path::windowsPath(winPath, d.path);
 				wr.attr("Include", winPath);
 			}
 		}
