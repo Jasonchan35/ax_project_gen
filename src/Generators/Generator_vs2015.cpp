@@ -395,28 +395,34 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 				
 			wr.tagWithBody("PreprocessorDefinitions", "%(PreprocessorDefinitions)");
 
-			if (!vsForLinux()) {
+			if (vsForLinux()) {
+				if (config.isDebug) {
+					wr.tagWithBody("DebugInformationFormat",	"FullDebug");
+				}else{
+					wr.tagWithBody("DebugInformationFormat",	"None");
+				}
 
-				wr.tagWithBody("DebugInformationFormat", "ProgramDatabase");
+			}else{
 				wr.tagWithBody("SDLCheck", "true");
-
 				wr.tagWithBodyBool("MultiProcessorCompilation", proj.multithread_build());
 
 				if (config.isDebug) {
-					wr.tagWithBody("Optimization", "Disabled");
-					wr.tagWithBody("MinimalRebuild", "true");
-					wr.tagWithBody("RuntimeLibrary", "MultiThreadedDebugDLL");
-					wr.tagWithBody("LinkIncremental", "true");
+					wr.tagWithBody("Optimization",				"Disabled");
+					wr.tagWithBody("DebugInformationFormat",	"ProgramDatabase");
+					wr.tagWithBody("MinimalRebuild",			"true");
+					wr.tagWithBody("RuntimeLibrary",			"MultiThreadedDebugDLL");
+					wr.tagWithBody("LinkIncremental",			"true");
 				}
 				else {
-					wr.tagWithBody("Optimization", "MaxSpeed");
-					wr.tagWithBody("MinimalRebuild", "false");
-					wr.tagWithBody("WholeProgramOptimization", "true");
-					wr.tagWithBody("RuntimeLibrary", "MultiThreadedDLL");
-					wr.tagWithBody("FunctionLevelLinking", "true");
-					wr.tagWithBody("IntrinsicFunctions", "true");
-					wr.tagWithBody("WholeProgramOptimization", "true");
-					wr.tagWithBody("BasicRuntimeChecks", "Default");
+					wr.tagWithBody("Optimization",				"MaxSpeed");
+					wr.tagWithBody("DebugInformationFormat",	"None");
+					wr.tagWithBody("MinimalRebuild",			"false");
+					wr.tagWithBody("WholeProgramOptimization",	"true");
+					wr.tagWithBody("RuntimeLibrary",			"MultiThreadedDLL");
+					wr.tagWithBody("FunctionLevelLinking",		"true");
+					wr.tagWithBody("IntrinsicFunctions",		"true");
+					wr.tagWithBody("WholeProgramOptimization",	"true");
+					wr.tagWithBody("BasicRuntimeChecks",		"Default");
 				}
 			}
 
