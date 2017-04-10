@@ -392,25 +392,30 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 			auto tag = wr.tagScope("ClCompile");
 				
 			wr.tagWithBody("PreprocessorDefinitions", "%(PreprocessorDefinitions)");
-			wr.tagWithBody("DebugInformationFormat", "ProgramDatabase");
-			wr.tagWithBody("SDLCheck", "true");
 
-			wr.tagWithBodyBool("MultiProcessorCompilation", proj.multithread_build());
+			if (!vsForLinux()) {
 
-			if (config.isDebug) {
-				wr.tagWithBody("Optimization",				"Disabled");
-				wr.tagWithBody("MinimalRebuild",			"true");
-				wr.tagWithBody("RuntimeLibrary",			"MultiThreadedDebugDLL");
-				wr.tagWithBody("LinkIncremental",			"true");
-			}else{
-				wr.tagWithBody("Optimization",				"MaxSpeed");
-				wr.tagWithBody("MinimalRebuild",			"false");
-				wr.tagWithBody("WholeProgramOptimization",	"true");
-				wr.tagWithBody("RuntimeLibrary",			"MultiThreadedDLL");
-				wr.tagWithBody("FunctionLevelLinking",		"true");
-				wr.tagWithBody("IntrinsicFunctions",		"true");
-				wr.tagWithBody("WholeProgramOptimization",	"true");
-				wr.tagWithBody("BasicRuntimeChecks",		"Default");
+				wr.tagWithBody("DebugInformationFormat", "ProgramDatabase");
+				wr.tagWithBody("SDLCheck", "true");
+
+				wr.tagWithBodyBool("MultiProcessorCompilation", proj.multithread_build());
+
+				if (config.isDebug) {
+					wr.tagWithBody("Optimization", "Disabled");
+					wr.tagWithBody("MinimalRebuild", "true");
+					wr.tagWithBody("RuntimeLibrary", "MultiThreadedDebugDLL");
+					wr.tagWithBody("LinkIncremental", "true");
+				}
+				else {
+					wr.tagWithBody("Optimization", "MaxSpeed");
+					wr.tagWithBody("MinimalRebuild", "false");
+					wr.tagWithBody("WholeProgramOptimization", "true");
+					wr.tagWithBody("RuntimeLibrary", "MultiThreadedDLL");
+					wr.tagWithBody("FunctionLevelLinking", "true");
+					wr.tagWithBody("IntrinsicFunctions", "true");
+					wr.tagWithBody("WholeProgramOptimization", "true");
+					wr.tagWithBody("BasicRuntimeChecks", "Default");
+				}
 			}
 
 			if (proj.pch_header) {				
