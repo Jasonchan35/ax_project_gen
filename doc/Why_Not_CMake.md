@@ -88,7 +88,7 @@ Precompiled Header (PCH) is a basic feature supported almost all compiler, which
 In Xcode, you only have to set PCH filename in project, then just add include "pch.h" at the top for all cpp files.
 
 In Visual Studio, an extra step is needed, usually just create pch.cpp which only include "pch.h",
-and set compile option from `use PCH` to `create PCH`.
+and set compile option from `Use PCH` to `Create PCH`.
 
 In Makefile, it's a bit complicate, if you want the correct setup for file dependencies, but I'm not going to explain here.
 
