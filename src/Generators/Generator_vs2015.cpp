@@ -4,12 +4,17 @@
 
 namespace ax_gen {
 
-Generator_vs2015::Generator_vs2015() {
-	if (!g_ws->generator) g_ws->generator = "vs2015";
-	if (!g_ws->compiler) g_ws->compiler = "vc";
+void Generator_vs2015::onInit() {
+	if (vsForLinux()) {
+		if (!g_ws->os ) g_ws->os  = "linux";
+		if (!g_ws->cpu) g_ws->cpu = "x86_64";
+		if (!g_ws->compiler) g_ws->compiler = "gcc";
+	}else{
+		if (!g_ws->compiler) g_ws->compiler = "vc";
+	}
 }
 
-void Generator_vs2015::generate() {
+void Generator_vs2015::onGenerate() {
 	if (vsForLinux()) {
 		if (g_ws->os != "linux") {
 			throw Error("Unsupported OS ", g_ws->os);
@@ -31,8 +36,7 @@ void Generator_vs2015::generate() {
 	gen_workspace();
 }
 
-void Generator_vs2015::ide() {
-	Log::info("=========== Open IDE ===============");
+void Generator_vs2015::onIde() {
 	System::shellOpen(g_ws->genData_vs2015.sln);
 }
 
@@ -52,9 +56,7 @@ StrView Generator_vs2017::slnFileHeader() {
 			"\r\n";
 }
 
-void Generator_vs2015::build() {
-	Log::info("=========== Build ===============");
-
+void Generator_vs2015::onBuild() {
 	auto* proj = g_ws->_startup_project;
 	if (!proj) {
 		Log::error("no startup project to build");

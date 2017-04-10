@@ -5,10 +5,10 @@
 	//"pch_header": "src/precompiledHeader.h",
 
 	//"unite_build": false,
-	//"unite_mega_byte_per_file": 1,
+	//"unite_filesize": 1,
 	"files" : [
 		"**/*.cpp",
-		"include/*.h",
+		"./include/*.h",
 		"*.axproj"
 	],
 	"exclude_files": [

@@ -7,11 +7,10 @@ namespace ax_gen {
 
 class Generator_xcode : public Generator {
 public:
-	Generator_xcode();
-
-	void generate() override;
-	void build() override;
-	void ide() override;
+	void onInit		() override;
+	void onGenerate	() override;
+	void onBuild	() override;
+	void onIde		() override;
 
 private:
 	void gen_workspace();

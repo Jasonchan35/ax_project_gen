@@ -137,6 +137,7 @@ bool JsonReader::endArray() {
 }
 
 bool JsonReader::member(const StrView& name) {
+	if (_valueType == ValueType::EndObject) return false;
 	if (_valueType != ValueType::Member) error("value is not member");
 	if (_token.str != name) return false;
 	next();
@@ -152,14 +153,23 @@ StrView JsonReader::memberWithPrefix(const StrView& prefix) {
 }
 
 void JsonReader::getMemberName(String& out_value) {
+	if (_valueType != ValueType::Member) error("is not member name");
 	peekMemberName(out_value);
 	next();
 }
 
-void JsonReader::peekMemberName(String& out_value) {
+bool JsonReader::peekMemberName(String& out_value) {
+	if (_valueType == ValueType::EndObject) return false;
 	if (_valueType != ValueType::Member) error("is not member name");
 	out_value = _token.str;
+	return true;
 }
+
+void JsonReader::skipMemberName() {
+	if (_valueType != ValueType::Member) error("is not member name");
+	next();	
+}
+
 
 void JsonReader::getValue(String& out_value) {
 	if (_valueType != ValueType::String) error("value is not String");

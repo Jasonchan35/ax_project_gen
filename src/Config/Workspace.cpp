@@ -52,10 +52,6 @@ Workspace::Workspace() {
 #endif
 
 	input.build_dir = "_build";
-
-//====================
-	os  = host_os;
-	cpu = host_cpu;
 }
 
 void Workspace::dump(StringStream& s) {
@@ -70,7 +66,7 @@ void Workspace::dump(StringStream& s) {
 
 	if (input.unite_build) {
 		ax_dump(s, input.unite_build);
-		ax_dump(s, input.unite_mega_byte_per_file);
+		ax_dump(s, input.unite_filesize);
 	}
 
 	ax_dump(s, input.startup_project);
@@ -129,7 +125,7 @@ void Workspace::readJson(JsonReader& r) {
 		if (r.member("build_dir",			input.build_dir )) continue;
 		if (r.member("startup_project",		input.startup_project)) continue;
 		if (r.member("unite_build",			input.unite_build)) continue;
-		if (r.member("unite_mega_byte_per_file", input.unite_mega_byte_per_file )) continue;
+		if (r.member("unite_filesize", input.unite_filesize )) continue;
 
 		if (r.member("config_list", input.config_list)) {
 			for (auto& config_name : input.config_list) {
@@ -171,6 +167,40 @@ void Workspace::readJson(JsonReader& r) {
 			}
 			r.skipValue();
 			continue;
+		}
+
+		//----- condition check -----
+		String memberName;
+		if (r.peekMemberName(memberName)) {
+			if (auto v = memberName.getFromPrefix("os==")) {
+				if (v != g_ws->os) { 
+					r.skipValue();
+				}else{				
+					r.skipMemberName();
+					readJson(r);
+				}
+				continue;
+			}
+
+			if (auto v = memberName.getFromPrefix("compiler==")) {
+				if (v != g_ws->compiler) {
+					r.skipValue();
+				}else{
+					r.skipMemberName();
+					readJson(r);
+				}
+				continue;
+			}
+
+			if (auto v = memberName.getFromPrefix("generator==")) {
+				if (v != g_ws->generator) { 
+					r.skipValue();
+				}else{
+					r.skipMemberName();
+					readJson(r);
+				}
+				continue;
+			}
 		}
 	}
 }

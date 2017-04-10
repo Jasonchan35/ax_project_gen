@@ -14,12 +14,19 @@ class Config;
 class Generator : public NonCopyable {
 public:
 	Generator();
-	virtual void generate() = 0;
 
-	virtual void build	() { Log::warning("this generator doesn't support action [-build]"); }
-	virtual void ide	() { Log::warning("this generator doesn't support action [-ide]"); }
+			void init		();
+			void generate	();
+			void ide		();
+			void build		();
+			void run		();
 
-			void run	();
+
+	virtual void onInit	() = 0;
+	virtual void onGenerate	() = 0;
+	virtual void onBuild	() { Log::warning("this generator doesn't support action [-build]"); }
+	virtual void onIde		() { Log::warning("this generator doesn't support action [-ide]"); }
+			void onRun		();
 };
 
 } //namespace

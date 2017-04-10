@@ -7,15 +7,15 @@
 
     "linux": {
         "command": "sh",
-        "args": ["examples/001/test_run.sh"]
+        "args": ["examples/001/test_makefile.sh"]
     },
     "osx": {
         "command": "sh",
-        "args": ["examples/001/test_run.sh"]
+        "args": ["examples/001/test_xcode.sh"]
     },
     "windows": {
         "command": "call",
-        "args": ["examples/001/test_run.bat"]
+        "args": ["examples/001/test_vs2015.bat"]
     },
     "tasks": [
         {

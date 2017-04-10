@@ -60,7 +60,7 @@ void Project::Input::dump(StringStream& s) {
 	ax_dump(s, dependencies);
 	ax_dump(s, pch_header);
 	if (unite_build)   ax_dump(s, unite_build);
-	ax_dump(s, unite_mega_byte_per_file);
+	ax_dump(s, unite_filesize);
 }
 
 void Project::dump(StringStream& s) {
@@ -114,7 +114,7 @@ void Project::init(const StrView& name_) {
 	
 	//carry workspace global setting as project default
 	input.unite_build = g_ws->input.unite_build;
-	input.unite_mega_byte_per_file = g_ws->input.unite_mega_byte_per_file;
+	input.unite_filesize = g_ws->input.unite_filesize;
 	
 	for (auto& src : g_ws->configs) {
 		auto* dst = configs.add(src.name);
@@ -142,17 +142,26 @@ void Project::readJson(JsonReader& r) {
 			ReadMember(group);
 			ReadMember(type);
 			ReadMember(gui_app);
-			ReadMember(dependencies);
-			ReadMember(files);
-			ReadMember(exclude_files);
 			ReadMember(pch_header);
 			ReadMember(unite_build);
-			ReadMember(unite_mega_byte_per_file);
+			ReadMember(unite_filesize);
 			ReadMember(multithread_build);
 			ReadMember(xcode_bundle_identifier);
 			ReadMember(visualc_PlatformToolset);
 		#undef ReadMember
-		
+
+		if (r.member("dependencies")) {
+			r.appendValue(input.dependencies);
+		}
+
+		if (r.member("files")) {
+			r.appendValue(input.files);
+		}
+
+		if (r.member("exclude_files")) {
+			r.appendValue(input.exclude_files);
+		}
+
 		if (r.member("config")) {
 			if (!configs.size()) {
 				r.error("please specify config_list before config");
@@ -164,6 +173,40 @@ void Project::readJson(JsonReader& r) {
 			}
 			r.skipValue();
 			continue;
+		}
+
+		//----- condition check -----
+		String memberName;
+		if (r.peekMemberName(memberName)) {
+			if (auto v = memberName.getFromPrefix("os==")) {
+				if (v != g_ws->os) { 
+					r.skipValue();
+				}else{				
+					r.skipMemberName();
+					readJson(r);
+				}
+				continue;
+			}
+
+			if (auto v = memberName.getFromPrefix("compiler==")) {
+				if (v != g_ws->compiler) {
+					r.skipValue();
+				}else{
+					r.skipMemberName();
+					readJson(r);
+				}
+				continue;
+			}
+
+			if (auto v = memberName.getFromPrefix("generator==")) {
+				if (v != g_ws->generator) { 
+					r.skipValue();
+				}else{
+					r.skipMemberName();
+					readJson(r);
+				}
+				continue;
+			}
 		}
 	}
 }
@@ -292,7 +335,6 @@ void Project::resolve_files() {
 
 void Project::resolve_genUniteFiles(FileType targetType, const StrView& ext) {
 	String code;
-	const int unite_byte_per_file = (int)(input.unite_mega_byte_per_file * 1024 * 1024);
 
 	for (auto& f : fileEntries) {
 		if (f.excludedFromBuild) continue;
@@ -304,7 +346,7 @@ void Project::resolve_genUniteFiles(FileType targetType, const StrView& ext) {
 
 		code.append("#include \"", f.name(), "\"\n");
 
-		if (code.size() > unite_byte_per_file) {
+		if (code.size() > input.unite_filesize) {
 			write_uniteFile(code, ext);
 			code.clear();
 		}

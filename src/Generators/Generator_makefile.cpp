@@ -2,14 +2,11 @@
 
 namespace ax_gen {
 
-Generator_makefile::Generator_makefile() {
-	if (!g_ws->generator) g_ws->generator = "makefile";
+void Generator_makefile::onInit() {
 	if (!g_ws->compiler) g_ws->compiler = "gcc";
 }
 
-void Generator_makefile::build() {
-	Log::info("=========== Build ===============");
-
+void Generator_makefile::onBuild() {
 #if ax_OS_Windows
 #else
 	int ret = ::system(String("make -C \"", g_ws->outDir, "\"").c_str());
@@ -20,7 +17,7 @@ void Generator_makefile::build() {
 #endif
 }
 
-void Generator_makefile::generate() {
+void Generator_makefile::onGenerate() {
 	gen_workspace();
 }
 

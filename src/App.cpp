@@ -100,6 +100,8 @@ int App::_run(int argc, char* argv[]) {
 		throw Error("Unsupported generator '", workspace.generator, "'");
 	}
 
+	_generator->init();
+
 	if (!workspace.compiler) {
 		throw Error("please specific compiler");
 	}

@@ -4,12 +4,10 @@
 
 	//"multithread_build": false,
 	//"unite_build": false,
-	//"unite_mega_byte_per_file": 1,
+	//"unite_filesize": 1,
 	//"build_dir" : "./",
 
 	"config": {
-		//TODO condition
-		//"if confing == Debug or os == windows": ......	
 		"config==Debug": {
 			"cpp_defines": ["DEBUG", "_DEBUG"]
 		},

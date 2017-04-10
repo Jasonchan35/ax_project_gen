@@ -6,11 +6,10 @@ namespace ax_gen {
 
 class Generator_vs2015 : public Generator {
 public:
-	Generator_vs2015();
-
-	void generate() override;
-	void build() override;
-	void ide() override;
+	void onInit		() override;
+	void onGenerate	() override;
+	void onBuild	() override;
+	void onIde		() override;
 
 	virtual bool vsForLinux() { return false; }
 
