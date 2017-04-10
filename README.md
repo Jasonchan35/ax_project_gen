@@ -87,8 +87,8 @@ ax_gen.exe ws=examples/001/Hello.axworkspace -gen
 	"dependencies": ["MyLib"],
 	"pch_header": "src/precompiledHeader.h",
 
-	//"unite_build": false,
-	//"unite_mega_byte_per_file": 1,
+	//"unite_build": true,
+	//"unite_filesize": 1,
 	"files" : [
 		"src/*.cpp",
 		"*.axproj"

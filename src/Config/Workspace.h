@@ -20,8 +20,8 @@ public:
 		Vector<String>		config_list;
 		String				build_dir;
 		String				startup_project;
-		bool				unite_build {true};
-		double				unite_mega_byte_per_file {1};
+		bool				unite_build {false};
+		int					unite_filesize  {1 * 1024 * 1024};
 	};
 	Input	input;
 

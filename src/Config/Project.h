@@ -42,7 +42,7 @@ public:
 
 		bool				multithread_build {true};
 		bool				unite_build {false};
-		double				unite_mega_byte_per_file {1};
+		int					unite_filesize {0};
 
 		bool				cpp_as_objcpp {true};
 
