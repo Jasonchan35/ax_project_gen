@@ -41,7 +41,7 @@ public:
 		Vector<String>		exclude_files;
 
 		bool				multithread_build {true};
-		bool				unite_build {true};
+		bool				unite_build {false};
 		double				unite_mega_byte_per_file {1};
 
 		bool				cpp_as_objcpp {true};
