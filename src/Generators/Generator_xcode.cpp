@@ -13,14 +13,16 @@ const StrView Generator_xcode::dependencies_group_uuid		= "C0000000B0000000B0000
 const StrView Generator_xcode::kSourceTreeGroup				= "\"<group>\"";
 const StrView Generator_xcode::kSourceTreeAbsolute			= "\"<absolute>\"";
 
-Generator_xcode::Generator_xcode() {
-	if (!g_ws->generator) g_ws->generator = "xcode";
+
+void Generator_xcode::onInit() {
 	if (!g_ws->compiler) g_ws->compiler = "clang";
+	if (!g_ws->os) g_ws->os = "macosx";
 }
 
-void Generator_xcode::generate() {
-	//!TODO CPU check
+void Generator_xcode::onGenerate() {
 	if (g_ws->os == "macosx") {
+		//
+	}else if (g_ws->os == "ios") {
 		//
 	}else{
 		throw Error("Unsupported os ", g_ws->os);
@@ -28,9 +30,7 @@ void Generator_xcode::generate() {
 	gen_workspace();
 }
 
-void Generator_xcode::build() {
-	Log::info("=========== Build ===============");
-
+void Generator_xcode::onBuild() {
 	auto* proj = g_ws->_startup_project;
 	if (!proj) {
 		Log::error("no startup project to build");
@@ -47,8 +47,7 @@ void Generator_xcode::build() {
 	
 }
 
-void Generator_xcode::ide() {
-	Log::info("=========== Open IDE ===============");
+void Generator_xcode::onIde() {
 #if ax_OS_MacOSX
 	String cmd("open \"", g_ws->genData_xcode.xcworkspace, "\"");
 	Log::info("cmd> ", cmd);

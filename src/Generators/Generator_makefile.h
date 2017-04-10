@@ -5,10 +5,9 @@
 namespace ax_gen {
 class Generator_makefile : public Generator {
 public:
-	Generator_makefile();
-
-	void generate	() override;
-	void build		() override;
+	void onInit		() override;
+	void onGenerate	() override;
+	void onBuild	() override;
 
 private:
 	void gen_workspace();

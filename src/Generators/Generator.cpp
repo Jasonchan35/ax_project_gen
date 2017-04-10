@@ -6,9 +6,14 @@ namespace ax_gen {
 Generator::Generator() {
 }
 
-void Generator::run() {
-	Log::info("=========== Run ===============");
+void Generator::init() {
+	onInit();
 
+	if (!g_ws->os ) g_ws->os  = g_ws->host_os;
+	if (!g_ws->cpu) g_ws->cpu = g_ws->host_cpu;
+}
+
+void Generator::onRun() {
 	if (!g_ws->_startup_project) {
 		Log::error("no startup project to run");
 		return;
@@ -21,6 +26,26 @@ void Generator::run() {
 	}
 
 	System::createProcess(config.outputTarget, "");
+}
+
+void Generator::generate() {
+	Log::info("=========== generate ===============");
+	onGenerate();
+}
+
+void Generator::ide() {
+	Log::info("=========== Open IDE ===============");
+	onIde();
+}
+
+void Generator::build() {
+	Log::info("=========== Build ===============");
+	onBuild();
+}
+
+void Generator::run() {
+	Log::info("=========== Run ===============");
+	onRun();
 }
 
 } //namespace ax_gen

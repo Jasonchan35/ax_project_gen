@@ -52,10 +52,6 @@ Workspace::Workspace() {
 #endif
 
 	input.build_dir = "_build";
-
-//====================
-	os  = host_os;
-	cpu = host_cpu;
 }
 
 void Workspace::dump(StringStream& s) {
