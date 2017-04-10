@@ -10,7 +10,7 @@
             "cwd": "${workspaceRoot}",
             "environment": [],
             "externalConsole": false,
-            "program": "${workspaceRoot}/bin/ax_pjgen",
+            "program": "${workspaceRoot}/bin/ax_gen",
             "args": ["gen=makefile", " ws=examples/001/Hello.axworkspace", "-gen"],
             "linux": {
                 "MIMode": "lldb"
