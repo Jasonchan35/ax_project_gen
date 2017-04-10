@@ -7,7 +7,7 @@ I had to spend quite some time to spot the syntax or logical error.
 
 And here are some examples I had problem with CMake
 ## Just specify files for project
-of cause you can specify every single cpp file one by one
+of course you can specify every single cpp file one by one
 but for daily work, I probably just want to put all .cpp file in a folder and compile
 so in cmake I have to this:
 ```
@@ -69,7 +69,7 @@ One thing I expected is generated project should follow folder sturcture as same
 `(Left: what I expected by ax_gen, Right: by CMake)`
 
 As you can see CMake flattened all files in one single folder, for some project contains 100+ files,
-it makes virtual folders un-usable, of cause the project can compile without any problem,
+it makes virtual folders un-usable, of course the project can compile without any problem,
 but the point to having IDE is making programmer's life easier not more painful !
 
 ### And I also do timing of xcode project generation, even I don't generate project that often

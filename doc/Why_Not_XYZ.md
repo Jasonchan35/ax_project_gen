@@ -2,7 +2,7 @@
 I think this is the most common question people asked me.
 
 The answer is simple, it's because no other generator fit what I want.
-Of cause every generator has their own pros and crons, but one size doesn't fit all.
+Of course every generator has their own pros and crons, but one size doesn't fit all.
 
 After years of looking for my favourite generator, I still couldn't find single one I'm happy with, 
 so at the end I decided to make one, it may not be perfect, but at least it fit what I really need.
