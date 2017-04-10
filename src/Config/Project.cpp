@@ -80,6 +80,30 @@ void Project::dump(StringStream& s) {
 		ax_dump_(s, "dependencies._inherit", tmp);
 	}
 
+	if (g_app->options.verbose) {
+		s << "                         files = ";
+		int i = 0;
+		for (auto f : fileEntries) {
+			if (i > 0) {
+				s << "\n                                 ";
+			}
+			s << f.name();
+			i++;
+		}
+		s << "\n";
+
+		s << "                virtualFolders = ";
+		i = 0;
+		for (auto f : virtualFolders.dict) {
+			if (i > 0) {
+				s << "\n                                 ";
+			}
+			s << f.path;
+			i++;
+		}
+		s << "\n";
+	}
+
 	for (auto& c : configs) {
 		c.dump(s);
 	}

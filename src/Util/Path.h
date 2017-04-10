@@ -24,7 +24,7 @@ struct Path {
 		
 	static SpliteResult	splite(const StrView& path);
 
-	static void		makeFullPath(String& outStr, const StrView& dir, const StrView& path);
+	static void		makeFullPath(String& out_str, const StrView& dir, const StrView& path);
 
 	static void		windowsPath	(String& outPath, const StrView& path);
 	static void		unixPath	(String& outPath, const StrView& path);

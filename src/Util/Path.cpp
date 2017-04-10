@@ -50,19 +50,20 @@ Path::SpliteResult Path::splite(const StrView& path) {
 	return o;
 }
 
-void Path::makeFullPath(String& outStr, const StrView& dir, const StrView& path) {
+void Path::makeFullPath(String& out_str, const StrView& dir, const StrView& path) {
 	if (isAbs(path)) {
-		outStr = path;
+		getAbs(out_str, path); // normalize '.' or '..'
 	}else{
 		String tmp;
 		tmp.append(dir, '/', path);
-		Path::getAbs(outStr, tmp);
+		Path::getAbs(out_str, tmp);
 	}
 }
 
 void Path::getAbs(String& out_str, const StrView& path) {
 	out_str.clear();
 
+	/*
 	if (Path::isAbs(path)) {
 		char lastCh = 0;
 		for (auto ch : path) {
@@ -78,10 +79,19 @@ void Path::getAbs(String& out_str, const StrView& path) {
 
 		return;
 	}
+	*/
 
-	getCurrentDir(out_str);
+	if (!path) return;
+	bool needSlash = false;
+	if (Path::isAbs(path)) {
+		needSlash = (path[0] == '/'); //unix path need '/' at beginning
 
-	auto p = path;
+	}else{
+		getCurrentDir(out_str);
+		needSlash = true;
+	}
+
+	StrView p = path;
 	while (p) {
 		auto s = p.splitByCharInList("\\/");
 		if (s.first == ".") {
@@ -91,14 +101,17 @@ void Path::getAbs(String& out_str, const StrView& path) {
 		}else if (s.first == "..") {
 			auto idx = out_str.view().lastIndexOfAnyCharIn("\\/");
 			if (idx < 0) {
-				out_str.clear();
+				out_str.clear(); //no more parent folder
 				return;
 			}
 
 			out_str.resize(idx);
 		}else{
-			out_str += '/';
+			if (needSlash) {
+				out_str += '/';
+			}
 			out_str += s.first;
+			needSlash = true;
 		}
 		p = s.second;
 	}
