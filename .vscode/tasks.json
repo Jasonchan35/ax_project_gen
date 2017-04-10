@@ -11,7 +11,7 @@
     },
     "osx": {
         "command": "sh",
-        "args": ["examples/001/test_vs2015.sh"]
+        "args": ["examples/001/test_xcode.sh"]
     },
     "windows": {
         "command": "call",
