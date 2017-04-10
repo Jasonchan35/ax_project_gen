@@ -79,16 +79,16 @@ int App::_run(int argc, char* argv[]) {
 		throw Error("please specific generator");
 
 	}else if (workspace.generator == "vs2015"  ) { 
-
-		if (g_ws->os != "windows") {
-			throw Error("Unsupported os ", g_ws->os);
-		}
-
 		_generator.reset(new Generator_vs2015());
 
 	}else if (workspace.generator == "vs2015_linux") {
-		g_ws->os = "linux";
-		_generator.reset(new Generator_vs2015() );
+		_generator.reset(new Generator_vs2015_linux());
+
+	}else if (workspace.generator == "vs2017") {
+		_generator.reset(new Generator_vs2017());
+
+	}else if (workspace.generator == "vs2017_linux") {
+		_generator.reset(new Generator_vs2017_linux());
 
 	}else if (workspace.generator == "makefile") { 
 		_generator.reset(new Generator_makefile());
@@ -127,7 +127,7 @@ int App::_run(int argc, char* argv[]) {
 			"  ax_gen ws=my.axworkspace gen=vs2015 -gen\n"
 			"\n"
 			"Options:\n"
-			"  gen=<Geneartor>  - [vs2015, xcode, makefile]\n"
+			"  gen=<Geneartor>  - [vs2015, vs2015_linux, vs2017, vs2017_linux, xcode, makefile]\n"
 			"  os=<target OS>   - [windows, macosx, ios, linux]\n"
 			"  cpu=<target CPU> - [x86_64, x86] \n"
 			"\n"

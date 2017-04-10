@@ -114,21 +114,20 @@ void Project::readFile(const StrView& filename) {
 void Project::readJson(JsonReader& r) {
 	r.beginObject();
 	while (!r.endObject()) {
-		if (r.member("group",			input.group			)) continue;
-		if (r.member("type",			input.type			)) continue;
-		if (r.member("gui_app",			input.gui_app		)) continue;
-
-		if (r.member("dependencies",	input.dependencies	)) continue;
-		if (r.member("files",			input.files			)) continue;
-		if (r.member("exclude_files",	input.exclude_files	)) continue;
-		if (r.member("pch_header",		input.pch_header	)) continue;
-
-
-		if (r.member("unite_build",					input.unite_build				)) continue;
-		if (r.member("unite_mega_byte_per_file",	input.unite_mega_byte_per_file	)) continue;
-
-		if (r.member("multithread_build",			input.multithread_build			)) continue;
-		if (r.member("xcode_bundle_identifier",		input.xcode_bundle_identifier	)) continue;
+		#define ReadMember(T) r.member(#T, input.T);
+			ReadMember(group);
+			ReadMember(type);
+			ReadMember(gui_app);
+			ReadMember(dependencies);
+			ReadMember(files);
+			ReadMember(exclude_files);
+			ReadMember(pch_header);
+			ReadMember(unite_build);
+			ReadMember(unite_mega_byte_per_file);
+			ReadMember(multithread_build);
+			ReadMember(xcode_bundle_identifier);
+			ReadMember(visualc_PlatformToolset);
+		#undef ReadMember
 		
 		if (r.member("config")) {
 			if (!configs.size()) {

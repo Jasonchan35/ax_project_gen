@@ -44,8 +44,13 @@ public:
 		bool				unite_build {true};
 		double				unite_mega_byte_per_file {1};
 
-		String				xcode_bundle_identifier;
 		bool				cpp_as_objcpp {true};
+
+		//---
+		String				xcode_bundle_identifier;
+
+		//---
+		String				visualc_PlatformToolset;
 
 		void dump(StringStream& s);
 	};

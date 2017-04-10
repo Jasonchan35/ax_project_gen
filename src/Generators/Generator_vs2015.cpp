@@ -10,6 +10,15 @@ Generator_vs2015::Generator_vs2015() {
 }
 
 void Generator_vs2015::generate() {
+	if (vsForLinux()) {
+		if (g_ws->os != "linux") {
+			throw Error("Unsupported OS ", g_ws->os);
+		}
+	}else{
+		if (g_ws->os != "windows") {
+			throw Error("Unsupported OS ", g_ws->os);
+		}
+	}
 
 	if (g_ws->cpu == "x86") {
 		vcxproj_cpu = "Win32";
@@ -25,6 +34,22 @@ void Generator_vs2015::generate() {
 void Generator_vs2015::ide() {
 	Log::info("=========== Open IDE ===============");
 	System::shellOpen(g_ws->genData_vs2015.sln);
+}
+
+StrView Generator_vs2015::slnFileHeader() {
+	return  "Microsoft Visual Studio Solution File, Format Version 12.00\r\n"
+			"# Visual Studio 14\r\n"
+			"VisualStudioVersion = 14.0.25420.1\r\n"
+			"MinimumVisualStudioVersion = 10.0.40219.1\r\n"
+			"\r\n";
+}
+
+StrView Generator_vs2017::slnFileHeader() {
+	return  "Microsoft Visual Studio Solution File, Format Version 12.00\r\n"
+			"# Visual Studio 15\r\n"
+			"VisualStudioVersion = 15.0.26403.0\r\n"
+			"MinimumVisualStudioVersion = 10.0.40219.1\r\n"
+			"\r\n";
 }
 
 void Generator_vs2015::build() {
@@ -127,6 +152,13 @@ void Generator_vs2015::writeCacheFile(const StrView& filename) {
 	FileUtil::writeTextFile(filename, wr.buffer());
 }
 
+ax_gen::StrView Generator_vs2015::_visualc_PlatformToolset(Project& proj) {
+	if (proj.input.visualc_PlatformToolset) {
+		return proj.input.visualc_PlatformToolset;
+	}
+	return visualc_PlatformToolset();
+}
+
 void Generator_vs2015::genUuid(String& outStr) {
 	if (outStr) return;
 
@@ -159,7 +191,7 @@ void Generator_vs2015::gen_project(Project& proj) {
 		auto tag = wr.tagScope("Project");
 
 		wr.attr("DefaultTargets", "Build");
-		wr.attr("ToolsVersion", "12.0");
+		wr.attr("ToolsVersion", vcxprojToolsVersion());
 		wr.attr("xmlns", "http://schemas.microsoft.com/developer/msbuild/2003");
 
 		{
@@ -181,7 +213,7 @@ void Generator_vs2015::gen_project(Project& proj) {
 			wr.tagWithBody("Keyword",		"Win32Proj");
 			wr.tagWithBody("RootNamespace", proj.name);
 
-			if (g_ws->generator == "vs2015_linux") {
+			if (vsForLinux()) {
 				wr.tagWithBody("ApplicationType",			"Linux");
 				wr.tagWithBody("ApplicationTypeRevision",	"1.0");
 				wr.tagWithBody("TargetLinuxPlatform",		"Generic");
@@ -221,10 +253,10 @@ void Generator_vs2015::gen_project(Project& proj) {
 		
 			wr.tagWithBody("CharacterSet",    "Unicode");
 
-			if (g_ws->generator == "vs2015_linux") {
+			if (vsForLinux()) {
 				wr.tagWithBody("PlatformToolset", "Remote_GCC_1_0");
 			}else {
-				wr.tagWithBody("PlatformToolset", "v140_xp");
+				wr.tagWithBody("PlatformToolset", _visualc_PlatformToolset(proj));
 			}
 		}
 
@@ -238,7 +270,7 @@ void Generator_vs2015::gen_project(Project& proj) {
 			wr.attr("Label", "PropertySheets");
 		}
 
-		if (g_ws->generator == "vs2015_linux") {
+		if (vsForLinux()) {
 			{
 				auto tag = wr.tagScope("ImportGroup");
 				wr.attr("Label", "ExtensionSettings");
@@ -441,10 +473,7 @@ void Generator_vs2015::gen_workspace() {
 	}
 
 	String o;
-	o.append("Microsoft Visual Studio Solution File, Format Version 12.00\n");
-	o.append("# Visual Studio 14\n");
-	o.append("VisualStudioVersion = 14.0.25420.1\n");
-	o.append("MinimumVisualStudioVersion = 10.0.40219.1\n");
+	o.append(slnFileHeader());
 
 	{
 		o.append("\n# ---- projects ----\n");

@@ -66,7 +66,7 @@ public:
 	Vector<Setting*>	_settings;
 
 	StringDict<String>	xcode_settings;
-
+	
 	void inherit(const Config& rhs);
 	void computeFinal();
 
