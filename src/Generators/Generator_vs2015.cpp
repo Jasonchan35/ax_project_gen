@@ -257,6 +257,7 @@ void Generator_vs2015::gen_project(Project& proj) {
 
 			if (vsForLinux()) {
 				wr.tagWithBody("PlatformToolset", "Remote_GCC_1_0");
+				wr.tagWithBody("RemoteRootDir", String("~/_", g_ws->generator, "_RemoteRootDir"));
 			}else {
 				wr.tagWithBody("PlatformToolset", _visualc_PlatformToolset(proj));
 			}
