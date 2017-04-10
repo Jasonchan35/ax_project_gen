@@ -172,6 +172,40 @@ void Workspace::readJson(JsonReader& r) {
 			r.skipValue();
 			continue;
 		}
+
+		//----- condition check -----
+		String memberName;
+		if (r.peekMemberName(memberName)) {
+			if (auto v = memberName.getFromPrefix("os==")) {
+				if (v != g_ws->os) { 
+					r.skipValue();
+				}else{				
+					r.skipMemberName();
+					readJson(r);
+				}
+				continue;
+			}
+
+			if (auto v = memberName.getFromPrefix("compiler==")) {
+				if (v != g_ws->compiler) {
+					r.skipValue();
+				}else{
+					r.skipMemberName();
+					readJson(r);
+				}
+				continue;
+			}
+
+			if (auto v = memberName.getFromPrefix("generator==")) {
+				if (v != g_ws->generator) { 
+					r.skipValue();
+				}else{
+					r.skipMemberName();
+					readJson(r);
+				}
+				continue;
+			}
+		}
 	}
 }
 

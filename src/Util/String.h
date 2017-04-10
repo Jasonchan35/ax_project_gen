@@ -151,6 +151,9 @@ public:
 
 	StrView view() const { return StrView(_p.data(), (int)_p.size()); }
 
+	StrView	getFromPrefix(const StrView& prefix) { return view().getFromPrefix(prefix); }
+
+
 private:
 	void _append(char    ch)						{ _p.push_back(ch); }
 	void _append(int     v);

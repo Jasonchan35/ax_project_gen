@@ -142,9 +142,6 @@ void Project::readJson(JsonReader& r) {
 			ReadMember(group);
 			ReadMember(type);
 			ReadMember(gui_app);
-			ReadMember(dependencies);
-			ReadMember(files);
-			ReadMember(exclude_files);
 			ReadMember(pch_header);
 			ReadMember(unite_build);
 			ReadMember(unite_filesize);
@@ -152,7 +149,19 @@ void Project::readJson(JsonReader& r) {
 			ReadMember(xcode_bundle_identifier);
 			ReadMember(visualc_PlatformToolset);
 		#undef ReadMember
-		
+
+		if (r.member("dependencies")) {
+			r.appendValue(input.dependencies);
+		}
+
+		if (r.member("files")) {
+			r.appendValue(input.files);
+		}
+
+		if (r.member("exclude_files")) {
+			r.appendValue(input.exclude_files);
+		}
+
 		if (r.member("config")) {
 			if (!configs.size()) {
 				r.error("please specify config_list before config");
@@ -164,6 +173,40 @@ void Project::readJson(JsonReader& r) {
 			}
 			r.skipValue();
 			continue;
+		}
+
+		//----- condition check -----
+		String memberName;
+		if (r.peekMemberName(memberName)) {
+			if (auto v = memberName.getFromPrefix("os==")) {
+				if (v != g_ws->os) { 
+					r.skipValue();
+				}else{				
+					r.skipMemberName();
+					readJson(r);
+				}
+				continue;
+			}
+
+			if (auto v = memberName.getFromPrefix("compiler==")) {
+				if (v != g_ws->compiler) {
+					r.skipValue();
+				}else{
+					r.skipMemberName();
+					readJson(r);
+				}
+				continue;
+			}
+
+			if (auto v = memberName.getFromPrefix("generator==")) {
+				if (v != g_ws->generator) { 
+					r.skipValue();
+				}else{
+					r.skipMemberName();
+					readJson(r);
+				}
+				continue;
+			}
 		}
 	}
 }

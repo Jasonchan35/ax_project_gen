@@ -6,12 +6,17 @@
 
 	//"unite_build": true,
 	//"unite_filesize": 1,
+	
 	"files" : [
 		"src/*.cpp",
 		"*.axproj"
 	],
-	"exclude_files": [
-	],		
+
+	"os==linux": {
+		"exclude_files": [
+			"some_file_not_for_linux"
+		]	
+	},
 
 	"config": {
 		"cpp_defines": [],

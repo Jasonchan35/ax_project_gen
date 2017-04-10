@@ -46,7 +46,7 @@ public:
 
 	void getMemberName(String& out_value);
 
-	void peekMemberName(String& out_value);
+	bool peekMemberName(String& out_value);
 
 
 	void getValue(String&	out_value);
@@ -55,10 +55,11 @@ public:
 	void getValue(int&		out_value) { double tmp; getValue(tmp); out_value = static_cast<int>(tmp); }
 	void getValue(uint32_t& out_value) { double tmp; getValue(tmp); out_value = static_cast<uint32_t>(tmp); }
 
-	template<typename T>
-	void getValue(Vector<T>& out_value);
+	template<typename T> void getValue		(Vector<T>& out_value);
+	template<typename T> void appendValue	(Vector<T>& out_value);
 
 	void skipValue();
+	void skipMemberName();
 
 	void reset();
 	bool next();
@@ -105,7 +106,6 @@ private:
 	bool _nextToken();
 	void _nextChar();
 
-	void _skipCommentBlock();
 	void _parseStringToken();
 
 	int _findPrevNewlineLocation(const char* &out_pos, int maxNumLines);
@@ -151,6 +151,13 @@ bool JsonReader::member(const StrView& name, T& out_value)
 
 template<typename T>
 void JsonReader::getValue(Vector<T>& out_value)
+{
+	out_value.clear();
+	appendValue(out_value);
+}
+
+template<typename T>
+void JsonReader::appendValue(Vector<T>& out_value)
 {
 	beginArray();
 	while (!endArray()) {

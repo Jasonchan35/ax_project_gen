@@ -132,57 +132,63 @@ void Config::readJson(JsonReader& r) {
 		}
 
 		//----------
-		String memberNameStr;
-		r.getMemberName(memberNameStr);
-
-		auto memberName = StrView(memberNameStr);
-
-		if (auto v = memberName.getFromPrefix("config==")) {
-			if (v != name) { 
-				r.skipValue();
-			}else{
-				readJson(r);
+		String memberName;
+		if (r.peekMemberName(memberName)) {
+			if (auto v = memberName.getFromPrefix("config==")) {
+				if (v != name) { 
+					r.skipValue();
+				}else{
+					r.skipMemberName();
+					readJson(r);
+				}
+				continue;
 			}
-			continue;
-		}
 
-		if (auto v = memberName.getFromPrefix("os==")) {
-			if (v != g_ws->os) { 
-				r.skipValue();
-			}else{				
-				readJson(r);
+			if (auto v = memberName.getFromPrefix("os==")) {
+				if (v != g_ws->os) { 
+					r.skipValue();
+				}else{				
+					r.skipMemberName();
+					readJson(r);
+				}
+				continue;
 			}
-			continue;
-		}
 
-		if (auto v = memberName.getFromPrefix("compiler==")) {
-			if (v != g_ws->compiler) {
-				r.skipValue();
-			}else{
-				readJson(r);
+			if (auto v = memberName.getFromPrefix("compiler==")) {
+				if (v != g_ws->compiler) {
+					r.skipValue();
+				}else{
+					r.skipMemberName();
+					readJson(r);
+				}
+				continue;
 			}
-			continue;
-		}
 
-		if (auto v = memberName.getFromPrefix("generator==")) {
-			if (v != g_ws->generator) { 
-				r.skipValue();
-			}else{
-				readJson(r);
+			if (auto v = memberName.getFromPrefix("generator==")) {
+				if (v != g_ws->generator) { 
+					r.skipValue();
+				}else{
+					r.skipMemberName();
+					readJson(r);
+				}
+				continue;
 			}
-			continue;
 		}
 	}
 }
 
 void Config::Setting::_readValue(JsonReader& r, Vector<String>& v) {
-	r.getValue(v);
-	if (isPath) {		
+	if (!isPath) {
+		r.appendValue(v);
+	}else{
+		Vector<String> arr;
+		r.getValue(arr);
+
 		String tmp;
-		for (auto& it : v) {
+		for (auto& it : arr) {
 			auto dir = Path::dirname(r.filename());
 			Path::makeFullPath(tmp, dir, it);
-			it = tmp;
+			v.append(tmp);
 		}
 	}
 }

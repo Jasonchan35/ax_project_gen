@@ -8,8 +8,6 @@
 	//"build_dir" : "./",
 
 	"config": {
-		//TODO condition
-		//"if confing == Debug or os == windows": ......	
 		"config==Debug": {
 			"cpp_defines": ["DEBUG", "_DEBUG"]
 		},
