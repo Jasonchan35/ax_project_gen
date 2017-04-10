@@ -2,4 +2,4 @@
 %~d0
 cd %~dp0
 
-..\..\bin\ax_gen.exe ws=Hello.axworkspace gen=vs2015 -gen -build -run
+..\..\bin\ax_gen.exe ws=Hello.axworkspace gen=vs2015 -gen -verbose -build -run

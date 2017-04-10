@@ -8,7 +8,7 @@
 	//"unite_mega_byte_per_file": 1,
 	"files" : [
 		"**/*.cpp",
-		"include/*.h",
+		"./include/*.h",
 		"*.axproj"
 	],
 	"exclude_files": [
