@@ -70,7 +70,7 @@ void Workspace::dump(StringStream& s) {
 
 	if (input.unite_build) {
 		ax_dump(s, input.unite_build);
-		ax_dump(s, input.unite_mega_byte_per_file);
+		ax_dump(s, input.unite_filesize);
 	}
 
 	ax_dump(s, input.startup_project);
@@ -129,7 +129,7 @@ void Workspace::readJson(JsonReader& r) {
 		if (r.member("build_dir",			input.build_dir )) continue;
 		if (r.member("startup_project",		input.startup_project)) continue;
 		if (r.member("unite_build",			input.unite_build)) continue;
-		if (r.member("unite_mega_byte_per_file", input.unite_mega_byte_per_file )) continue;
+		if (r.member("unite_filesize", input.unite_filesize )) continue;
 
 		if (r.member("config_list", input.config_list)) {
 			for (auto& config_name : input.config_list) {
