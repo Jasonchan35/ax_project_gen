@@ -272,9 +272,9 @@ void Generator_vs2015::gen_project(Project& proj) {
 				for (auto& f : proj.fileEntries) {
 					fileToCopy.append(f.path(), ":=", remoteRootDir,"/", f.path(), ";");
 				}
+				wr.tagWithBody("SourcesToCopyRemotelyOverride", "");
 				wr.tagWithBody("AdditionalSourcesToCopyMapping", fileToCopy);
 //				wr.tagWithBody("LocalRemoteCopySources", "false");
-				wr.tagWithBody("SourcesToCopyRemotelyOverride", "");
 
 			}else {
 				wr.tagWithBody("PlatformToolset", _visualc_PlatformToolset(proj));
@@ -432,8 +432,13 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 
 				if (config.isDebug) {
 					wr.tagWithBody("DebugInformationFormat",	"FullDebug");
+					wr.tagWithBody("Optimization",				"Disabled");
+					wr.tagWithBody("OmitFramePointers",			"false");
+
 				}else{
 					wr.tagWithBody("DebugInformationFormat",	"None");
+					wr.tagWithBody("Optimization",				"Full");
+					wr.tagWithBody("OmitFramePointers",			"true");
 				}
 
 			}else{
@@ -480,21 +485,44 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 		{
 			auto tag = wr.tagScope("Link");
 
-			if (vsForLinux()) {
-				wr.tagWithBody("VerboseOutput", "true");
-			}
-
-			wr.tagWithBody("SubSystem", "Console");
-			wr.tagWithBody("GenerateDebugInformation", "true");
-
 			if (proj.type_is_exe_or_dll()) {
 				gen_config_option(wr, "AdditionalLibraryDirectories",	config.link_dirs._final);
 				gen_config_option(wr, "AdditionalDependencies",			config.link_files._final);
 			}
 
-			if (!config.isDebug) {
-				wr.tagWithBodyBool("EnableCOMDATFolding", true);
-				wr.tagWithBodyBool("OptimizeReferences",  true);
+			if (vsForLinux()) {
+				wr.tagWithBody("VerboseOutput", "true");
+
+				{
+					String tmp;
+					for (auto& p : config.link_flags._final) {
+						tmp.append(" -Wl,", p.path());
+					}
+					wr.tagWithBody("AdditionalOptions", tmp);
+				}
+
+				if (config.isDebug) {
+					wr.tagWithBodyBool("DebuggerSymbolInformation", "true");
+				}else{
+					wr.tagWithBodyBool("DebuggerSymbolInformation", "OmitAllSymbolInformation");
+				}
+
+			}else{
+				wr.tagWithBody("SubSystem", "Console");
+				wr.tagWithBody("GenerateDebugInformation", "true");
+
+				{
+					String tmp;
+					for (auto& p : config.link_flags._final) {
+						tmp.append(" ", p.path());
+					}
+					wr.tagWithBody("AdditionalOptions", tmp);
+				}
+
+				if (!config.isDebug) {
+					wr.tagWithBodyBool("EnableCOMDATFolding", true);
+					wr.tagWithBodyBool("OptimizeReferences",  true);
+				}
 			}
 		}
 	}

@@ -306,6 +306,9 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 	for (auto& q : config.link_flags._final) {
 		link_flags.append("\\\n\t", q.path());
 	}
+	for (auto& q : config.link_dirs._final) {
+		link_files.append("\\\n\t-L", quoteString(q.path()));
+	}
 	for (auto& q : config.link_files._final) {
 		link_files.append("\\\n\t", quoteString(q.path()));
 	}
