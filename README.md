@@ -2,11 +2,11 @@
 C++ Project Generator
 
 ### Feature Highlights:
-* Lightweight - only require C++11 and good to go! *( No lua, python, java or any of libraries / packages dependencies )*
+* Lightweight - only C++11 is required ! *( No lua, python, java or any packages dependencies )*<br>
 
 * Run on multiple platforms *( Windows / MacOSX / Linux / FreeBSD )*
 
-* Auto inherit configuration from depended project, for instance executable project depends on library <br>
+* Auto inherit configuration from depended projects, for instance executable project depends on library<br>
 will inherit all settings by default *( e.g. include_dir, cpp_defines, output_library ...etc )*
 
 * Support wildcard, glob with sub-directories *( example: ```src/**/*.cpp```,
@@ -100,6 +100,7 @@ ax_gen.exe ws=examples/001/Hello.axworkspace -gen
 		"cpp_defines": [],
 		"cpp_flags": [],
 		"include_dirs": ["src"],
+		"include_dirs.local": ["header_only_for_this_but_not_inherit_projects"],
 		"link_dirs": [],
 		"link_files": [],
 		"link_flags": [],
@@ -113,6 +114,15 @@ ax_gen.exe ws=examples/001/Hello.axworkspace -gen
 }
 
 ```
+# How to build
+#### Windows
+vs2015 program in ./projects/vs015/ax_gen.sln to build
+#### Mac
+Xcode project in ./project/xcode/ax_gen.xcodeproj
+#### FreeBSD / Linux
+run `make` under ./project/makefile folder
+#### In case don't have 'Make' but gcc / clang
+```g++ -std=c++11 src/_single_file_build_.cpp -o ax_gen```
 
 # If you're interested to
 * [Another generator again ? Why Not XYZ ... please click here](doc/Why_Not_XYZ.md)
