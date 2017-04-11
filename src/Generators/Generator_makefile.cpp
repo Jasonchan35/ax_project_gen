@@ -9,7 +9,7 @@ void Generator_makefile::onInit() {
 void Generator_makefile::onBuild() {
 #if ax_OS_Windows
 #else
-	int ret = ::system(String("make -C \"", g_ws->outDir, "\"").c_str());
+	int ret = ::system(String("make -C \"", g_ws->outDir, "\" config=\"", g_app->options.config,"\"").c_str());
 	//int ret = ::execlp("make", "-C", g_ws->outDir.c_str());
 	if (ret < 0) {
 		throw Error("Error Build");
@@ -246,12 +246,12 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 	o.append("#!!! therefore we try to unroll all file dependencies directly in makefile instead of using makefile variable\n");
 	o.append("#!!!\n");
 
-	config.genData_makefile.cpp_obj_dir.set(config._build_tmp_dir, "cpp_objs/");
+	config.genData_makefile.cpp_obj_dir.set(config._build_tmp_dir.path(), "/cpp_objs/");
 
 	o.append(config.name, "__build: ", escapeString(config.outputTarget.path()), "\n\n");
 
 	o.append(config.name, "__clean: \n");
-	o.append("\t$(cmd_rmdir) \"", config._build_tmp_dir, "\"\n\n");
+	o.append("\t$(cmd_rmdir) \"", config._build_tmp_dir.path(), "\"\n\n");
 
 	String pch_header_dep;
 	String pch_header_pch;
@@ -263,7 +263,7 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 	if (proj.pch_header) {
 		pch_basename = Path::basename(proj.pch_header->absPath(), true);
 
-		pch_header_pch.set(config._build_tmp_dir, "cpp_pch/", pch_basename, pch_suffix);
+		pch_header_pch.set(config._build_tmp_dir.path(), "/cpp_pch/", pch_basename, pch_suffix);
 		pch_header_dep.set(pch_header_pch, ".d");
 
 		pch_header_pch_dir = Path::dirname(pch_header_pch);
@@ -301,10 +301,10 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 		cpp_defines.append("\\\n\t-D", q.path());
 	}
 	for (auto& q : config.cpp_flags._final) {
-		cpp_flags.append(" ", q.path());
+		cpp_flags.append("\\\n\t", q.path());
 	}
 	for (auto& q : config.link_flags._final) {
-		link_flags.append(" ", q.path());
+		link_flags.append("\\\n\t", q.path());
 	}
 	for (auto& q : config.link_files._final) {
 		link_files.append("\\\n\t", quoteString(q.path()));
@@ -321,7 +321,7 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 		cpp_obj_files.append("\\\n\t", escapeString(get_obj_file(config, q)));
 	}
 
-	o.append(config.name, "__BUILD_TMP_DIR  = ", escapeString(config._build_tmp_dir));
+	o.append(config.name, "__BUILD_TMP_DIR  = ", escapeString(config._build_tmp_dir.path()));
 	if (proj.pch_header) {
 		o.append(config.name, "__PCH_HEADER        = ", escapeString(proj.pch_header->path()), "\n");
 		o.append(config.name, "__PCH_HEADER_PCH    = ", escapeString(pch_header_pch), "\n");

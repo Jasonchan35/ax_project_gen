@@ -37,11 +37,9 @@ void Generator_xcode::onBuild() {
 		return;
 	}
 
-	StrView configName = g_ws->defaultConfigName();
-
 	String args(" -workspace \"", g_ws->genData_xcode.xcworkspace, "\"",
 				" -scheme \"", proj->name, "\"",
-				" -configuration \"", configName, "\"",
+				" -configuration \"", g_app->options.config, "\"",
 				" build");
 	System::createProcess("/usr/bin/xcodebuild", args);
 	
@@ -98,16 +96,17 @@ void Generator_xcode::gen_workspace_group(XmlWriter& wr, ProjectGroup& group) {
 		gen_workspace_group(wr, *c);
 	}
 
+	String rel;
 	for (auto& proj : group.projects) {
 		auto tag = wr.tagScope("FileRef");
-		wr.attr("location", String("container:", proj->genData_xcode.xcodeproj));
+		wr.attr("location", String("container:", proj->genData_xcode.xcodeproj.path()));
 	}
 }
 
 void Generator_xcode::gen_project_genUuid(Project& proj) {
 	auto& gd = proj.genData_xcode;
-	gd.xcodeproj.set(g_ws->outDir, proj.name, ".xcodeproj");
-	gd.pbxproj.set(gd.xcodeproj, "/", "project.pbxproj");
+	gd.xcodeproj.init(String(g_ws->outDir, proj.name, ".xcodeproj"), false, true);
+	gd.pbxproj.set(gd.xcodeproj.absPath(), "/", "project.pbxproj");
 	genUuid(gd.uuid);
 	genUuid(gd.targetUuid);
 	genUuid(gd.targetProductUuid);
@@ -212,7 +211,7 @@ void Generator_xcode::gen_project_dependencies(XCodePbxWriter& wr, Project& proj
 	for (auto& dp : proj._dependencies_inherit) {
 		if (!dp->hasOutputTarget) continue;
 	
-		auto targetBasename = Path::basename(dp->genData_xcode.xcodeproj, true);
+		auto targetBasename = Path::basename(dp->genData_xcode.xcodeproj.path(), true);
 	
 		wr.newline();
 		wr.newline(); wr.commentBlock(dp->name);
@@ -247,7 +246,7 @@ void Generator_xcode::gen_project_dependencies(XCodePbxWriter& wr, Project& proj
 			auto scope = wr.objectScope(dp->genData_xcode.uuid);
 			wr.member("isa", "PBXFileReference");
 			wr.member("name", quoteString(targetBasename));
-			wr.member("path", quoteString(dp->genData_xcode.xcodeproj));
+			wr.member("path", quoteString(dp->genData_xcode.xcodeproj.path()));
 			wr.member("sourceTree", kSourceTreeAbsolute);
 		}
 	}
@@ -344,7 +343,9 @@ void Generator_xcode::gen_project_PBXGroup(XCodePbxWriter& wr, Project& proj) {
 						
 			if (v.parent == root) {
 				wr.member("sourceTree", "SOURCE_ROOT");
-				wr.member("path", quoteString(v.diskPath));
+				String rel;
+				Path::getRel(rel, v.diskPath, g_ws->outDir);
+				wr.member("path", quoteString(rel));
 			}else{
 				wr.member("sourceTree", kSourceTreeGroup);
 				wr.member("path", quoteString(basename));
@@ -370,7 +371,9 @@ void Generator_xcode::gen_project_PBXGroup(XCodePbxWriter& wr, Project& proj) {
 		}
 		
 		wr.member("sourceTree", "SOURCE_ROOT");
-		wr.member("path", quoteString(proj.axprojDir));
+		String rel;
+		Path::getRel(rel, proj.axprojDir, g_ws->outDir);
+		wr.member("path", quoteString(rel));
 		wr.member("name", "MainGroup");
 	}
 	
@@ -544,7 +547,7 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 				wr.member("EXECUTABLE_PREFIX",				quoteString(""));
 				wr.member("EXECUTABLE_EXTENSION",			quoteString(targetExt));
 				wr.member("CONFIGURATION_BUILD_DIR",		quoteString(targetDir));
-				wr.member("CONFIGURATION_TEMP_DIR",			quoteString(config._build_tmp_dir));
+				wr.member("CONFIGURATION_TEMP_DIR",			quoteString(config._build_tmp_dir.path()));
 				wr.member("STRIP_STYLE",					quoteString("all"));
 				wr.member("DEAD_CODE_STRIPPING",			"YES");
 				

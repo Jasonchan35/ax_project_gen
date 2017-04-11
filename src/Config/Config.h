@@ -24,7 +24,7 @@ public:
 
 	Project*		_project {nullptr};
 	FileEntry		outputTarget;
-	String			_build_tmp_dir;
+	FileEntry		_build_tmp_dir;
 
 	class Entry {
 	public:

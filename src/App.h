@@ -21,6 +21,7 @@ public:
 		bool _hasAction{false};
 
 		String	workspaceFile;
+		String	config; //config for -build / -run
 	};
 
 	Options	options;

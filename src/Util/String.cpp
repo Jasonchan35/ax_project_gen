@@ -4,6 +4,20 @@
 
 namespace ax_gen {
 
+std::ostream& StrView::onStreamOut(std::ostream& s) const {
+	const int n = 512;
+	char tmp[n+1];
+	if (_size < n) {
+		memcpy(tmp, _data, n);
+		tmp[_size] = 0;
+		s << tmp;
+	}else{
+		String tmp = *this;
+		s << tmp.c_str();
+	}
+	return s;
+}
+
 StrView StrView::getFromPrefix(const StrView& prefix) {
 	if (prefix._size <= _size) {
 		if (strncmp(_data, prefix._data, (size_t)prefix._size) == 0) {

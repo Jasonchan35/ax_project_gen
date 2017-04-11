@@ -84,6 +84,7 @@ public:
 
 	StringDict<Config>	configs;
 	Config&				defaultConfig();
+	Config&				configToBuild();
 
 	String				_generatedFileDir;
 	Vector<Project*>	_dependencies;
@@ -103,7 +104,7 @@ public:
 	bool _resolving : 1;
 
 	struct GenData_xcode {
-		String		xcodeproj; //folder
+		FileEntry	xcodeproj; //folder
 		String		pbxproj;
 		String		info_plist_file;
 

@@ -16,7 +16,6 @@ int App::run(int argc, char* argv[]) {
 	int ret = -1;
 	try{
 		ret = _run(argc, argv);
-		Log::info("======== End ========");
 	}catch(...){
 		ret = -1;
 		Log::error("Error !!!!!");
@@ -40,7 +39,7 @@ void App::readArgs(int argc, char* argv[]) {
 		}else if (s == "-build") {
 			options._hasAction = true;
 			options.build = true;
-
+			
 		}else if (s == "-run") {
 			options._hasAction = true;
 			options.run = true;
@@ -51,6 +50,9 @@ void App::readArgs(int argc, char* argv[]) {
 
 		}else if (s == "-verbose") {
 			options.verbose = true;
+
+		}else if (auto v = s.getFromPrefix("config=")) {
+			options.config = v;
 
 		}else if (auto v = s.getFromPrefix("ws=")) {
 			options.workspaceFile = v;
@@ -132,6 +134,7 @@ int App::_run(int argc, char* argv[]) {
 			"  gen=<Geneartor>  - [vs2015, vs2015_linux, vs2017, vs2017_linux, xcode, makefile]\n"
 			"  os=<target OS>   - [windows, macosx, ios, linux]\n"
 			"  cpu=<target CPU> - [x86_64, x86] \n"
+			"  config=<Name>    - Configuration name for action -build / -run \n"
 			"\n"
 			"Actions:\n"
 			"  -gen     - generate output workspace / projects\n"
@@ -147,6 +150,10 @@ int App::_run(int argc, char* argv[]) {
 			throw Error("no action specified, e.g. -gen, -build");
 		}
 		return -1;
+	}
+	
+	if (!options.config) {
+		options.config = g_ws->defaultConfigName();
 	}
 
 	if (options.gen) {

@@ -67,11 +67,9 @@ void Generator_vs2015::onBuild() {
 	target.replaceChars('/', '\\');
 	target.append('\\', proj->name);
 
-	StrView configName = g_ws->defaultConfigName();
-
 	String args("\"", g_ws->genData_vs2015.sln, "\"",
 				" /project \"", proj->name, "\"",
-				" /ProjectConfig \"", configName, "\"",
+				" /ProjectConfig \"", g_app->options.config, "\"",
 				" /build");
 
 	System::createProcess("C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\IDE\\devenv.exe", args);
@@ -396,8 +394,7 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 		auto tag = wr.tagScope("PropertyGroup");
 		wr.attr("Condition", cond);
 
-		String intermediaDir;
-		Path::getRel(intermediaDir, config._build_tmp_dir, g_ws->outDir);
+		String intermediaDir(config._build_tmp_dir.path());
 		if (!intermediaDir) intermediaDir.append('.'); // for current dir, should using "./"
 		intermediaDir.append('/');
 

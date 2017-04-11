@@ -19,7 +19,7 @@ void Generator::onRun() {
 		return;
 	}
 
-	auto& config = g_ws->_startup_project->defaultConfig();
+	auto& config = g_ws->_startup_project->configToBuild();
 	if (!config.outputTarget) {
 		Log::error("no output target to run in startup project ", g_ws->_startup_project->name);
 		return;
@@ -39,12 +39,12 @@ void Generator::ide() {
 }
 
 void Generator::build() {
-	Log::info("=========== Build ===============");
+	Log::info("=========== Build [", g_app->options.config ,"] ===============");
 	onBuild();
 }
 
 void Generator::run() {
-	Log::info("=========== Run ===============");
+	Log::info("=========== Run [", g_app->options.config ,"] ===============");
 	onRun();
 }
 

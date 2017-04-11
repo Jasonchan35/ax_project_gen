@@ -11,7 +11,17 @@ Project::Project() {
 }
 
 Config& Project::defaultConfig() {
-	return *configs.find(g_ws->defaultConfigName());
+	auto& name = g_ws->defaultConfigName();
+	auto* c = configs.find(name);
+	if (!c) throw Error("Cannot get default config ", name);
+	return *c;
+}
+
+Config& Project::configToBuild() {
+	auto& name = g_app->options.config;
+	auto* c = configs.find(name);
+	if (!c) throw Error("Cannot find config ", name, " for -build / -run");
+	return *c;
 }
 
 bool Project::type_is_cpp() {
@@ -120,7 +130,7 @@ void Project::init(const StrView& name_) {
 		auto* dst = configs.add(src.name);
 		dst->_project = this;
 		dst->name = src.name;
-		dst->_build_tmp_dir.set(g_ws->outDir, "_build_tmp/", src.name, '/', name, '/');
+		dst->_build_tmp_dir.init(String(g_ws->outDir, "_build_tmp/", src.name, '/', name), false, true);
 	}
 }
 	

@@ -9,4 +9,4 @@ set -v
 cd `dirname $0`
 echo pwd = `pwd`
 
-../../bin/ax_gen ws=Hello.axworkspace gen=xcode -gen -verbose -build -run
+../../bin/ax_gen ws=Hello.axworkspace gen=xcode -gen -verbose -build -run "$@"

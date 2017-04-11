@@ -38,20 +38,7 @@ public:
 	SplitResult splitEndByChar		(char ch) const;
 	SplitResult splitEndByAnyCharIn	(const StrView& charList) const;
 
-	template<typename S> inline
-	S& onStreamOut(S& s) const {
-		const int n = 512;
-		char tmp[n+1];
-		if (_size < n) {
-			memcpy(tmp, _data, n);
-			tmp[_size] = 0;
-			s << tmp;
-		}else{
-			String tmp = *this;
-			s << tmp.c_str();
-		}
-		return s;
-	}
+	std::ostream& onStreamOut(std::ostream& s) const;
 
 	explicit operator bool() const { return _size != 0; }
 	
