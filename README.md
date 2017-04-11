@@ -9,23 +9,26 @@ C++ Project Generator
 * Auto inherit configuration from depended projects, for instance executable project depends on library<br>
 will inherit all settings by default *( e.g. include_dir, cpp_defines, output_library ...etc )*
 
-* Support wildcard, glob with sub-directories *( example: ```src/**/*.cpp```,
-means all c++ files within `src` folder including all sub-directories )*
+* Add source file by wildcard, glob with sub-directories *( example: ```src/**/*.cpp```,
+means all c++ files within `src` folder including all sub-directories recursively)*
 
-* Support file path with space and Unicode for non-Latin characters
+* Using relative path in generated projects, therefore project can be move between folders or share for other users
 
-* Precompiled header - auto apply force-include to c++ files<br>
+* Support file path with space and Unicode
+
+* Support Project Group, Virtual Folder in Visual Studio solution or Xcode workspace
+
+* Precompiled header - and auto force-include to all c++ files<br>
 `(*In vs2015 precompiledHeader.cpp will be auto generated)`
 
 * Unite Build - build multiple small C/C++ file at once to improve the compile time
 
-* Generate proejcts / Makefile with multi-thread build support
+* Generate proejct / makefile with multi-thread settings
 
-* Support Project Group, Virtual Folder in Visual Studio solution or Xcode workspace
 
 **Command Line:**
 ```
-ax_gen.exe ws=<Workspace File> [gen=<Geneartor>] [os=<target OS>] [cpu=<target CPU>] [-gen] [-build] [-ide] [-run] [-verbose] 
+ax_gen.exe ws=<Workspace File> [gen=<Geneartor>] [os=<target OS>] [cpu=<target CPU>] [config=<Name>] [-gen] [-build] [-ide] [-run] [-verbose] 
 ```
 - `arguments can be in random order`
 
@@ -66,10 +69,13 @@ ax_gen.exe ws=examples/001/Hello.axworkspace -gen
 
 |**Compiler options:**||
 |----------------|-----------------|
-| compiler=vc    | MS Visual C++<br>*(default in gen=vs2015)*   |
-| compiler=gcc   | GNU C/C++<br>*(default in gen=makefile)*       |
+| compiler=vc    | MS Visual C++<br>*(default in gen=vs2015)*  |
+| compiler=gcc   | GNU C/C++<br>*(default in gen=makefile)*    |
 | compiler=clang | clang from LLVM<br>*(default in gen=xcode)* |
 
+|**Config options:**||
+|---|---|
+| config=&lt;Name&gt; | configuration for action [-build] or [-run] |
 
 <br>
 <br>
@@ -123,6 +129,11 @@ Xcode project in ```./project/xcode/ax_gen.xcodeproj```
 run `make` under ./project/makefile folder
 #### In case don't have 'Make' but gcc / clang only
 ```g++ -std=c++11 src/_single_file_build_.cpp -o ax_gen```
+
+# TODO
+* Android project support
+* Cross-compile
+* Pre / Post build step for VS, Xcode, Makefile
 
 # If you're interested to
 * [Another generator again ? Why Not XYZ ... please click here](doc/Why_Not_XYZ.md)
