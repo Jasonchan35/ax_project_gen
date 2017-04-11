@@ -415,7 +415,9 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 		wr.tagWithBody("TargetName",	targetName);
 		{
 			String tmp;
-			tmp.append(".", targetExt);
+			if (targetExt) {
+				tmp.append(".", targetExt);
+			}
 			wr.tagWithBody("TargetExt", tmp);
 		}
 	}
@@ -429,6 +431,8 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 			wr.tagWithBody("PreprocessorDefinitions", "%(PreprocessorDefinitions)");
 
 			if (vsForLinux()) {
+				wr.tagWithBody("Verbose", "true");
+
 				if (config.isDebug) {
 					wr.tagWithBody("DebugInformationFormat",	"FullDebug");
 				}else{
@@ -478,6 +482,11 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 		}
 		{
 			auto tag = wr.tagScope("Link");
+
+			if (vsForLinux()) {
+				wr.tagWithBody("VerboseOutput", "true");
+			}
+
 			wr.tagWithBody("SubSystem", "Console");
 			wr.tagWithBody("GenerateDebugInformation", "true");
 
