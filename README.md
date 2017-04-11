@@ -116,12 +116,12 @@ ax_gen.exe ws=examples/001/Hello.axworkspace -gen
 ```
 # How to build
 #### Windows
-vs2015 program in ./projects/vs015/ax_gen.sln to build
+vs2015 solution in ```./projects/vs015/ax_gen.sln to build```
 #### Mac
-Xcode project in ./project/xcode/ax_gen.xcodeproj
+Xcode project in ```./project/xcode/ax_gen.xcodeproj```
 #### FreeBSD / Linux
 run `make` under ./project/makefile folder
-#### In case don't have 'Make' but gcc / clang
+#### In case don't have 'Make' but gcc / clang only
 ```g++ -std=c++11 src/_single_file_build_.cpp -o ax_gen```
 
 # If you're interested to
