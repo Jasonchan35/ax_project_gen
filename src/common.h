@@ -38,6 +38,8 @@
 
 namespace ax_gen {
 
+const int ax_dump_padding = 30;
+
 using std::unique_ptr;
 
 class NonCopyable {

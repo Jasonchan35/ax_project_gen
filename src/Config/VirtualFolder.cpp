@@ -40,7 +40,7 @@ VirtualFolderDict::VirtualFolderDict() {
 
 void VirtualFolderDict::add(const StrView& baseDir, FileEntry& file) {
 	String rel;
-	Path::getRel(rel, file.name(), baseDir);
+	Path::getRel(rel, file.absPath(), baseDir);
 
 	auto* p = getOrAddParent(baseDir, rel);
 	file.parent = p;

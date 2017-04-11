@@ -12,7 +12,7 @@ public:
 			void extend		(const Vector<T>& rhs)	{ for (auto& p : rhs) append(p); }
 
 			template<typename... ARGS>
-			void emplaceBack(ARGS&&... args) { _p.emplace_back(std::forward<ARGS>(args)...); }
+			T& emplaceBack(ARGS&&... args) { _p.emplace_back(std::forward<ARGS>(args)...); return back(); }
 
 			void resize		(int n)			{ _p.resize((size_t)n); }
 			void reserve	(int n)			{ _p.reserve((size_t)n); }
@@ -61,7 +61,7 @@ std::ostream& operator<<(std::ostream& s, Vector<T>& v) {
 	//s << "[";
 	int i = 0;
 	for (auto& it : v) {
-		if (i > 0) s << "\n" << std::setw(33) << " ";
+		if (i > 0) s << "\n" << std::setw(ax_dump_padding + 3) << " ";
 		s << it;
 		i++;
 	}

@@ -19,7 +19,7 @@ public:
 			VALUE& operator[](int i)		{ return *_pairs[i].value; }
 	const	VALUE& operator[](int i) const	{ return *_pairs[i].value; }
 
-	int size() { return _pairs.size(); }
+	int size() const { return _pairs.size(); }
 
 	VALUE* add(const InKey& key);
 	VALUE* uniqueAdd(const InKey& key);

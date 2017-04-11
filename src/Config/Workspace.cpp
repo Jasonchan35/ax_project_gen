@@ -50,8 +50,6 @@ Workspace::Workspace() {
 #else
 	#error "Unknown OS"
 #endif
-
-	input.build_dir = "_build";
 }
 
 void Workspace::dump(StringStream& s) {
@@ -90,25 +88,28 @@ void Workspace::readFile(const StrView& filename) {
 	_platformName.clear();
 	_platformName.append(workspace_name, '-', generator, '-', compiler, '-', os, '-', cpu);
 
-	{
-		String json;
-		FileUtil::readTextFile(filename, json);
+	String json;
+	FileUtil::readTextFile(filename, json);
 
+	{
 		JsonReader r(json, axworkspaceFilename);
-		readJson(r);
+		readBuildDir(r);
 	}
 
-	{
+	{// set outDir and log file
 		String tmp;
 		tmp.append(axworkspaceDir, input.build_dir, '/', _platformName);
 		Path::getAbs(outDir, tmp);
 		outDir += '/';
-	}
 
-	{
 		String logFilename;
 		logFilename.append(outDir, "_ax_gen_log.txt");
 		Log::createLogFile(logFilename);
+	}
+
+	{
+		JsonReader r(json, axworkspaceFilename);
+		readJson(r);
 	}
 }
 
@@ -117,6 +118,16 @@ void Workspace::readProjectFile(const StrView& filename) {
 	auto* proj = projects.add(projName);
 	proj->init(projName);
 	proj->readFile(filename);
+}
+
+void Workspace::readBuildDir(JsonReader& r) {
+	r.beginObject();
+	while (!r.endObject()) {
+		if (r.member("build_dir",	input.build_dir )) return;
+		r.skipValue();
+	}
+
+	input.build_dir = "_build"; //using default
 }
 
 void Workspace::readJson(JsonReader& r) {

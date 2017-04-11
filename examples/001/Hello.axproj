@@ -4,7 +4,7 @@
 	"dependencies": ["MyLib"],
 	"pch_header": "src/precompiledHeader.h",
 
-	//"unite_build": true,
+	"unite_build": true,
 	//"unite_filesize": 1,
 	
 	"files" : [

@@ -1,5 +1,6 @@
 #include "../common.h"
 #include "../App.h"
+#include "FileEntry.h"
 #include "Config.h"
 #include "Project.h"
 #include "Workspace.h"
@@ -49,7 +50,7 @@ void Config::dump(StringStream& s) {
 
 bool Config::_readSettings(JsonReader& r) {
 	for (auto& p : _settings) {
-		if (p->readItem(r)) return true;
+		if (p->readEntry(r)) return true;
 	}
 	return false;
 }
@@ -62,6 +63,11 @@ void Config::inherit(const Config& rhs) {
 		p->inherit(*rhs._settings[i]);
 		i++;
 	}
+
+	auto& t = rhs.outputTarget.path();
+	if (t) {
+		link_files._inherit.add(t, g_ws->outDir);
+	}
 }
 
 void Config::computeFinal() {
@@ -72,40 +78,38 @@ void Config::computeFinal() {
 		p->computeFinal();
 		i++;
 	}
-
-	if (outputTarget) {
-		link_files._inherit.uniqueAppend(outputTarget);
-	}
 }
 
 void Config::resolve() {
 	if (_resolved) return;
 	_resolved = true;
 
-	outputTarget.clear();
-
 	if (name == "Debug") isDebug = true;
 	if (!_project) return;
 
-	cpp_defines._final.uniqueAppend(String("ax_GEN_CPU_",				g_ws->cpu));
-	cpp_defines._final.uniqueAppend(String("ax_GEN_OS_",				g_ws->os));
-	cpp_defines._final.uniqueAppend(String("ax_GEN_GENERATOR_",			g_ws->generator));
-	cpp_defines._final.uniqueAppend(String("ax_GEN_COMPILER_",			g_ws->compiler));
-	cpp_defines._final.uniqueAppend(String("ax_GEN_CONFIG_",			this->name));
-	cpp_defines._final.uniqueAppend(String("ax_GEN_PLATFORM_NAME=\"",	g_ws->_platformName,"\""));
+	cpp_defines._final.add(String("ax_GEN_CPU_",				g_ws->cpu));
+	cpp_defines._final.add(String("ax_GEN_OS_",					g_ws->os));
+	cpp_defines._final.add(String("ax_GEN_GENERATOR_",			g_ws->generator));
+	cpp_defines._final.add(String("ax_GEN_COMPILER_",			g_ws->compiler));
+	cpp_defines._final.add(String("ax_GEN_CONFIG_",				this->name));
+	cpp_defines._final.add(String("ax_GEN_PLATFORM_NAME=\"",	g_ws->_platformName,"\""));
 
 	if (_project) {
 		auto& proj = *_project;
-		cpp_defines._final.uniqueAppend(String("ax_GEN_PROJECT_",		proj.name));
-		cpp_defines._final.uniqueAppend(String("ax_GEN_TYPE_",			proj.input.type));
+		cpp_defines._final.add(String("ax_GEN_PROJECT_",		proj.name));
+		cpp_defines._final.add(String("ax_GEN_TYPE_",			proj.input.type));
+
+		String tmp;
 
 		if (proj.type_is_exe()) {
-			outputTarget.append(g_ws->outDir, "bin/", name, "/", proj.name, g_ws->exe_target_suffix);
+			tmp.set(g_ws->outDir, "bin/", name, "/", proj.name, g_ws->exe_target_suffix);
 		}else if (proj.type_is_dll()) {
-			outputTarget.append(g_ws->outDir, "bin/", name, "/", proj.name, g_ws->dll_target_suffix);
+			tmp.set(g_ws->outDir, "bin/", name, "/", proj.name, g_ws->dll_target_suffix);
 		}else if (proj.type_is_lib()) {
-			outputTarget.append(g_ws->outDir, "lib/", name, "/", proj.name, g_ws->lib_target_suffix);
+			tmp.set(g_ws->outDir, "lib/", name, "/", proj.name, g_ws->lib_target_suffix);
 		}
+
+		outputTarget.init(tmp, false, false);
 	}
 }
 
@@ -177,23 +181,30 @@ void Config::readJson(JsonReader& r) {
 	}
 }
 
-void Config::Setting::_readValue(JsonReader& r, Vector<String>& v) {
+void Config::Setting::_readValue(JsonReader& r, EntryDict& v) {
+	Vector<String> arr;
+	r.getValue(arr);
+
 	if (!isPath) {
-		r.appendValue(v);
+		for (auto& q : arr) {
+			v.add(q);
+		}
 	}else{
-		Vector<String> arr;
-		r.getValue(arr);
 
 		String tmp;
-		for (auto& it : arr) {
-			auto dir = Path::dirname(r.filename());
-			Path::makeFullPath(tmp, dir, it);
-			v.append(tmp);
+		for (auto& q : arr) {
+			if (Path::isAbs(q)) {
+				v.add(q);
+
+			}else{
+				auto dir = Path::dirname(r.filename());
+				v.add(q, dir);
+			}
 		}
 	}
 }
 
-bool Config::Setting::readItem(JsonReader& r) {
+bool Config::Setting::readEntry(JsonReader& r) {
 	if (r.member(name)) {
 		_readValue(r, add);
 		return true;
@@ -219,26 +230,75 @@ bool Config::Setting::readItem(JsonReader& r) {
 	return false;
 }
 
-void Config::Setting::inherit(const Setting& rhs) {
-	_inherit.uniqueExtend(rhs._inherit);
+void Config::Setting::inherit(Setting& rhs) {
+	_inherit.extend(rhs._inherit);
 }
 
 void Config::Setting::computeFinal() {
-	_inherit.uniqueExtend(add);
+	_inherit.extend(add);
 //	_inherit.remove_if(rhs.remove);
 
-	_final.uniqueExtend(_inherit);
-	_final.uniqueExtend(localAdd);
+	_final.extend(_inherit);
+	_final.extend(localAdd);
 	//localRemove
 }
 
 void Config::Setting::dump(StringStream& s) {
-	dumpItem(s, _inherit, "._inherit");
-	dumpItem(s, add, "");
-	dumpItem(s, remove, ".remove");
-	dumpItem(s, localAdd, ".local");
-	dumpItem(s, localRemove, ".localRemove");
-	dumpItem(s, _final, "._final");
+	dumpEntries(s, _inherit, "._inherit");
+	dumpEntries(s, add, "");
+	dumpEntries(s, remove, ".remove");
+	dumpEntries(s, localAdd, ".local");
+	dumpEntries(s, localRemove, ".localRemove");
+	dumpEntries(s, _final, "._final");
+}
+
+void Config::Entry::init(const StrView& absPath, bool isAbs) {
+	_isAbs = isAbs;
+	_absPath = absPath;
+	if (isAbs) {
+		_path = absPath;
+	}else{
+		Path::getRel(_path, absPath, g_ws->outDir);
+	}
+}
+
+Config::Entry* Config::EntryDict::add(const StrView& value, const StrView& fromDir) {
+	String key;
+	bool isAbs = true;
+
+	if (!fromDir) {
+		key = value;
+	}else{
+		isAbs = Path::isAbs(value);
+		if (isAbs) {
+			key = value;
+		}else{
+			Path::makeFullPath(key, fromDir, value);
+		}
+	}
+
+	auto* e = _dict.find(key);
+	if (!e) {
+		e = _dict.add(key);
+	}
+	e->init(key, isAbs);
+	return e;
+}
+
+void Config::EntryDict::add(Entry& v) {
+	auto& key = v.absPath();
+
+	auto* e = _dict.find(key);
+	if (!e) {
+		e = _dict.add(key);
+	}
+	*e = v;
+}
+
+void Config::EntryDict::extend(EntryDict& rhs) {
+	for (auto& q : rhs) {
+		add(q);
+	}
 }
 
 } //namespace

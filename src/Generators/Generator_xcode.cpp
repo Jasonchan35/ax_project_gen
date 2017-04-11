@@ -172,9 +172,9 @@ void Generator_xcode::gen_project(Project& proj) {
 
 void Generator_xcode::gen_file_reference(XCodePbxWriter& wr, Project& proj, FileEntry& f) {
 	wr.newline();
-	wr.commentBlock(f.name());
+	wr.commentBlock(f.path());
 	auto scope = wr.objectScope(f.genData_xcode.uuid);
-	auto basename = Path::basename(f.name(), true);
+	auto basename = Path::basename(f.path(), true);
 	
 	wr.member("isa", StrView("PBXFileReference"));
 	wr.member("name", quoteString(basename));
@@ -274,7 +274,7 @@ void Generator_xcode::gen_project_PBXBuildFile(XCodePbxWriter& wr, Project& proj
 		if (f.excludedFromBuild) continue;
 	
 		wr.newline();
-		wr.commentBlock(f.name());
+		wr.commentBlock(f.path());
 		auto scope = wr.objectScope(f.genData_xcode.buildUuid);
 		wr.member("isa", "PBXBuildFile");
 		wr.member("fileRef", f.genData_xcode.uuid);
@@ -470,7 +470,7 @@ void Generator_xcode::gen_project_PBXNativeTarget(XCodePbxWriter& wr, Project& p
 		wr.member("explicitFileType", explicitFileType);
 		wr.member("includeInIndex", "0");
 		
-		auto targetBasename = Path::basename(proj.defaultConfig().outputTarget, true);
+		auto targetBasename = Path::basename(proj.defaultConfig().outputTarget.path(), true);
 		wr.member("path", quoteString(targetBasename));
 		wr.member("sourceTree", "BUILT_PRODUCTS_DIR");
 	}
@@ -533,9 +533,11 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 				auto scope = wr.objectScope("buildSettings");
 				//link_flags
 				String targetDir, targetBasename, targetExt;
-				targetDir		= Path::dirname(config.outputTarget);
-				targetBasename	= Path::basename(config.outputTarget, false);
-				targetExt		= Path::extension(config.outputTarget);
+
+				auto& outputTarget = config.outputTarget.path();
+				targetDir		= Path::dirname(outputTarget);
+				targetBasename	= Path::basename(outputTarget, false);
+				targetExt		= Path::extension(outputTarget);
 				
 				
 				wr.member("PRODUCT_NAME",					quoteString(targetBasename));
@@ -588,21 +590,21 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 					auto scope = wr.arrayScope("GCC_PREPROCESSOR_DEFINITIONS");
 					for (auto& q : config.cpp_defines._final) {
 						wr.newline();
-						wr.write(quoteString(q));
+						wr.write(quoteString(q.path()));
 					}
 				}
 				{
 					auto scope = wr.arrayScope("HEADER_SEARCH_PATHS");
 					for (auto& q : config.include_dirs._final) {
 						wr.newline();
-						wr.write(quoteString2(q));
+						wr.write(quoteString2(q.path()));
 					}
 				}
 				{
 					auto scope = wr.arrayScope("OTHER_CPLUSPLUSFLAGS");
 					for (auto& q : config.cpp_flags._final) {
 						wr.newline();
-						wr.write(quoteString(q));
+						wr.write(quoteString(q.path()));
 					}
 				}
 
@@ -610,11 +612,11 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 					auto scope = wr.arrayScope("OTHER_LDFLAGS");
 					for (auto& q : config.link_flags._final) {
 						wr.newline();
-						wr.write(quoteString(q));
+						wr.write(quoteString(q.path()));
 					}
 					for (auto& q : config.link_files._final) {
 						wr.newline();
-						wr.write(quoteString2(q));
+						wr.write(quoteString2(q.path()));
 					}
 				}
 				
@@ -651,9 +653,7 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 				}
 				
 				if (proj.pch_header) {
-					String pch_header;
-					Path::makeFullPath(pch_header, proj.axprojDir, proj.pch_header);
-					wr.member("GCC_PREFIX_HEADER", quoteString(pch_header));
+					wr.member("GCC_PREFIX_HEADER", quoteString(proj.pch_header->path()));
 					wr.member("GCC_PRECOMPILE_PREFIX_HEADER", "YES");
 				}
 				
@@ -940,7 +940,7 @@ void Generator_xcode::writeCacheFile(const StrView& filename) {
 				{
 					auto scope = wr.objectScope("fileEntries");
 					for (auto& f : proj.fileEntries) {
-						auto scope = wr.objectScope(f.name());
+						auto scope = wr.objectScope(f.path());
 						wr.write("uuid",		f.genData_xcode.uuid);
 						wr.write("buildUuid",	f.genData_xcode.buildUuid);
 					}

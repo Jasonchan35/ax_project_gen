@@ -37,8 +37,6 @@ public:
 
 		String				pch_header;
 		Vector<String>		dependencies;
-		Vector<String>		files;
-		Vector<String>		exclude_files;
 
 		bool				multithread_build {true};
 		bool				unite_build {false};
@@ -60,7 +58,8 @@ public:
 
 	ProjectGroup*			group {nullptr};
 
-	StringDict<FileEntry>	fileEntries;
+	FileEntryDict			fileEntries;
+	
 	int						_uniteFileCount {0};
 	bool					hasOutputTarget {false};
 	
@@ -90,7 +89,7 @@ public:
 	Vector<Project*>	_dependencies;
 	Vector<Project*>	_dependencies_inherit;
 
-	String				pch_header;
+	FileEntry*			pch_header {nullptr};
 
 	void dump(StringStream& s);
 
