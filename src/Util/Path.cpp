@@ -63,24 +63,6 @@ void Path::makeFullPath(String& out_str, const StrView& dir, const StrView& path
 void Path::getAbs(String& out_str, const StrView& path) {
 	out_str.clear();
 
-	/*
-	if (Path::isAbs(path)) {
-		char lastCh = 0;
-		for (auto ch : path) {
-			if (ch == '\\') ch = '/'; //replace \ to /
-			if (lastCh == '/' && ch == '/') continue; //remove double /
-			out_str.append(ch);
-			lastCh = ch;
-		}
-
-		if (lastCh == '/') { //remove tail /
-			out_str.resize(out_str.size() - 1);
-		}
-
-		return;
-	}
-	*/
-
 	if (!path) return;
 	bool needSlash = false;
 	if (Path::isAbs(path)) {

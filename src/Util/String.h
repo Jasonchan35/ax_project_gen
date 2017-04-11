@@ -40,7 +40,17 @@ public:
 
 	template<typename S> inline
 	S& onStreamOut(S& s) const {
-		return s.write(_data, _size);
+		const int n = 512;
+		char tmp[n+1];
+		if (_size < n) {
+			memcpy(tmp, _data, n);
+			tmp[_size] = 0;
+			s << tmp;
+		}else{
+			String tmp = *this;
+			s << tmp.c_str();
+		}
+		return s;
 	}
 
 	explicit operator bool() const { return _size != 0; }
@@ -144,6 +154,8 @@ public:
 
 	char operator[](int i) { return _p[(size_t)i]; }
 
+	char back() const { return _p.back(); }
+
 	void resize(int n) { _p.resize((size_t)n); }
 	void reserve(int n) { _p.reserve((size_t)n); }
 
@@ -186,20 +198,21 @@ private:
 	std::wstring _p;
 };
 
-inline std::ostream& operator<<(std::ostream& s, const StrView& v) { return v.onStreamOut(s); }
+inline std::ostream& operator<<(std::ostream& s, const StrView& v) {
+	return v.onStreamOut(s); 
+}
+
 inline std::ostream& operator<<(std::ostream& s, const WString& v) { 
 	String tmp;
 	tmp.setUtf(v);
-	return s << tmp;
+	s << tmp;
+	return s;
 }
 
 template<typename S, typename Value> inline
 void ax_dump_(S& s, const StrView& name, Value& value) {
-	int padding = 30 - name.size();
-	for (int i = 0; i<padding; i++) {
-		s.put(' ');
-	}
-	s << name << " = " << value << '\n';
+	s << std::right << std::setw(ax_dump_padding) << name;
+	s << " = " << value << '\n';
 }
 
 template<typename S> inline

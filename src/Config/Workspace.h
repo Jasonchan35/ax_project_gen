@@ -12,6 +12,7 @@ public:
 
 	void readFile(const StrView& filename);
 	void readJson(JsonReader& r);
+	void readBuildDir(JsonReader& r);
 
 	void readProjectFile(const StrView& filename);
 

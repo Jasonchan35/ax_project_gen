@@ -87,7 +87,7 @@ void Project::dump(StringStream& s) {
 			if (i > 0) {
 				s << "\n                                 ";
 			}
-			s << f.name();
+			s << f.path();
 			i++;
 		}
 		s << "\n";
@@ -155,11 +155,43 @@ void Project::readJson(JsonReader& r) {
 		}
 
 		if (r.member("files")) {
-			r.appendValue(input.files);
+			Vector<String> arr;
+			r.getValue(arr);
+
+			Vector<String> globResult;
+			String tmp;
+			for (auto& a : arr) {
+				bool isAbs = Path::isAbs(a);
+
+				Path::makeFullPath(tmp, axprojDir, a);
+				Glob::search(globResult, tmp, false);
+
+				for (auto& q : globResult) {				
+					if (isAbs) {
+						tmp = q;
+					}else{
+						Path::getRel(tmp, q, axprojDir);
+					}
+
+					fileEntries.add(tmp, axprojDir, false);
+				}
+			}
 		}
 
 		if (r.member("exclude_files")) {
-			r.appendValue(input.exclude_files);
+			Vector<String> arr;
+			r.getValue(arr);
+
+			Vector<String> globResult;
+			String tmp;
+			for (auto& f : arr) {
+				Path::makeFullPath(tmp, axprojDir, f);
+				Glob::search(globResult, tmp, false);
+
+				for (auto& key : globResult) {
+					fileEntries.remove(key);
+				}
+			}
 		}
 
 		if (r.member("config")) {
@@ -284,38 +316,13 @@ void Project::resolve_internal() {
 			i++;
 		}
 	}
-
-	if (input.pch_header) {
-		Path::makeFullPath(pch_header, axprojDir, input.pch_header);
-	}
 }
 
 void Project::resolve_files() {
 	_generatedFileDir.set(g_ws->outDir, "_generated_/", name, "/");
 
-	fileEntries.clear();
-
-	Vector<String> globResult;
-	String tmp;
-
-	for (auto& f : input.files) {
-		Path::makeFullPath(tmp, axprojDir, f);
-		Glob::search(globResult, tmp, false);
-
-		for (auto& r : globResult) {
-			if (fileEntries.find(r)) continue;
-			auto* e = fileEntries.add(r);
-			e->init(r);
-		}
-	}
-
-	for (auto& f : input.exclude_files) {
-		Path::makeFullPath(tmp, axprojDir, f);
-		Glob::search(globResult, tmp, false);
-
-		for (auto& r : globResult) {
-			fileEntries.remove(r);
-		}
+	if (input.pch_header) {
+		pch_header = fileEntries.add(input.pch_header, axprojDir, false);
 	}
 
 	if (input.unite_build) {
@@ -335,6 +342,7 @@ void Project::resolve_files() {
 
 void Project::resolve_genUniteFiles(FileType targetType, const StrView& ext) {
 	String code;
+	String filename;
 
 	for (auto& f : fileEntries) {
 		if (f.excludedFromBuild) continue;
@@ -344,7 +352,9 @@ void Project::resolve_genUniteFiles(FileType targetType, const StrView& ext) {
 			code.append("//-- Auto Generated File for Unite Build\n");
 		}
 
-		code.append("#include \"", f.name(), "\"\n");
+		Path::getRel(filename, f.absPath(), _generatedFileDir);
+
+		code.append("#include \"", filename, "\"\n");
 
 		if (code.size() > input.unite_filesize) {
 			write_uniteFile(code, ext);
@@ -360,22 +370,20 @@ void Project::resolve_genUniteFiles(FileType targetType, const StrView& ext) {
 }
 
 void Project::write_uniteFile(const StrView& code, const StrView& ext) {
-	String filename;
 
 	char index[60+1];
 	snprintf(index, 60, "%03d", _uniteFileCount);
 	index[60] = 0;
 
-	filename.append(_generatedFileDir, name, "-UNITE_", StrView_c_str(index), ext);
-	FileUtil::writeTextFile(filename, code, g_app->options.verbose);
+	String filename(name, "-UNITE_", StrView_c_str(index), ext);
+	String fullpath(_generatedFileDir, filename);
+
+	FileUtil::writeTextFile(fullpath, code, g_app->options.verbose);
 	
 	_uniteFileCount++;
 	
-	auto* e = fileEntries.add(filename);
-	e->init(filename);
-	e->generated = true;
+	fileEntries.add(filename, _generatedFileDir, true);
 }
-
 
 } //namespace
 

@@ -25,7 +25,7 @@ void Generator::onRun() {
 		return;
 	}
 
-	System::createProcess(config.outputTarget, "");
+	System::createProcess(config.outputTarget.absPath(), "");
 }
 
 void Generator::generate() {

@@ -2,4 +2,4 @@
 %~d0
 cd %~dp0
 
-..\..\bin\ax_gen.exe ws=Hello.axworkspace gen=vs2017_linux os=linux -gen 
+..\..\bin\ax_gen.exe ws=Hello.axworkspace gen=vs2017_linux -gen 

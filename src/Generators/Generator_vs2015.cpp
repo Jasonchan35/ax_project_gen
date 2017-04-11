@@ -257,7 +257,27 @@ void Generator_vs2015::gen_project(Project& proj) {
 
 			if (vsForLinux()) {
 				wr.tagWithBody("PlatformToolset", "Remote_GCC_1_0");
-				wr.tagWithBody("RemoteRootDir", String("~/_", g_ws->generator, "_RemoteRootDir"));
+
+				String relBuildDir;
+				Path::getRel(relBuildDir, g_ws->outDir, g_ws->axworkspaceDir);
+
+				String remoteRootDir("_vsForLinux/", g_ws->workspace_name, "/", relBuildDir);
+				wr.tagWithBody("RemoteRootDir", String(remoteRootDir));
+
+				String relProjDir;
+				Path::getRel(relProjDir, proj.axprojDir, g_ws->outDir);
+
+				wr.tagWithBody("RemoteProjectDir", "$(RemoteRootDir)");
+
+				String fileToCopy;
+
+				for (auto& f : proj.fileEntries) {
+					fileToCopy.append(f.path(), ":=", remoteRootDir,"/", f.path(), ";");
+				}
+				wr.tagWithBody("AdditionalSourcesToCopyMapping", fileToCopy);
+//				wr.tagWithBody("LocalRemoteCopySources", "false");
+				wr.tagWithBody("SourcesToCopyRemotelyOverride", "");
+
 			}else {
 				wr.tagWithBody("PlatformToolset", _visualc_PlatformToolset(proj));
 			}
@@ -318,20 +338,20 @@ void Generator_vs2015::gen_project_files(XmlWriter& wr, Project& proj) {
 		switch (f.type()) {
 			case FileType::cpp_header: {
 				auto tag = wr.tagScope("ClInclude");
-				wr.attr("Include", f.name());
+				wr.attr("Include", f.path());
 			}break;
 
 			case FileType::c_source: ax_fallthrough
 			case FileType::cpp_source: {
 				auto tag = wr.tagScope("ClCompile");
-				wr.attr("Include", f.name());
+				wr.attr("Include", f.path());
 				if (f.excludedFromBuild) {
 					wr.tagWithBody("ExcludedFromBuild", "true");
 				}
 			}break;
 			default: {
 				auto tag = wr.tagScope("None");
-				wr.attr("Include", f.name());
+				wr.attr("Include", f.path());
 			}break;
 		}
 	}
@@ -353,17 +373,20 @@ void Generator_vs2015::gen_project_pch(XmlWriter& wr, Project& proj) {
 	String filename;
 	filename.append(proj._generatedFileDir, proj.name, "-precompiledHeader", pch_ext);
 
-	proj.pch_cpp.init(filename);
-	proj.pch_cpp.generated = true;
+	proj.pch_cpp.init(filename, false, true);
 
 	String code;
 	code.append("//-- Auto Generated File for Visual C++ precompiled header\n");
-	code.append("#include \"", proj.pch_header, "\"\n");
+
+	String tmp;
+	Path::getRel(tmp, proj.pch_header->absPath(), proj._generatedFileDir);
+
+	code.append("#include \"", tmp, "\"\n");
 
 	FileUtil::writeTextFile(filename, code);
 
 	auto tag = wr.tagScope("ClCompile");
-	wr.attr("Include", filename);
+	wr.attr("Include", proj.pch_cpp.path());
 	wr.tagWithBody("PrecompiledHeader", "Create");
 }
 
@@ -372,15 +395,24 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 	{
 		auto tag = wr.tagScope("PropertyGroup");
 		wr.attr("Condition", cond);
-		wr.tagWithBody("IntDir", config._build_tmp_dir);
 
-		String	targetDir  = Path::dirname  ( config.outputTarget);
-		auto	targetName = Path::basename (config.outputTarget, false);
-		auto	targetExt  = Path::extension(config.outputTarget);
+		String intermediaDir;
+		Path::getRel(intermediaDir, config._build_tmp_dir, g_ws->outDir);
+		if (!intermediaDir) intermediaDir.append('.'); // for current dir, should using "./"
+		intermediaDir.append('/');
 
+		auto& outputTarget = config.outputTarget.path();
+
+		String	targetDir = Path::dirname(outputTarget);
+		if (!targetDir) targetDir.append('.'); // for current dir, should using "./"
 		targetDir.append('/');
-		wr.tagWithBody("OutDir",	 targetDir);
-		wr.tagWithBody("TargetName", targetName);
+
+		auto	targetName = Path::basename (outputTarget, false);
+		auto	targetExt  = Path::extension(outputTarget);
+
+		wr.tagWithBody("OutDir",		targetDir);
+		wr.tagWithBody("IntDir",		intermediaDir);
+		wr.tagWithBody("TargetName",	targetName);
 		{
 			String tmp;
 			tmp.append(".", targetExt);
@@ -427,10 +459,11 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 				}
 			}
 
-			if (proj.pch_header) {				
+			if (proj.pch_header) {
 				wr.tagWithBody("PrecompiledHeader",		"Use");
-				wr.tagWithBody("PrecompiledHeaderFile",	proj.pch_header);
-				wr.tagWithBody("ForcedIncludeFiles",	proj.pch_header);
+				auto pch = Path::basename(proj.pch_header->path(), true);
+				wr.tagWithBody("PrecompiledHeaderFile",	pch);
+				wr.tagWithBody("ForcedIncludeFiles",	pch);
 			}
 
 			if (config.warning_level) {
@@ -461,10 +494,10 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 	}
 }
 
-void Generator_vs2015::gen_config_option(XmlWriter& wr, const StrView& name, Vector<String>& value) {
+void Generator_vs2015::gen_config_option(XmlWriter& wr, const StrView& name, Config::EntryDict& value) {
 	String tmp;
 	for (auto& p : value) {
-		tmp.append(p, ";");
+		tmp.append(p.path(), ";");
 	}
 	tmp.append("%(", name, ")");
 	wr.tagWithBody(name, tmp);
@@ -550,7 +583,7 @@ void Generator_vs2015::gen_vcxproj_filters(Project& proj) {
 		wr.attr("ToolsVersion", "4.0");
 		wr.attr("xmlns", "http://schemas.microsoft.com/developer/msbuild/2003");
 
-		if (proj.pch_cpp.name()) {
+		if (proj.pch_cpp.path()) {
 			auto& f = proj.pch_cpp;
 			proj.virtualFolders.add(g_ws->outDir, f);
 		}
@@ -583,7 +616,7 @@ void Generator_vs2015::gen_vcxproj_filters(Project& proj) {
 					}
 
 					auto tag = wr.tagScope(type);
-					wr.attr("Include", f->name());
+					wr.attr("Include", f->path());
 					if (pair.key) {
 						String winPath;
 						Path::windowsPath(winPath, pair.key);
