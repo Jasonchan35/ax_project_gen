@@ -68,7 +68,7 @@ void Generator_makefile::gen_workspace() {
 	if (!g_ws->_startup_project) {
 		o.append("\t@echo \"no startup_project specified\"\n");
 	}else{
-		o.append("\t$(MAKE) -f ", quoteString(g_ws->_startup_project->genData_makefile.makefile), " run $(.MAKEFLAGS)\n");
+		o.append("\t$(MAKE) -f \"", g_ws->_startup_project->genData_makefile.makefile, "\" run $(.MAKEFLAGS)\n");
 	}
 	o.append("\n");
 
@@ -76,7 +76,7 @@ void Generator_makefile::gen_workspace() {
 	o.append("clean: \n");
 	o.append("\t@echo \"==============================================================\"\n");
 	for (auto& proj : g_ws->projects) {
-		o.append("\t$(MAKE) -f ", quoteString(proj.genData_makefile.makefile), " clean $(.MAKEFLAGS)\n");
+		o.append("\t$(MAKE) -f \"", proj.genData_makefile.makefile, "\" clean $(.MAKEFLAGS)\n");
 	}
 	o.append("\t@echo \"===== clean finish ===== \"\n");
 	o.append("\n");
@@ -98,7 +98,7 @@ void Generator_makefile::gen_workspace() {
 
 		o.append("\t@echo \"==============================================================\"\n");
 		o.append("\t@echo \"[build project] ", proj.name, "\"\n");
-		o.append("\t$(MAKE)", mt_build," -f ", quoteString(proj.genData_makefile.makefile), " build $(.MAKEFLAGS)\n");
+		o.append("\t$(MAKE)", mt_build," -f \"", proj.genData_makefile.makefile, "\" build $(.MAKEFLAGS)\n");
 		o.append("\n");
 	}
 
@@ -161,9 +161,14 @@ String Generator_makefile::escapeString(const StrView& v) {
 	return o;
 }
 
-String Generator_makefile::quoteString(const StrView& v) {
+String Generator_makefile::quotePath(const StrView& v) {
 	String o;
+
 	o.append('\"');
+	if (!Path::isAbs(v)) {
+		o.append("$(pwd)/");
+	}
+
 	for (auto ch : v) {
 		switch (ch) {
 			case '\"':	o.append("\\\"");	break;
@@ -191,7 +196,8 @@ void Generator_makefile::gen_project(Project& proj) {
 		o.append("cpp_source_compiler_language = c++\n");
 	}
 	o.append("\n");
-
+	o.append("pwd=$$(pwd)\n");
+	o.append("\n");
 	o.append(".PHONY:");
 	o.append("\\\n\t", "clean");
 	o.append("\\\n\t", "build");
@@ -267,20 +273,20 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 		pch_header_dep.set(pch_header_pch, ".d");
 
 		pch_header_pch_dir = Path::dirname(pch_header_pch);
-		pch_cc_flags.append("\\\n\t", "-I", quoteString(pch_header_pch_dir));
-		pch_cc_flags.append("\\\n\t", "-include ", quoteString(proj.pch_header->path()));
+		pch_cc_flags.append("\\\n\t", "-I", quotePath(pch_header_pch_dir));
+		pch_cc_flags.append("\\\n\t", "-include ", quotePath(proj.pch_header->path()));
 
 		//makefile optional include cpp_dep		
-		o.append("-include ", quoteString(pch_header_dep), "\n");
+		o.append("-include ", escapeString(pch_header_dep), "\n");
 		//---------
 		o.append("#--- pch_header dependencies ------\n");
 		o.append(escapeString(pch_header_pch), ": ", escapeString(proj.pch_header->path()), "\n");
 		o.append("\t@echo \"-------------------------------------------------------------\"\n");
 		o.append("\t@echo \"[precompiled header] $< => $@\"\n");
-		o.append("\t$(cmd_mkdir) ", quoteString(pch_header_pch_dir), "\n");
+		o.append("\t$(cmd_mkdir) ", quotePath(pch_header_pch_dir), "\n");
 		o.append("\t$(cmd_cc) -x $(pch_header_compiler_language) $(CPP_DEFINES) $(CPP_FLAGS) $(CPP_INCLUDE_DIRS) \\\n");
-		o.append("\t\t-o \"$@\" -c ", quoteString(proj.pch_header->path()), " \\\n");
-		o.append("\t\t-MMD -MQ \"$@\" -MF ", quoteString(pch_header_dep), " \\\n");
+		o.append("\t\t-o \"$@\" -c ", quotePath(proj.pch_header->path()), " \\\n");
+		o.append("\t\t-MMD -MQ \"$@\" -MF ", quotePath(pch_header_dep), " \\\n");
 		o.append("\n");
 
 		o.append("\n\n");
@@ -307,16 +313,16 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 		link_flags.append("\\\n\t", q.path());
 	}
 	for (auto& q : config.link_dirs._final) {
-		link_files.append("\\\n\t-L", quoteString(q.path()));
+		link_files.append("\\\n\t-L", quotePath(q.path()));
 	}
 	for (auto& q : config.link_files._final) {
-		link_files.append("\\\n\t", quoteString(q.path()));
+		link_files.append("\\\n\t", quotePath(q.path()));
 	}
 	for (auto& q : config.include_files._final) {
-		include_files.append("\\\n\t-include ", quoteString(q.path()));
+		include_files.append("\\\n\t-include ", quotePath(q.path()));
 	}
 	for (auto& q : config.include_dirs._final) {
-		include_dirs.append("\\\n\t-I", quoteString(q.path()));
+		include_dirs.append("\\\n\t-I", quotePath(q.path()));
 	}
 
 	for (auto q : proj.fileEntries) {
@@ -354,15 +360,15 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 		}
 
 		//makefile optional include cpp_dep
-		o.append("-include ", quoteString(cpp_dep), "\n");
+		o.append("-include ", escapeString(cpp_dep), "\n");
 		//--------
 		o.append(escapeString(cpp_obj), ":", escapeString(cpp_src), "\n");
 		o.append("\t@echo \"-------------------------------------------------------------\"\n");
 		o.append("\t@echo \"[compile cpp] => $@\"\n");
-		o.append("\t$(cmd_mkdir) ", quoteString(Path::dirname(cpp_obj)), "\n");
+		o.append("\t$(cmd_mkdir) ", quotePath(Path::dirname(cpp_obj)), "\n");
 		o.append("\t$(cmd_cc) -x $(cpp_source_compiler_language) $(PCH_CC_FLAGS) $(CPP_DEFINES) $(CPP_FLAGS) $(CPP_INCLUDE_DIRS) $(CPP_INCLUDE_FILES) \\\n");
-		o.append("\t\t-o \"$@\" -c ", quoteString(cpp_src), "\\\n");
-		o.append("\t\t-MMD -MQ \"$@\" -MF ", quoteString(cpp_dep), "\\\n");
+		o.append("\t\t-o \"$@\" -c ", quotePath(cpp_src), "\\\n");
+		o.append("\t\t-MMD -MQ \"$@\" -MF ", quotePath(cpp_dep), "\\\n");
 		o.append("\n");
 
 	}
@@ -377,21 +383,21 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 		o.append(escapeString(outputTarget), ": $(LINK_FILES)\n");
 		o.append("\t@echo \"-------------------------------------------------------------\"\n");
 		o.append("\t@echo \"[cpp_exe] $@\"\n");
-		o.append("\t$(cmd_mkdir) ", quoteString(outputTargetDir), "\n"); //gmake cannot handle path contain 'space' in function $(@D)
+		o.append("\t$(cmd_mkdir) ", quotePath(outputTargetDir), "\n"); //gmake cannot handle path contain 'space' in function $(@D)
 		o.append("\t$(cmd_link) -o \"$@\" $(CPP_OBJ_FILES) $(LINK_FILES) $(LINK_FLAGS)\n");
 		o.append("\n");
 		o.append(config.name, "__run: ", escapeString(outputTarget), "\n");
-		o.append("\t", quoteString(outputTarget), "\n");
+		o.append("\t", quotePath(outputTarget), "\n");
 		o.append("\n");
 	} else if (proj.type == ProjectType::cpp_lib || proj.type == ProjectType::c_lib) {
 		o.append(escapeString(outputTarget), ": $(LINK_FILES)\n");
 		o.append("\t@echo \"-------------------------------------------------------------\"\n");
 		o.append("\t@echo \"[cpp_lib] $@\"\n");
-		o.append("\t$(cmd_mkdir) ", quoteString(outputTargetDir), "\n"); // gmake cannot handle path contain 'space' in function $(@D)
+		o.append("\t$(cmd_mkdir) ", quotePath(outputTargetDir), "\n"); // gmake cannot handle path contain 'space' in function $(@D)
 		o.append("\t$(cmd_ar) \"$@\" $(CPP_OBJ_FILES)\n");
 		o.append("\n");
 		o.append("run_", config.name, ": ", escapeString(outputTarget), "\n");
-		o.append("\t @echo cannot run cpp_lib ", quoteString(outputTarget), "\n");
+		o.append("\t @echo cannot run cpp_lib ", quotePath(outputTarget), "\n");
 		o.append("\n");
 	}else if (proj.type == ProjectType::cpp_headers || proj.type == ProjectType::c_headers) {
 		//nothing build is needed

@@ -14,8 +14,8 @@ public:
 	virtual bool vsForLinux() { return false; }
 
 	virtual StrView slnFileHeader();
-	virtual StrView vcxprojToolsVersion() { return "14.0"; }
-	virtual StrView visualc_PlatformToolset() { return "v140_xp"; }
+	virtual StrView vcxprojToolsVersion() { return StrView("14.0"); }
+	virtual StrView visualc_PlatformToolset() { return StrView("v140_xp"); }
 private:
 
 	void gen_workspace();
@@ -56,8 +56,8 @@ public:
 class Generator_vs2017 : public Generator_vs2015 {
 public:
 	virtual StrView slnFileHeader();
-	virtual StrView vcxprojToolsVersion() { return "15.0"; }
-	virtual StrView visualc_PlatformToolset() { return "v141_xp"; }
+	virtual StrView vcxprojToolsVersion() { return StrView("15.0"); }
+	virtual StrView visualc_PlatformToolset() { return StrView("v141_xp"); }
 };
 
 class Generator_vs2017_linux : public Generator_vs2017 {

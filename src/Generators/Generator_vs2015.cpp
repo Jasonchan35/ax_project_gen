@@ -41,19 +41,19 @@ void Generator_vs2015::onIde() {
 }
 
 StrView Generator_vs2015::slnFileHeader() {
-	return  "Microsoft Visual Studio Solution File, Format Version 12.00\r\n"
-			"# Visual Studio 14\r\n"
-			"VisualStudioVersion = 14.0.25420.1\r\n"
-			"MinimumVisualStudioVersion = 10.0.40219.1\r\n"
-			"\r\n";
+	return  StrView("Microsoft Visual Studio Solution File, Format Version 12.00\r\n"
+					"# Visual Studio 14\r\n"
+					"VisualStudioVersion = 14.0.25420.1\r\n"
+					"MinimumVisualStudioVersion = 10.0.40219.1\r\n"
+					"\r\n");
 }
 
 StrView Generator_vs2017::slnFileHeader() {
-	return  "Microsoft Visual Studio Solution File, Format Version 12.00\r\n"
-			"# Visual Studio 15\r\n"
-			"VisualStudioVersion = 15.0.26403.0\r\n"
-			"MinimumVisualStudioVersion = 10.0.40219.1\r\n"
-			"\r\n";
+	return  StrView("Microsoft Visual Studio Solution File, Format Version 12.00\r\n"
+					"# Visual Studio 15\r\n"
+					"VisualStudioVersion = 15.0.26403.0\r\n"
+					"MinimumVisualStudioVersion = 10.0.40219.1\r\n"
+					"\r\n");
 }
 
 void Generator_vs2015::onBuild() {

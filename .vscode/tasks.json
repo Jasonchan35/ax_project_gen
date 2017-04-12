@@ -7,7 +7,7 @@
 
     "linux": {
         "command": "sh",
-        "args": ["examples/001/test_makefile.sh"]
+        "args": ["examples/001/test_makefile.sh", "-build", "-run"]
     },
     "osx": {
         "command": "sh",

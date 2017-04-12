@@ -19,8 +19,8 @@ private:
 
 	String get_obj_file(Config& config, FileEntry& f);
 
-	String escapeString(const StrView& v);
-	String quoteString (const StrView& v);
+	String escapeString	(const StrView& v);
+	String quotePath	(const StrView& v);
 
 	String	pch_suffix;
 };
