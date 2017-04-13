@@ -279,6 +279,8 @@ void Generator_vs2015::gen_project(Project& proj) {
 				String projectDir("$(RemoteRootDir)/../ProjectDir_", proj.name);
 				wr.tagWithBody("RemoteProjectDir", projectDir);
 
+
+				//-- define our own source file mapping, because VS will strip out all "../" in the path
 				String fileToCopy;
 				for (auto& f : proj.fileEntries) {
 					fileToCopy.append(f.path(), ":=", projectDir,"/", f.path(), ";");
@@ -364,6 +366,8 @@ void Generator_vs2015::gen_project_files(XmlWriter& wr, Project& proj) {
 		if (excludedFromBuild) {
 			wr.tagWithBody("ExcludedFromBuild", "true");
 		}
+
+		//using our own file mapping to copy, so disable the default one
 		wr.tagWithBody("RemoteCopyFile", "false");
 	}
 }
