@@ -4,9 +4,7 @@
 	"dependencies": ["MyLib"],
 	"pch_header": "src/precompiledHeader.h",
 
-	"unite_build": true,
-	//"unite_filesize": 1,
-	
+	"unite_build": true,	
 	"files" : [
 		"src/*.cpp",
 		"*.axproj"
@@ -24,12 +22,6 @@
 		"include_dirs": ["src"],
 		"link_dirs": [],
 		"link_files": [],
-		"link_flags": [],
-		"compiler==gcc": {
-			"link_flags":["-lm"]			
-		},
-		"compiler==clang": {
-			"link_flags":["-lm"]			
-		}
+		"link_flags": []
 	}
 }

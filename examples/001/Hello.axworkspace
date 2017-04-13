@@ -3,9 +3,8 @@
 	"config_list": ["Debug", "Release"],
 
 	//"multithread_build": false,
-	//"unite_build": false,
-	//"unite_filesize": 1,
-	//"build_dir" : "./",
+	//"unite_build": true,
+	//"unite_filesize": 1000000,
 
 	"config": {
 		"config==Debug": {
@@ -27,12 +26,7 @@
 		"os==macosx": {
 			"cpp_flags":[],
 			"link_flags": [	"-ObjC",
-							"-framework Foundation",
-							"-framework AppKit",
-							"-framework OpenGL",
-							"-framework QuartzCore",
-							"-framework AudioToolBox",
-							"-framework OpenAL"],
+							"-framework Foundation"],
 			"xcode_settings": {
 				//"MACOSX_DEPLOYMENT_TARGET": 	"10.11",
 				//"SUPPORTED_PLATFORMS":		"macosx",
@@ -42,18 +36,12 @@
 		"os==ios": {
 			"cpp_flags":[],
 			"link_flags": [	"-ObjC",
-							"-framework Foundation",
-							"-framework OpenGLES",
-							"-framework OpenAL"],
+							"-framework Foundation"],
 			"xcode_settings": {
-				//"MACOSX_DEPLOYMENT_TARGET": 	"10.11",
-				//"SUPPORTED_PLATFORMS":		"macosx",
-				//"SDKROOT":					"macosx",
 			}
 		},	
 		"os==linux": {
 			"cpp_flags":[],
-			//"link_flags":["-lpthread -lX11 -lGL -lGLU"]
 			"link_flags":["-lpthread"]
 		},
 		"os==freebsd": {
@@ -62,7 +50,7 @@
 		},
 		"os==cygwin": {
 			"cpp_flags":["-I/usr/local/include"],
-			"link_flags":["-lpthread -lX11 -lGL -lGLU"]
+			"link_flags":["-lm"]
 		},
 
 		"compiler==vc": {
