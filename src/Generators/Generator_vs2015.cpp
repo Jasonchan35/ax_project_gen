@@ -255,23 +255,35 @@ void Generator_vs2015::gen_project(Project& proj) {
 
 			if (vsForLinux()) {
 				wr.tagWithBody("PlatformToolset", "Remote_GCC_1_0");
+				if (g_ws->compiler=="gcc") {
+					wr.tagWithBody("RemoteCCompileToolExe","gcc");
+					wr.tagWithBody("RemoteCppCompileToolExe","g++");
+				}else if(g_ws->compiler=="clang") {
+					wr.tagWithBody("RemoteCCompileToolExe","clang");
+					wr.tagWithBody("RemoteCppCompileToolExe","clang++");
+				}else{
+					throw Error("Unsupported compiler ", g_ws->compiler);
+				}
 
 				String relBuildDir;
 				Path::getRel(relBuildDir, g_ws->buildDir, g_ws->axworkspaceDir);
 
-				String remoteRootDir("_vsForLinux/", g_ws->workspace_name, "/", relBuildDir);
-				wr.tagWithBody("RemoteRootDir", String(remoteRootDir));
+				String remoteRootDir("_vsForLinux/", g_ws->_platformName, "/", relBuildDir);
+				wr.tagWithBody("RemoteRootDir", remoteRootDir);
 
-				String relProjDir;
-				Path::getRel(relProjDir, proj.axprojDir, g_ws->buildDir);
-
-				wr.tagWithBody("RemoteProjectDir", "$(RemoteRootDir)");
+				// vsForLinux will delete everything inside $(RemoteProjectDir) before build,
+				// that's why we have to separate ProjectDir for each Project to avoid file get deleted by another project
+				// and it caused another problem, because the solution and projects are in the same folder in local,
+				// but on the remote it's on different folder, it makes Visual Studio cannot mapping local->remote file properly
+				// so, we have to setup RemotePostBuildEvent to copy output lib/exe back to the correct output folder (g_ws->buildDir /lib or /bin)
+				String projectDir("$(RemoteRootDir)/../ProjectDir_", proj.name);
+				wr.tagWithBody("RemoteProjectDir", projectDir);
 
 				String fileToCopy;
-
 				for (auto& f : proj.fileEntries) {
-					fileToCopy.append(f.path(), ":=", remoteRootDir,"/", f.path(), ";");
+					fileToCopy.append(f.path(), ":=", projectDir,"/", f.path(), ";");
 				}
+
 				wr.tagWithBody("SourcesToCopyRemotelyOverride", "");
 				wr.tagWithBody("AdditionalSourcesToCopyMapping", fileToCopy);
 //				wr.tagWithBody("LocalRemoteCopySources", "false");
@@ -333,25 +345,26 @@ void Generator_vs2015::gen_project_files(XmlWriter& wr, Project& proj) {
 	gen_project_pch(wr, proj);
 
 	for (auto& f : proj.fileEntries) {
-		switch (f.type()) {
-			case FileType::cpp_header: {
-				auto tag = wr.tagScope("ClInclude");
-				wr.attr("Include", f.path());
-			}break;
+		StrView tagName;
+		bool excludedFromBuild = false;
 
+		switch (f.type()) {
 			case FileType::c_source: ax_fallthrough
 			case FileType::cpp_source: {
-				auto tag = wr.tagScope("ClCompile");
-				wr.attr("Include", f.path());
-				if (f.excludedFromBuild) {
-					wr.tagWithBody("ExcludedFromBuild", "true");
-				}
+				tagName = "ClCompile";
+				excludedFromBuild = f.excludedFromBuild;
 			}break;
-			default: {
-				auto tag = wr.tagScope("None");
-				wr.attr("Include", f.path());
-			}break;
+
+			case FileType::cpp_header: { tagName = "ClInclude"; }break;
+			default: { tagName = "None"; }break;
 		}
+
+		auto tag = wr.tagScope(tagName);
+		wr.attr("Include", f.path());
+		if (excludedFromBuild) {
+			wr.tagWithBody("ExcludedFromBuild", "true");
+		}
+		wr.tagWithBody("RemoteCopyFile", "false");
 	}
 }
 
@@ -394,16 +407,21 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 		auto tag = wr.tagScope("PropertyGroup");
 		wr.attr("Condition", cond);
 
-		String intermediaDir(config._build_tmp_dir.path());
-		if (!intermediaDir) intermediaDir.append('.'); // for current dir, should using "./"
-		intermediaDir.append('/');
-
+		//------
 		auto& outputTarget = config.outputTarget.path();
-
-		String	targetDir = Path::dirname(outputTarget);
+		String	targetDir;
+		if (vsForLinux()) targetDir.append("../", g_ws->_platformName, "/");
+		targetDir.append(Path::dirname(outputTarget));
 		if (!targetDir) targetDir.append('.'); // for current dir, should using "./"
 		targetDir.append('/');
 
+		//------
+		String intermediaDir;
+		intermediaDir.append(config._build_tmp_dir.path());
+		if (!intermediaDir) intermediaDir.append('.'); // for current dir, should using "./"
+		intermediaDir.append('/');
+
+		//------
 		auto	targetName = Path::basename (outputTarget, false);
 		auto	targetExt  = Path::extension(outputTarget);
 
@@ -487,7 +505,12 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 
 			if (proj.type_is_exe_or_dll()) {
 				gen_config_option(wr, "AdditionalLibraryDirectories",	config.link_dirs._final);
-				gen_config_option(wr, "AdditionalDependencies",			config.link_files._final);
+
+				if (vsForLinux()) {
+					gen_config_option(wr, "AdditionalDependencies",		config.link_files._final, "$(RemoteRootDir)/");
+				}else{
+					gen_config_option(wr, "AdditionalDependencies",		config.link_files._final);
+				}
 			}
 
 			if (vsForLinux()) {
@@ -525,13 +548,23 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 				}
 			}
 		}
+
+		if (config.outputTarget.path()) {
+			auto tag = wr.tagScope("RemotePostBuildEvent");			
+			String dir("$(RemoteRootDir)/", Path::dirname(config.outputTarget.path()));
+
+			String cmd;
+			cmd.append("mkdir -p \"", dir,"\";");
+			cmd.append("cp -f \"$(RemoteProjectDir)/", config.outputTarget.path(), "\" \"$(RemoteRootDir)/", config.outputTarget.path(), "\"");
+			wr.tagWithBody("Command", cmd);
+		}
 	}
 }
 
-void Generator_vs2015::gen_config_option(XmlWriter& wr, const StrView& name, Config::EntryDict& value) {
+void Generator_vs2015::gen_config_option(XmlWriter& wr, const StrView& name, Config::EntryDict& value, const StrView& relativeTo) {
 	String tmp;
 	for (auto& p : value) {
-		tmp.append(p.path(), ";");
+		tmp.append(relativeTo, p.path(), ";");
 	}
 	tmp.append("%(", name, ")");
 	wr.tagWithBody(name, tmp);
