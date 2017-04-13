@@ -14,14 +14,14 @@ void Generator::init() {
 }
 
 void Generator::onRun() {
-	if (!g_ws->_startup_project) {
+	if (!g_ws->startupProject) {
 		Log::error("no startup project to run");
 		return;
 	}
 
-	auto& config = g_ws->_startup_project->configToBuild();
+	auto& config = g_ws->startupProject->configToBuild();
 	if (!config.outputTarget) {
-		Log::error("no output target to run in startup project ", g_ws->_startup_project->name);
+		Log::error("no output target to run in startup project ", g_ws->startupProject->name);
 		return;
 	}
 

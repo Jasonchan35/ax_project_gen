@@ -96,14 +96,14 @@ void Workspace::readFile(const StrView& filename) {
 		readBuildDir(r);
 	}
 
-	{// set outDir and log file
+	{// set build_dir and log file
 		String tmp;
 		tmp.append(axworkspaceDir, input.build_dir, '/', _platformName);
-		Path::getAbs(outDir, tmp);
-		outDir += '/';
+		Path::getAbs(buildDir, tmp);
+		buildDir += '/';
 
 		String logFilename;
-		logFilename.append(outDir, "_ax_gen_log.txt");
+		logFilename.append(buildDir, "_ax_gen_log.txt");
 		Log::createLogFile(logFilename);
 	}
 
@@ -218,21 +218,7 @@ void Workspace::readJson(JsonReader& r) {
 
 void Workspace::resolve() {	
 	if (input.startup_project) {
-		_startup_project = projects.find(input.startup_project);
-	}
-
-	if (os == "windows") {
-		exe_target_suffix = ".exe";
-		dll_target_suffix = ".dll";
-	}else{
-		exe_target_suffix = "";
-		dll_target_suffix = ".so";
-	}
-
-	if (compiler == "msvc") {
-		lib_target_suffix = ".lib";
-	}else{
-		lib_target_suffix = ".a";
+		startupProject = projects.find(input.startup_project);
 	}
 
 	for (auto& c : configs) {

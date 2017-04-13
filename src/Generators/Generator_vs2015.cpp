@@ -57,7 +57,7 @@ StrView Generator_vs2017::slnFileHeader() {
 }
 
 void Generator_vs2015::onBuild() {
-	auto* proj = g_ws->_startup_project;
+	auto* proj = g_ws->startupProject;
 	if (!proj) {
 		Log::error("no startup project to build");
 		return;
@@ -180,7 +180,7 @@ void Generator_vs2015::genUuid(String& outStr) {
 }
 
 void Generator_vs2015::gen_project(Project& proj) {
-	proj.genData_vs2015.vcxproj.set(g_ws->outDir, proj.name, ".vcxproj");
+	proj.genData_vs2015.vcxproj.set(g_ws->buildDir, proj.name, ".vcxproj");
 
 	Log::info("gen_project ", proj.genData_vs2015.vcxproj);
 	genUuid(proj.genData_vs2015.uuid);
@@ -257,13 +257,13 @@ void Generator_vs2015::gen_project(Project& proj) {
 				wr.tagWithBody("PlatformToolset", "Remote_GCC_1_0");
 
 				String relBuildDir;
-				Path::getRel(relBuildDir, g_ws->outDir, g_ws->axworkspaceDir);
+				Path::getRel(relBuildDir, g_ws->buildDir, g_ws->axworkspaceDir);
 
 				String remoteRootDir("_vsForLinux/", g_ws->workspace_name, "/", relBuildDir);
 				wr.tagWithBody("RemoteRootDir", String(remoteRootDir));
 
 				String relProjDir;
-				Path::getRel(relProjDir, proj.axprojDir, g_ws->outDir);
+				Path::getRel(relProjDir, proj.axprojDir, g_ws->buildDir);
 
 				wr.tagWithBody("RemoteProjectDir", "$(RemoteRootDir)");
 
@@ -540,11 +540,11 @@ void Generator_vs2015::gen_config_option(XmlWriter& wr, const StrView& name, Con
 void Generator_vs2015::gen_workspace() {
 	Log::info("gen_workspace ", g_ws->workspace_name);
 
-	g_ws->genData_vs2015.sln.set(g_ws->outDir, g_ws->workspace_name, ".sln");
+	g_ws->genData_vs2015.sln.set(g_ws->buildDir, g_ws->workspace_name, ".sln");
 
 	//cache file
 	String cacheFilename;
-	cacheFilename.append(g_ws->outDir, "_ax_gen_cache.json");
+	cacheFilename.append(g_ws->buildDir, "_ax_gen_cache.json");
 
 	readCacheFile(cacheFilename);
 
@@ -619,7 +619,7 @@ void Generator_vs2015::gen_vcxproj_filters(Project& proj) {
 
 		if (proj.pch_cpp.path()) {
 			auto& f = proj.pch_cpp;
-			proj.virtualFolders.add(g_ws->outDir, f);
+			proj.virtualFolders.add(g_ws->buildDir, f);
 		}
 
 		//------------
@@ -662,7 +662,7 @@ void Generator_vs2015::gen_vcxproj_filters(Project& proj) {
 	}	
 
 	String filename;
-	filename.append(g_ws->outDir, proj.name, ".vcxproj.filters");
+	filename.append(g_ws->buildDir, proj.name, ".vcxproj.filters");
 	FileUtil::writeTextFile(filename, wr.buffer());
 }
 

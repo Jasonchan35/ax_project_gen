@@ -130,7 +130,7 @@ void Project::init(const StrView& name_) {
 		auto* dst = configs.add(src.name);
 		dst->_project = this;
 		dst->name = src.name;
-		dst->_build_tmp_dir.init(String(g_ws->outDir, "_build_tmp/", src.name, '/', name), false, true);
+		dst->_build_tmp_dir.init(String(g_ws->buildDir, "_build_tmp/", src.name, '/', name), false, true);
 	}
 }
 	
@@ -329,7 +329,7 @@ void Project::resolve_internal() {
 }
 
 void Project::resolve_files() {
-	_generatedFileDir.set(g_ws->outDir, "_generated_/", name, "/");
+	_generatedFileDir.set(g_ws->buildDir, "_generated_/", name, "/");
 
 	if (input.pch_header) {
 		pch_header = fileEntries.add(input.pch_header, axprojDir, false);
@@ -343,7 +343,7 @@ void Project::resolve_files() {
 	// virtual folder
 	for (auto& f : fileEntries) {
 		if (f.generated) {
-			virtualFolders.add(g_ws->outDir, f);
+			virtualFolders.add(g_ws->buildDir, f);
 		}else{
 			virtualFolders.add(axprojDir, f);
 		}

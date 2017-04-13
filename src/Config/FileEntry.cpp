@@ -18,7 +18,7 @@ void FileEntry::init(const StrView& absPath, bool isAbs, bool isGenerated) {
 	if (isAbs) {
 		_path = absPath;
 	}else{
-		Path::getRel(_path, absPath, g_ws->outDir);
+		Path::getRel(_path, absPath, g_ws->buildDir);
 	}
 
 	auto ext = Path::extension(_path);

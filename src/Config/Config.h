@@ -92,6 +92,15 @@ public:
 
 	};
 
+	String		exe_target_prefix;
+	String		exe_target_suffix;
+
+	String		dll_target_prefix;
+	String		dll_target_suffix;
+
+	String		lib_target_prefix;
+	String		lib_target_suffix;
+
 	Setting		cpp_defines;
 	Setting		cpp_flags;
 	Setting		include_dirs;

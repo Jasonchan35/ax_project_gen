@@ -22,7 +22,7 @@ void Generator_makefile::onGenerate() {
 }
 
 void Generator_makefile::gen_helper_batch_file() {
-	String filename(g_ws->outDir, "mkdir.bat");
+	String filename(g_ws->buildDir, "mkdir.bat");
 	String o("@ECHO OFF\n IF exist \"%1\" (echo directory \"%1\" exists) ELSE ( mkdir \"%1\" && echo directory \"%1\" created)");
 	FileUtil::writeTextFile(filename, o);
 }
@@ -65,10 +65,10 @@ void Generator_makefile::gen_workspace() {
 	//------ run: -------
 	o.append("run: build \n");
 	o.append("\t@echo \"==============================================================\"\n");
-	if (!g_ws->_startup_project) {
+	if (!g_ws->startupProject) {
 		o.append("\t@echo \"no startup_project specified\"\n");
 	}else{
-		o.append("\t$(MAKE) -f \"", g_ws->_startup_project->genData_makefile.makefile, "\" run $(.MAKEFLAGS)\n");
+		o.append("\t$(MAKE) -f \"", g_ws->startupProject->genData_makefile.makefile, "\" run $(.MAKEFLAGS)\n");
 	}
 	o.append("\n");
 
@@ -102,7 +102,7 @@ void Generator_makefile::gen_workspace() {
 		o.append("\n");
 	}
 
-	String filename(g_ws->outDir, "Makefile");
+	String filename(g_ws->buildDir, "Makefile");
 	FileUtil::writeTextFile(filename, o);
 }
 
@@ -234,7 +234,7 @@ void Generator_makefile::gen_project(Project& proj) {
 	o.append("run:   $(config)__run\n");
 	o.append("\n");
 
-	String filename(g_ws->outDir, proj.genData_makefile.makefile);
+	String filename(g_ws->buildDir, proj.genData_makefile.makefile);
 	FileUtil::writeTextFile(filename, o);
 }
 

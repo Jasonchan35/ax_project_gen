@@ -26,6 +26,20 @@ Config::Config() {
 	include_files.isPath = true;
 	link_dirs.isPath     = true;
 	link_files.isPath    = true;
+
+	if (g_ws->os == "windows") {
+		exe_target_suffix = ".exe";
+		dll_target_suffix = ".dll";
+	}else{
+		exe_target_suffix = "";
+		dll_target_suffix = ".so";
+	}
+
+	if (g_ws->compiler == "vc") {
+		lib_target_suffix = ".lib";
+	}else{
+		lib_target_suffix = ".a";
+	}
 }
 
 void Config::dump(StringStream& s) {
@@ -66,7 +80,7 @@ void Config::inherit(const Config& rhs) {
 
 	auto& t = rhs.outputTarget.path();
 	if (t) {
-		link_files._inherit.add(t, g_ws->outDir);
+		link_files._inherit.add(t, g_ws->buildDir);
 	}
 }
 
@@ -102,11 +116,11 @@ void Config::resolve() {
 		String tmp;
 
 		if (proj.type_is_exe()) {
-			tmp.set(g_ws->outDir, "bin/", name, "/", proj.name, g_ws->exe_target_suffix);
+			tmp.set(g_ws->buildDir, "bin/", name, "/", exe_target_prefix, proj.name, exe_target_suffix);
 		}else if (proj.type_is_dll()) {
-			tmp.set(g_ws->outDir, "bin/", name, "/", proj.name, g_ws->dll_target_suffix);
+			tmp.set(g_ws->buildDir, "bin/", name, "/", dll_target_prefix, proj.name, dll_target_suffix);
 		}else if (proj.type_is_lib()) {
-			tmp.set(g_ws->outDir, "lib/", name, "/", proj.name, g_ws->lib_target_suffix);
+			tmp.set(g_ws->buildDir, "lib/", name, "/", lib_target_prefix, proj.name, lib_target_suffix);
 		}
 
 		outputTarget.init(tmp, false, false);
@@ -122,6 +136,12 @@ void Config::readJson(JsonReader& r) {
 		#define ReadMember(Value) if (r.member(#Value, Value)) continue;
 		ReadMember(warning_as_error);
 		ReadMember(warning_level);
+		ReadMember(exe_target_prefix);
+		ReadMember(exe_target_suffix);
+		ReadMember(lib_target_prefix);
+		ReadMember(lib_target_suffix);
+		ReadMember(dll_target_prefix);
+		ReadMember(dll_target_suffix);
 		#undef ReadMember
 
 		if (r.member("xcode_settings")) {
@@ -258,7 +278,7 @@ void Config::Entry::init(const StrView& absPath, bool isAbs) {
 	if (isAbs) {
 		_path = absPath;
 	}else{
-		Path::getRel(_path, absPath, g_ws->outDir);
+		Path::getRel(_path, absPath, g_ws->buildDir);
 	}
 }
 

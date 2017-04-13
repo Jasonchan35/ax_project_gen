@@ -31,7 +31,7 @@ void Generator_xcode::onGenerate() {
 }
 
 void Generator_xcode::onBuild() {
-	auto* proj = g_ws->_startup_project;
+	auto* proj = g_ws->startupProject;
 	if (!proj) {
 		Log::error("no startup project to build");
 		return;
@@ -56,11 +56,11 @@ void Generator_xcode::onIde() {
 }
 
 void Generator_xcode::gen_workspace() {
-	g_ws->genData_xcode.xcworkspace.set(g_ws->outDir, g_ws->workspace_name, ".xcworkspace");
+	g_ws->genData_xcode.xcworkspace.set(g_ws->buildDir, g_ws->workspace_name, ".xcworkspace");
 
 	//cache file
 	String cacheFilename;
-	cacheFilename.append(g_ws->outDir, "_ax_gen_cache.json");
+	cacheFilename.append(g_ws->buildDir, "_ax_gen_cache.json");
 
 	readCacheFile(cacheFilename);
 
@@ -105,7 +105,7 @@ void Generator_xcode::gen_workspace_group(XmlWriter& wr, ProjectGroup& group) {
 
 void Generator_xcode::gen_project_genUuid(Project& proj) {
 	auto& gd = proj.genData_xcode;
-	gd.xcodeproj.init(String(g_ws->outDir, proj.name, ".xcodeproj"), false, true);
+	gd.xcodeproj.init(String(g_ws->buildDir, proj.name, ".xcodeproj"), false, true);
 	gd.pbxproj.set(gd.xcodeproj.absPath(), "/", "project.pbxproj");
 	genUuid(gd.uuid);
 	genUuid(gd.targetUuid);
@@ -344,7 +344,7 @@ void Generator_xcode::gen_project_PBXGroup(XCodePbxWriter& wr, Project& proj) {
 			if (v.parent == root) {
 				wr.member("sourceTree", "SOURCE_ROOT");
 				String rel;
-				Path::getRel(rel, v.diskPath, g_ws->outDir);
+				Path::getRel(rel, v.diskPath, g_ws->buildDir);
 				wr.member("path", quoteString(rel));
 			}else{
 				wr.member("sourceTree", kSourceTreeGroup);
@@ -372,7 +372,7 @@ void Generator_xcode::gen_project_PBXGroup(XCodePbxWriter& wr, Project& proj) {
 		
 		wr.member("sourceTree", "SOURCE_ROOT");
 		String rel;
-		Path::getRel(rel, proj.axprojDir, g_ws->outDir);
+		Path::getRel(rel, proj.axprojDir, g_ws->buildDir);
 		wr.member("path", quoteString(rel));
 		wr.member("name", "MainGroup");
 	}
@@ -766,7 +766,7 @@ void Generator_xcode::gen_info_plist(Project& proj) {
 			wr.tagWithBody("string", "NSApplication");
 		}
 	}
-	FileUtil::writeTextFile(String(g_ws->outDir, gd.info_plist_file), wr.buffer());
+	FileUtil::writeTextFile(String(g_ws->buildDir, gd.info_plist_file), wr.buffer());
 }
 
 void Generator_xcode::genUuid(String& o) {

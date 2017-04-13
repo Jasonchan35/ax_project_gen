@@ -41,18 +41,14 @@ public:
 	String				cpu;
 	String				_platformName;
 
-	Project*			_startup_project{nullptr};
+	Project*			startupProject{nullptr};
 
 	StringDict<Project>	projects;
 	ProjectGroupDict	projectGroups;
 
-	String				exe_target_suffix;
-	String				dll_target_suffix;
-	String				lib_target_suffix;
-
 	String				axworkspaceFilename;
 	String				axworkspaceDir;
-	String				outDir;
+	String				buildDir;
 	
 	bool os_has_objc();
 
