@@ -26,7 +26,7 @@ private:
 	void gen_project_pch( XmlWriter& wr, Project& proj);
 
 	void gen_project_config(XmlWriter& wr, Project& proj, Config& config);
-	void gen_config_option(XmlWriter& wr, const StrView& name, Config::EntryDict& value, const StrView& relativeTo = "");
+	void gen_config_option(XmlWriter& wr, const StrView& name, Config::EntryDict& value, const StrView& relativeTo = StrView());
 
 	void readCacheFile(const StrView& filename);
 	void writeCacheFile(const StrView& filename);
