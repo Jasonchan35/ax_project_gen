@@ -16,7 +16,7 @@ CCFLAGS = -std=c++11 -Wall -Werror
 
 $(OUTPUT_TARGET):
 	@mkdir -p $(OUTPUT_DIR)
-	$(CC) $(pwd)/../../src/_single_file_build_.cpp -o "$@" $(CCFLAGS)
+	$(CC) "$(pwd)/../../src/_single_file_build_.cpp" -o "$@" $(CCFLAGS)
 
 all: build
 

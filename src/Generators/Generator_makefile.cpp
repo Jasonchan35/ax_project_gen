@@ -10,7 +10,6 @@ void Generator_makefile::onBuild() {
 #if ax_OS_Windows
 #else
 	int ret = ::system(String("make -C \"", g_ws->buildDir, "\" config=\"", g_app->options.config,"\"").c_str());
-	//int ret = ::execlp("make", "-C", g_ws->outDir.c_str());
 	if (ret < 0) {
 		throw Error("Error Build");
 	}
@@ -68,7 +67,7 @@ void Generator_makefile::gen_workspace() {
 	if (!g_ws->startupProject) {
 		o.append("\t@echo \"no startup_project specified\"\n");
 	}else{
-		o.append("\t$(MAKE) -f \"", g_ws->startupProject->genData_makefile.makefile, "\" run $(.MAKEFLAGS)\n");
+		o.append("\t$(MAKE) -f \"", g_ws->startupProject->genData_makefile.makefile, "\" run $(MFLAGS)\n");
 	}
 	o.append("\n");
 
@@ -76,7 +75,7 @@ void Generator_makefile::gen_workspace() {
 	o.append("clean: \n");
 	o.append("\t@echo \"==============================================================\"\n");
 	for (auto& proj : g_ws->projects) {
-		o.append("\t$(MAKE) -f \"", proj.genData_makefile.makefile, "\" clean $(.MAKEFLAGS)\n");
+		o.append("\t$(MAKE) -f \"", proj.genData_makefile.makefile, "\" clean $(MFLAGS)\n");
 	}
 	o.append("\t@echo \"===== clean finish ===== \"\n");
 	o.append("\n");
@@ -98,12 +97,20 @@ void Generator_makefile::gen_workspace() {
 
 		o.append("\t@echo \"==============================================================\"\n");
 		o.append("\t@echo \"[build project] ", proj.name, "\"\n");
-		o.append("\t$(MAKE)", mt_build," -f \"", proj.genData_makefile.makefile, "\" build $(.MAKEFLAGS)\n");
+		o.append("\t$(MAKE)", mt_build," -f \"", proj.genData_makefile.makefile, "\" build $(MFLAGS)\n");
 		o.append("\n");
 	}
 
-	String filename(g_ws->buildDir, "Makefile");
+	String filename(g_ws->buildDir, "GNUmakefile");
 	FileUtil::writeTextFile(filename, o);
+
+	{
+		String bsd_makefile_txt;
+		bsd_makefile_txt.append(".PHONY: all clean build run:\n");
+		bsd_makefile_txt.append("all clean build run:\n");
+		bsd_makefile_txt.append("\tgmake $@ $(MFLAGS)\n");
+		FileUtil::writeTextFile(String(g_ws->buildDir, "Makefile"), bsd_makefile_txt);
+	}
 }
 
 void Generator_makefile::gen_common_var(String& o) {
@@ -112,9 +119,6 @@ void Generator_makefile::gen_common_var(String& o) {
 	o.append("#!! \n");
 	o.append("config ?= ", g_ws->defaultConfigName(), "\n");
 	o.append("\n");
-	o.append("space=$(empty) $(empty)	\n");
-	o.append("escape_str = $(subst $(space),\\\\\\$(space),$1)	\n");
-	o.append("qs = $(subst ?,$(sp),$1)	\n");
 	o.append("\n");
 
 	pch_suffix = ".gch";
@@ -137,10 +141,12 @@ void Generator_makefile::gen_common_var(String& o) {
 	if (g_ws->host_os == "windows") {
 		o.append("cmd_mkdir := cmd.exe /c mkdir.bat","\n");
 		o.append("cmd_rmdir := rm -rf",   "\n");
+		o.append("cmd_rm    := rm -f",    "\n");
 		o.append("cmd_copy  := cp -f",    "\n");
 	}else{
 		o.append("cmd_mkdir := mkdir -p", "\n");
 		o.append("cmd_rmdir := rm -rf",   "\n");
+		o.append("cmd_rm    := rm -f",    "\n");
 		o.append("cmd_copy  := cp -f",    "\n");
 	}
 
@@ -257,7 +263,11 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 	o.append(config.name, "__build: ", escapeString(config.outputTarget.path()), "\n\n");
 
 	o.append(config.name, "__clean: \n");
-	o.append("\t$(cmd_rmdir) \"", config._build_tmp_dir.path(), "\"\n\n");
+	o.append("\t$(cmd_rmdir) \"", config._build_tmp_dir.path(), "\"\n");
+	if (config.outputTarget.path()) {
+		o.append("\t$(cmd_rm) \"", config.outputTarget.path(), "\"\n");
+	}
+	o.append("\n");
 
 	String pch_header_dep;
 	String pch_header_pch;
