@@ -33,7 +33,7 @@ void System::shellOpen(const StrView& path) {
 
 }
 
-void System::createProcess(const StrView& exe, const StrView& args) {
+int System::createProcess(const StrView& exe, const StrView& args) {
 #if ax_OS_Windows
 	String cmd("\"", exe, "\" ", args);
 	Log::info("run> ", cmd);
@@ -54,7 +54,7 @@ void System::createProcess(const StrView& exe, const StrView& args) {
 	if (!::CreateProcess(exeW.c_str(), cmdW.data(), nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi)) {
 		auto dw = GetLastError();
 		Log::error("error createProcess", dw);
-		return;
+		return -1;
 	}
 
     WaitForSingleObject(pi.hProcess, INFINITE);
@@ -71,7 +71,7 @@ void System::createProcess(const StrView& exe, const StrView& args) {
 	FILE* fs = ::popen(cmd.c_str(), "r");
 	if (!fs) {
 		Log::error("error createProcess");
-		return;
+		return -1;
 	}
 
 	Vector<char> buf;
@@ -88,6 +88,7 @@ void System::createProcess(const StrView& exe, const StrView& args) {
 #endif //ax_OS
 
 	Log::info("process exit return: ", exit_code);
+	return (int)exit_code;
 }
 
 	

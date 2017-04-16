@@ -15,7 +15,7 @@ class System {
 public:
 	static void shellOpen(const StrView& path);
 	
-	static void createProcess(const StrView& exe, const StrView& args);
+	static int createProcess(const StrView& exe, const StrView& args);
 
 	static int cpuCount();
 
