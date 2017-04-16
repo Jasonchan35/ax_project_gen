@@ -41,8 +41,10 @@ void Generator_xcode::onBuild() {
 				" -scheme \"", proj->name, "\"",
 				" -configuration \"", g_app->options.config, "\"",
 				" build");
-	System::createProcess("/usr/bin/xcodebuild", args);
-	
+	int exit_code = System::createProcess("/usr/bin/xcodebuild", args);
+	if (exit_code != 0){
+		throw Error("Error Build");
+	}
 }
 
 void Generator_xcode::onIde() {

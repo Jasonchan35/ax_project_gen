@@ -72,7 +72,10 @@ void Generator_vs2015::onBuild() {
 				" /ProjectConfig \"", g_app->options.config, "\"",
 				" /build");
 
-	System::createProcess("C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\IDE\\devenv.exe", args);
+	int exit_code = System::createProcess("C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\IDE\\devenv.exe", args);
+	if (exit_code != 0){
+		throw Error("Error Build");
+	}
 }
 
 void Generator_vs2015::readCacheFile(const StrView& filename) {
