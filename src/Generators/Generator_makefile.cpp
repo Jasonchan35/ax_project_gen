@@ -10,7 +10,7 @@ void Generator_makefile::onBuild() {
 #if ax_OS_Windows
 #else
 	int ret = ::system(String("make -C \"", g_ws->buildDir, "\" config=\"", g_app->options.config,"\"").c_str());
-	if (ret < 0) {
+	if (ret != 0) {
 		throw Error("Error Build");
 	}
 #endif
