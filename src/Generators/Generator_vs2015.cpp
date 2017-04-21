@@ -492,7 +492,8 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 
 			if (proj.pch_header) {
 				wr.tagWithBody("PrecompiledHeader",		"Use");
-				auto pch = Path::basename(proj.pch_header->path(), true);
+				//auto pch = Path::basename(proj.pch_header->path(), true);
+				String pch("$(ProjectDir)", proj.pch_header->path());
 				wr.tagWithBody("PrecompiledHeaderFile",	pch);
 				wr.tagWithBody("ForcedIncludeFiles",	pch);
 			}
