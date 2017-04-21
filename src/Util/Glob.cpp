@@ -212,7 +212,7 @@ private:
 				w++;
 			}else if(*w == '*') {
 				auto w1 = w + 1;
-				if (w1 >= wEnd) break; // * is the last
+				if (w1 >= wEnd) return true; // * is the last
 
 				auto p1 = p + 1;
 				if (p1 >= end) return false;
@@ -225,7 +225,10 @@ private:
 				return false;
 			}
 		}
-		return true;
+
+		if (p == end && w == wEnd) return true;
+
+		return false;
 	}
 
 	Vector<String>* _out_paths;
