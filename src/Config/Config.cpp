@@ -123,7 +123,9 @@ void Config::resolve() {
 			tmp.set(g_ws->buildDir, "lib/", name, "/", lib_target_prefix, proj.name, lib_target_suffix);
 		}
 
-		outputTarget.init(tmp, false, false);
+		if (tmp) {
+			outputTarget.init(tmp, false, false);
+		}
 	}
 }
 
