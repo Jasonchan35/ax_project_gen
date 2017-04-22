@@ -872,10 +872,12 @@ void Generator_xcode::readCacheFile(const StrView& filename) {
 					
 					if (reader.member("fileEntries")) {
 						reader.beginObject();
+						String path;
+						String fullpath;
 						while(!reader.endObject()) {
-							String path;
 							reader.getMemberName(path);
-							auto* f = proj->fileEntries.find(path);
+							Path::makeFullPath(fullpath, g_ws->buildDir, path);
+							auto* f = proj->fileEntries.find(fullpath);
 							if (!f) {
 								reader.skipValue();
 								continue;
