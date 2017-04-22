@@ -561,7 +561,7 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 				}else if (g_ws->os == "macosx"){
 					wr.member("SDKROOT",					quoteString("macosx"));
 					wr.member("SUPPORTED_PLATFORMS",		quoteString("macosx"));
-					wr.member("MACOSX_DEPLOYMENT_TARGET",	quoteString("10.7"));
+					wr.member("MACOSX_DEPLOYMENT_TARGET",	quoteString("10.10"));
 				}else{
 					throw Error("Unsupported OS type ", g_ws->os);
 				}
