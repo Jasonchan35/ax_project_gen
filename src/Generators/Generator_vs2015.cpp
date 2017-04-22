@@ -533,9 +533,9 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 				}
 
 				if (config.isDebug) {
-					wr.tagWithBodyBool("DebuggerSymbolInformation", "true");
+					wr.tagWithBody("DebuggerSymbolInformation", "true");
 				}else{
-					wr.tagWithBodyBool("DebuggerSymbolInformation", "OmitAllSymbolInformation");
+					wr.tagWithBody("DebuggerSymbolInformation", "OmitAllSymbolInformation");
 				}
 
 			}else{
