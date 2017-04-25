@@ -15,6 +15,9 @@ public:
 	void readJson(JsonReader& r);
 	bool _readSettings(JsonReader& r);
 
+	void init(Project& proj, StrView name_);
+	void _init_xcode_settings();
+
 	String	name;
 
 	bool			isDebug {false};

@@ -128,9 +128,7 @@ void Project::init(const StrView& name_) {
 	
 	for (auto& src : g_ws->configs) {
 		auto* dst = configs.add(src.name);
-		dst->_project = this;
-		dst->name = src.name;
-		dst->_build_tmp_dir.init(String(g_ws->buildDir, "_build_tmp/", src.name, '/', name), false, true);
+		dst->init(*this, src.name);
 	}
 }
 	

@@ -550,46 +550,6 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 				wr.member("EXECUTABLE_EXTENSION",			quoteString(targetExt));
 				wr.member("CONFIGURATION_BUILD_DIR",		quoteString(targetDir));
 				wr.member("CONFIGURATION_TEMP_DIR",			quoteString(config._build_tmp_dir.path()));
-				wr.member("STRIP_STYLE",					quoteString("all"));
-				wr.member("DEAD_CODE_STRIPPING",			"YES");
-				
-				if (g_ws->os == "ios") {
-					wr.member("SDKROOT",					quoteString("iphoneos"));
-					wr.member("SUPPORTED_PLATFORMS",		quoteString("iphonesimulator iphoneos"));
-					wr.member("VALID_ARCHS",				quoteString("arm64 armv7 armv7s"));
-					wr.member("IPHONEOS_DEPLOYMENT_TARGET",	quoteString("10.1"));
-				}else if (g_ws->os == "macosx"){
-					wr.member("SDKROOT",					quoteString("macosx"));
-					wr.member("SUPPORTED_PLATFORMS",		quoteString("macosx"));
-					wr.member("MACOSX_DEPLOYMENT_TARGET",	quoteString("10.10"));
-				}else{
-					throw Error("Unsupported OS type ", g_ws->os);
-				}
-				
-				wr.member("CLANG_CXX_LANGUAGE_STANDARD",	quoteString("c++11"));
-				wr.member("GCC_SYMBOLS_PRIVATE_EXTERN",		"YES");
-				wr.member("CLANG_ENABLE_OBJC_ARC",			"YES");
-				
-				if (config.isDebug) {
-					wr.member("DEBUG_INFORMATION_FORMAT",		"dwarf");
-					wr.member("GCC_GENERATE_DEBUGGING_SYMBOLS",	"YES");
-
-					// 0: None[-O0], 1: Fast[-O1],  2: Faster[-O2], 3: Fastest[-O3], s: Fastest, Smallest[-Os], Fastest, Aggressive Optimizations [-Ofast]
-					wr.member("GCC_OPTIMIZATION_LEVEL",			"0");
-					wr.member("ONLY_ACTIVE_ARCH",				"YES");
-					wr.member("ENABLE_TESTABILITY",				"YES");
-					
-				}else{
-					wr.member("DEBUG_INFORMATION_FORMAT",		"dwarf-with-dsym");
-					wr.member("GCC_GENERATE_DEBUGGING_SYMBOLS",	"NO");
-					
-					// 0: None[-O0], 1: Fast[-O1],  2: Faster[-O2], 3: Fastest[-O3], s: Fastest, Smallest[-Os], Fastest, Aggressive Optimizations [-Ofast]
-					wr.member("GCC_OPTIMIZATION_LEVEL",			"s");
-
-					wr.member("ONLY_ACTIVE_ARCH",				"YES");
-					wr.member("ENABLE_TESTABILITY",				"YES");
-				}
-				
 				
 				{
 					auto scope = wr.arrayScope("GCC_PREPROCESSOR_DEFINITIONS");
@@ -624,31 +584,7 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 						wr.write(quoteString2(q.path()));
 					}
 				}
-				
-				// warning flags
-				
-				wr.member("CLANG_WARN_BOOL_CONVERSION",								"YES");
-				wr.member("CLANG_WARN_CONSTANT_CONVERSION", 						"YES");
-				wr.member("CLANG_WARN_EMPTY_BODY",									"YES");
-				wr.member("CLANG_WARN_ENUM_CONVERSION",								"YES");
-				wr.member("CLANG_WARN_INFINITE_RECURSION",							"YES");
-				wr.member("CLANG_WARN_INT_CONVERSION",								"YES");
-				wr.member("CLANG_WARN_SUSPICIOUS_MOVE",								"YES");
-				wr.member("CLANG_WARN_UNREACHABLE_CODE",							"YES");
-				wr.member("CLANG_WARN__DUPLICATE_METHOD_MATCH", 					"YES");
-				
-				wr.member("GCC_WARN_FOUR_CHARACTER_CONSTANTS",						"YES");
-				wr.member("CLANG_WARN_IMPLICIT_SIGN_CONVERSION",					"YES");
-				wr.member("GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED",				"YES");
-				wr.member("GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS",				"YES");
-			//	wr.member("GCC_WARN_ABOUT_MISSING_PROTOTYPES",						"YES");
-				wr.member("CLANG_WARN_ASSIGN_ENUM",									"YES");
-				wr.member("GCC_WARN_SIGN_COMPARE",									"YES");
-				wr.member("CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION",				"YES");
-				wr.member("GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS",	"YES");
-				wr.member("GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS",		"YES");
-				wr.member("GCC_WARN_UNUSED_LABEL",									"YES");
-				
+								
 				//-----------
 				if (proj.type_is_exe_or_dll()) {
 					if (proj.input.gui_app) {
