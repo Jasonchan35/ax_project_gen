@@ -62,8 +62,6 @@ void Config::_init_xcode_settings() {
 		xcode_settings.add("SDKROOT"                   )->set("macosx");
 		xcode_settings.add("SUPPORTED_PLATFORMS"       )->set("macosx");
 		xcode_settings.add("MACOSX_DEPLOYMENT_TARGET"  )->set("10.10"); // c++11 require 10.10+
-	}else{
-		throw Error("Unsupported OS type ", g_ws->os);
 	}
 	
 //-----------
