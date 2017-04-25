@@ -160,6 +160,19 @@ void String::appendUtf(const WString& w) {
 	appendUtf(w.c_str(), w.size());
 }
 
+void String::setQuoted(StrView v) {
+	clear();
+	append('\"');
+	for (auto ch : v) {
+		switch (ch) {
+			case '\"':	append("\\\"");	break;
+			case '\\':	append("\\\\");	break;
+			default:	append(ch);		break;
+		}
+	}
+	append('\"');
+}
+
 void WString::appendUtf(const StrView& v) {
 	int oldSize = size();
 	int n = UtfUtil::getConvertedCount<char, wchar_t>(v.data(), v.size());

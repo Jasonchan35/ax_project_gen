@@ -42,6 +42,84 @@ Config::Config() {
 	}
 }
 
+void Config::init(Project& proj, StrView name_) {
+	_project = &proj;
+	name = name_;
+	if (name == "Debug") {
+		isDebug = true;
+	}
+	_build_tmp_dir.init(String(g_ws->buildDir, "_build_tmp/", name, '/', proj.name), false, true);
+	_init_xcode_settings();
+}
+
+void Config::_init_xcode_settings() {
+	if (g_ws->os == "ios") {
+		xcode_settings.add("SDKROOT"                   )->set("iphoneos");
+		xcode_settings.add("SUPPORTED_PLATFORMS"       )->set("iphonesimulator iphoneos");
+	//	xcode_settings.add("VALID_ARCHS"               )->set("arm64 armv7 armv7s");
+		xcode_settings.add("IPHONEOS_DEPLOYMENT_TARGET")->set("10.1");
+	}else if (g_ws->os == "macosx"){
+		xcode_settings.add("SDKROOT"                   )->set("macosx");
+		xcode_settings.add("SUPPORTED_PLATFORMS"       )->set("macosx");
+		xcode_settings.add("MACOSX_DEPLOYMENT_TARGET"  )->set("10.10"); // c++11 require 10.10+
+	}else{
+		throw Error("Unsupported OS type ", g_ws->os);
+	}
+	
+//-----------
+	if (isDebug) {
+		xcode_settings.add("DEBUG_INFORMATION_FORMAT"      )->set("dwarf");
+		xcode_settings.add("GCC_GENERATE_DEBUGGING_SYMBOLS")->set("YES");
+
+		// 0: None[-O0], 1: Fast[-O1],  2: Faster[-O2], 3: Fastest[-O3], s: Fastest, Smallest[-Os], Fastest, Aggressive Optimizations [-Ofast]
+		xcode_settings.add("GCC_OPTIMIZATION_LEVEL"        )->set("0");
+		xcode_settings.add("ONLY_ACTIVE_ARCH"              )->set("YES");
+		xcode_settings.add("ENABLE_TESTABILITY"            )->set("YES");
+		
+	}else{
+		xcode_settings.add("DEBUG_INFORMATION_FORMAT"      )->set("dwarf-with-dsym");
+		xcode_settings.add("GCC_GENERATE_DEBUGGING_SYMBOLS")->set("NO");
+		
+		// 0: None[-O0], 1: Fast[-O1],  2: Faster[-O2], 3: Fastest[-O3], s: Fastest, Smallest[-Os], Fastest, Aggressive Optimizations [-Ofast]
+		xcode_settings.add("GCC_OPTIMIZATION_LEVEL"        )->set("s");
+
+		xcode_settings.add("ONLY_ACTIVE_ARCH"              )->set("NO");
+		xcode_settings.add("ENABLE_TESTABILITY"            )->set("YES");
+		xcode_settings.add("LLVM_LTO"		               )->set("YES"); //link time optimization
+		xcode_settings.add("DEAD_CODE_STRIPPING"           )->set("YES");
+		xcode_settings.add("STRIP_STYLE"                   )->set("all");
+	}
+	
+//-----------
+	xcode_settings.add("CLANG_CXX_LANGUAGE_STANDARD"   )->set("c++0x");
+	xcode_settings.add("CLANG_ENABLE_OBJC_ARC"         )->set("YES");
+	xcode_settings.add("GCC_SYMBOLS_PRIVATE_EXTERN"    )->set("YES");
+
+	// clang warning flags
+	xcode_settings.add("CLANG_WARN_BOOL_CONVERSION"                            )->set("YES");
+	xcode_settings.add("CLANG_WARN_CONSTANT_CONVERSION"                        )->set("YES");
+	xcode_settings.add("CLANG_WARN_EMPTY_BODY"                                 )->set("YES");
+	xcode_settings.add("CLANG_WARN_ENUM_CONVERSION"                            )->set("YES");
+	xcode_settings.add("CLANG_WARN_INFINITE_RECURSION"                         )->set("YES");
+	xcode_settings.add("CLANG_WARN_INT_CONVERSION"                             )->set("YES");
+	xcode_settings.add("CLANG_WARN_SUSPICIOUS_MOVE"                            )->set("YES");
+	xcode_settings.add("CLANG_WARN_UNREACHABLE_CODE"                           )->set("YES");
+	xcode_settings.add("CLANG_WARN__DUPLICATE_METHOD_MATCH"                    )->set("YES");
+	xcode_settings.add("CLANG_WARN_IMPLICIT_SIGN_CONVERSION"                   )->set("YES");
+	xcode_settings.add("CLANG_WARN_ASSIGN_ENUM"                                )->set("YES");
+	xcode_settings.add("CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION"             )->set("YES");
+	
+	// gcc warning flags
+	xcode_settings.add("GCC_WARN_FOUR_CHARACTER_CONSTANTS"                     )->set("YES");
+	xcode_settings.add("GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED"              )->set("YES");
+	xcode_settings.add("GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS"             )->set("YES");
+	xcode_settings.add("GCC_WARN_SIGN_COMPARE"                                 )->set("YES");
+	xcode_settings.add("GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS")->set("YES");
+	xcode_settings.add("GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS"    )->set("YES");
+	xcode_settings.add("GCC_WARN_UNUSED_LABEL"                                 )->set("YES");
+//	xcode_settings.add("GCC_WARN_ABOUT_MISSING_PROTOTYPES"                     )->set("YES");
+}
+
 void Config::dump(StringStream& s) {
 	if (!g_app->options.verbose) return;
 
@@ -98,7 +176,6 @@ void Config::resolve() {
 	if (_resolved) return;
 	_resolved = true;
 
-	if (name == "Debug") isDebug = true;
 	if (!_project) return;
 
 	cpp_defines._final.add(String("ax_GEN_CPU_",				g_ws->cpu));

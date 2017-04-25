@@ -98,6 +98,8 @@ public:
 		append(std::forward<ARGS>(args)...);
 	}
 
+	void setQuoted(StrView v);
+
 	void setUtf(const wchar_t* w, int size)	{ clear(); appendUtf(w, size); }
 	void setUtf(const WString& w)			{ clear(); appendUtf(w); }
 	void appendUtf(const WString& w);
