@@ -8,7 +8,7 @@ std::ostream& StrView::onStreamOut(std::ostream& s) const {
 	const int n = 512;
 	char tmp[n+1];
 	if (_size < n) {
-		memcpy(tmp, _data, n);
+		memcpy(tmp, _data, _size);
 		tmp[_size] = 0;
 		s << tmp;
 	}else{
