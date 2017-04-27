@@ -394,7 +394,7 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 		o.append("\t@echo \"-------------------------------------------------------------\"\n");
 		o.append("\t@echo \"[cpp_exe] $@\"\n");
 		o.append("\t$(cmd_mkdir) ", quotePath(outputTargetDir), "\n"); //gmake cannot handle path contain 'space' in function $(@D)
-		o.append("\t$(cmd_link) -o \"$@\" $(CPP_OBJ_FILES) $(LINK_FILES) $(LINK_FLAGS)\n");
+		o.append("\t$(cmd_link) -o \"$@\" $(CPP_OBJ_FILES) -Wl,--start-group $(LINK_FILES) -Wl,--end-group $(LINK_FLAGS)\n");
 		o.append("\n");
 		o.append(config.name, "__run: ", escapeString(outputTarget), "\n");
 		o.append("\t", quotePath(outputTarget), "\n");
