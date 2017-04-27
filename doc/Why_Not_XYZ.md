@@ -30,3 +30,5 @@ needed then output target IDE project for the actual work.
 * [gyp](https://gyp.gsrc.io/)
 * [premake](https://github.com/premake/premake-core)
 * [GENie](https://github.com/bkaradzic/GENie)
+* [Buck](https://buckbuild.com/)
+* [Gradle](https://gradle.org/)
