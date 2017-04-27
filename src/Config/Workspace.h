@@ -6,6 +6,28 @@
 
 namespace ax_gen {
 
+class ExtraWorkspace {
+public:
+	void readJson(JsonReader& r);
+	class Input {
+	public:
+		Vector<String>	projects;
+		Vector<String>	groups;
+		Vector<String>	exclude_projects;
+		Vector<String>	exclude_groups;
+	};
+	Input	input;
+	String	name;
+	Vector<Project*> projects;
+
+	struct GenData_vs2015 {
+		String		sln;
+	};
+	GenData_vs2015 genData_vs2015;
+
+	void resolve();
+};
+
 class Workspace : public NonCopyable {
 public:
 	Workspace();
@@ -50,6 +72,9 @@ public:
 	String				axworkspaceDir;
 	String				buildDir;
 	
+	ExtraWorkspace		masterWorkspace;
+	StringDict<ExtraWorkspace> extraWorkspaces;
+
 	bool os_has_objc();
 
 	void dump(StringStream& s);
@@ -59,12 +84,6 @@ public:
 		String		xcworkspace;
 	};
 	GenData_xcode genData_xcode;
-
-	struct GenData_vs2015 {
-		String		sln;
-	};
-	GenData_vs2015 genData_vs2015;
-
 };
 
 extern Workspace* g_ws;

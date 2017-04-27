@@ -18,7 +18,7 @@ public:
 	virtual StrView visualc_PlatformToolset() { return StrView("v140_xp"); }
 private:
 
-	void gen_workspace();
+	void gen_workspace(ExtraWorkspace& extraWorkspace);
 	void gen_vcxproj_filters(Project& proj);
 
 	void gen_project(Project& proj);

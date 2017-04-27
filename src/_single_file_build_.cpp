@@ -9,6 +9,7 @@
 #include "Util/JsonWriter.cpp"
 #include "Util/XmlWriter.cpp"
 #include "Util/Log.cpp"
+#include "Util/StrView.cpp"
 #include "Util/String.cpp"
 #include "Util/Glob.cpp"
 #include "Util/System.cpp"

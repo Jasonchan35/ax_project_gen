@@ -85,5 +85,19 @@
 	"projects": [
 		"Hello.axproj",
 		"My - Lib/MyLib.axproj"
-	]
+	],
+	"extra_workspaces": {
+		"MyLibs_Only" : {
+			"projects": [],
+			"groups": ["MyGroup/Library"],
+			"exclude_projects": [],
+			"exclude_groups": []
+		},
+		"Hello_NoLibs" : {
+			"projects": ["*"],
+			"groups": [],
+			"exclude_projects": [],
+			"exclude_groups": ["MyGroup/Library"]
+		}
+	}	
 }

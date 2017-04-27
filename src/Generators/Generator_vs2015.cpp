@@ -33,11 +33,27 @@ void Generator_vs2015::onGenerate() {
 		throw Error("Unsupported cpu type ", g_ws->cpu);
 	}
 
-	gen_workspace();
+	//cache file
+	String cacheFilename;
+	cacheFilename.append(g_ws->buildDir, "_ax_gen_cache.json");
+	readCacheFile(cacheFilename);
+
+	for (auto& p : g_ws->projects) {
+		gen_project(p);
+		gen_vcxproj_filters(p);
+	}
+
+	gen_workspace(g_ws->masterWorkspace);
+	for (auto& ew : g_ws->extraWorkspaces) {
+		gen_workspace(ew);
+	}
+
+	writeCacheFile(cacheFilename);
+
 }
 
 void Generator_vs2015::onIde() {
-	System::shellOpen(g_ws->genData_vs2015.sln);
+	System::shellOpen(g_ws->masterWorkspace.genData_vs2015.sln);
 }
 
 StrView Generator_vs2015::slnFileHeader() {
@@ -67,7 +83,7 @@ void Generator_vs2015::onBuild() {
 	target.replaceChars('/', '\\');
 	target.append('\\', proj->name);
 
-	String args("\"", g_ws->genData_vs2015.sln, "\"",
+	String args("\"", g_ws->masterWorkspace.genData_vs2015.sln, "\"",
 				" /project \"", proj->name, "\"",
 				" /ProjectConfig \"", g_app->options.config, "\"",
 				" /build");
@@ -578,35 +594,24 @@ void Generator_vs2015::gen_config_option(XmlWriter& wr, const StrView& name, Con
 	wr.tagWithBody(name, tmp);
 }
 
-void Generator_vs2015::gen_workspace() {
-	Log::info("gen_workspace ", g_ws->workspace_name);
+void Generator_vs2015::gen_workspace(ExtraWorkspace& ws) {
+	Log::info("gen_workspace ", ws.name);
 
-	g_ws->genData_vs2015.sln.set(g_ws->buildDir, g_ws->workspace_name, ".sln");
-
-	//cache file
-	String cacheFilename;
-	cacheFilename.append(g_ws->buildDir, "_ax_gen_cache.json");
-
-	readCacheFile(cacheFilename);
-
-	for (auto& p : g_ws->projects) {
-		gen_project(p);
-		gen_vcxproj_filters(p);
-	}
+	ws.genData_vs2015.sln.set(g_ws->buildDir, ws.name, ".sln");
 
 	String o;
 	o.append(slnFileHeader());
 
 	{
 		o.append("\n# ---- projects ----\n");
-		for (auto& proj : g_ws->projects) {
+		for (auto& proj : ws.projects) {
 			o.append("Project(\"{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}\") = ",
-					 "\"", proj.name, "\", \"", proj.name, ".vcxproj\", \"", proj.genData_vs2015.uuid, "\"\n");
+					 "\"", proj->name, "\", \"", proj->name, ".vcxproj\", \"", proj->genData_vs2015.uuid, "\"\n");
 
-			if (proj._dependencies_inherit) {
-				if (proj.type_is_exe_or_dll()) {
+			if (proj->_dependencies_inherit) {
+				if (proj->type_is_exe_or_dll()) {
 					o.append("\tProjectSection(ProjectDependencies) = postProject\n");
-					for (auto& dp : proj._dependencies_inherit) {
+					for (auto& dp : proj->_dependencies_inherit) {
 						o.append("\t\t", dp->genData_vs2015.uuid, " = ", dp->genData_vs2015.uuid, "\n");
 					}
 					o.append("\tEndProjectSection\n");
@@ -637,6 +642,7 @@ void Generator_vs2015::gen_workspace() {
 			}
 
 			for (auto& proj : c.projects) {
+				if (ws.projects.indexOf(proj) < 0) continue;
 				o.append("\t\t", proj->genData_vs2015.uuid, " = ", c.genData_vs2015.uuid, "\n");
 			}
 		}
@@ -644,9 +650,7 @@ void Generator_vs2015::gen_workspace() {
 		o.append("EndGlobal\n");
 	}
 	
-	writeCacheFile(cacheFilename);
-
-	FileUtil::writeTextFile(g_ws->genData_vs2015.sln, o);
+	FileUtil::writeTextFile(ws.genData_vs2015.sln, o);
 }
 
 void Generator_vs2015::gen_vcxproj_filters(Project& proj) {

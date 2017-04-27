@@ -193,42 +193,10 @@ private:
 				continue;
 			}
 
-			if (matchWildcard(entry, name)) {
+			if (entry.matchWildcard(name, true)) {
 				_step2(entry, remain);
 			}
 		}
-	}
-
-	bool matchWildcard(const StrView& sv, const StrView& wildcard) const {
-		const auto* p   = sv.data();
-		const auto* end = sv.end();
-
-		const auto* w    = wildcard.begin();
-		const auto* wEnd = wildcard.end();
-
-		while (p < end && w < wEnd) {
-			if (*w == *p || *w == '?'){
-				p++;
-				w++;
-			}else if(*w == '*') {
-				auto w1 = w + 1;
-				if (w1 >= wEnd) return true; // * is the last
-
-				auto p1 = p + 1;
-				if (p1 >= end) return false;
-
-				p = p1;
-				if (*p1 == *w1) {
-					w = w1; //next wildcard
-				}
-			}else{
-				return false;
-			}
-		}
-
-		if (p == end && w == wEnd) return true;
-
-		return false;
 	}
 
 	Vector<String>* _out_paths;

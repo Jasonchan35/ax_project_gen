@@ -136,7 +136,7 @@ void Workspace::readJson(JsonReader& r) {
 		if (r.member("build_dir",			input.build_dir )) continue;
 		if (r.member("startup_project",		input.startup_project)) continue;
 		if (r.member("unite_build",			input.unite_build)) continue;
-		if (r.member("unite_filesize", input.unite_filesize )) continue;
+		if (r.member("unite_filesize",		input.unite_filesize )) continue;
 
 		if (r.member("config_list", input.config_list)) {
 			for (auto& config_name : input.config_list) {
@@ -163,6 +163,27 @@ void Workspace::readJson(JsonReader& r) {
 				}else{
 					r.error("Unknown file type ", fullpath);
 				}
+			}
+			continue;
+		}
+
+		if (r.member("extra_workspaces")) {
+			r.beginObject();
+			while (!r.endObject()) {
+				String name;
+				r.getMemberName(name);
+
+				if (!name) {
+					r.error("extra_workspace name cannot be empty");
+				}
+
+				if (name.equals(workspace_name, true)) {
+					r.error("extra_workspace name cannot be as same as master workspace name");
+				}
+
+				auto* ew = extraWorkspaces.add(name);
+				ew->name = name;
+				ew->readJson(r);
 			}
 			continue;
 		}
@@ -229,12 +250,82 @@ void Workspace::resolve() {
 		projectGroups.add(p);
 		p.resolve();
 	}
+
+	//-------
+	masterWorkspace.name = g_ws->workspace_name;
+	masterWorkspace.projects.reserve(g_ws->projects.size());
+	for (auto& p : g_ws->projects) {
+		masterWorkspace.projects.append(&p);
+	}
+
+	for (auto& ew : extraWorkspaces) {
+		ew.resolve();
+	}
 }
 
 bool Workspace::os_has_objc() {
 	if (os=="macosx")	return true;
 	if (os=="ios")		return true;
 	return false;
+}
+
+
+void ExtraWorkspace::readJson(JsonReader& r) {
+	r.beginObject();
+	while (!r.endObject()) {
+		r.member("projects", input.projects);
+		r.member("groups",   input.groups);
+		r.member("exclude_projects", input.exclude_projects);
+		r.member("exclude_groups",   input.exclude_groups);
+	}
+}
+
+void ExtraWorkspace::resolve() {
+	Vector<Project*> projectToAdd;
+	Vector<Project*> projectToRemove;
+
+	for (auto& name : input.projects) {
+		for (auto& p : g_ws->projects) {
+			if (p.name.matchWildcard(name, true)) {
+				projectToAdd.uniqueAppend(&p);
+			}
+		}
+	}
+
+	for (auto& name : input.groups) {
+		for (auto& g : g_ws->projectGroups.dict.values()) {
+			if (g.path.matchWildcard(name, true)) {
+				for (auto& gp : g.projects) {
+					projectToAdd.uniqueAppend(gp);
+				}
+			}
+		}
+	}
+
+
+	for (auto& name : input.exclude_projects) {
+		for (auto& p : g_ws->projects) {
+			if (p.name.matchWildcard(name, true)) {
+				projectToRemove.uniqueAppend(&p);
+			}
+		}
+	}
+
+	for (auto& name : input.exclude_groups) {
+		for (auto& g : g_ws->projectGroups.dict.values()) {
+			if (g.path.matchWildcard(name, true)) {
+				for (auto& gp : g.projects) {
+					projectToRemove.uniqueAppend(gp);
+				}
+			}
+		}
+	}
+
+	for (auto& p : projectToAdd) {
+		if (projects.indexOf(p) >= 0) continue;
+		if (projectToRemove.indexOf(p) >= 0) continue;
+		projects.append(p);
+	}
 }
 
 } //namespace

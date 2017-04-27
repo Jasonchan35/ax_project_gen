@@ -35,7 +35,6 @@ public:
 
 		void	clear		()				{ _p.clear(); }
 
-
 	void uniqueAppend(const T& v)			{ if (indexOf(v) >= 0) return; append(v); }
 	void uniqueExtend(const Vector<T>& rhs)	{ for (auto& p : rhs) uniqueAppend(p); }
 

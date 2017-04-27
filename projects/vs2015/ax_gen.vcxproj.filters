@@ -94,6 +94,9 @@
     <ClCompile Include="..\..\src\Util\System.cpp">
       <Filter>src\Util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Util\StrView.cpp">
+      <Filter>src\Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\common.h">
@@ -181,6 +184,9 @@
       <Filter>src\Util</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Util\System.h">
+      <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Util\StrView.h">
       <Filter>src\Util</Filter>
     </ClInclude>
   </ItemGroup>
