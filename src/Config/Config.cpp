@@ -167,9 +167,9 @@ void Config::inherit(const Config& rhs) {
 		link_files._inherit.add(t, g_ws->buildDir);
 	}
 
-	xcode_settings.uniqueExtends(rhs.xcode_settings);
-	vs2015_ClCompile.uniqueExtends(rhs.vs2015_ClCompile);
-	vs2015_Link.uniqueExtends(rhs.vs2015_Link);
+	xcode_settings.uniqueExtend(rhs.xcode_settings);
+	vs2015_ClCompile.uniqueExtend(rhs.vs2015_ClCompile);
+	vs2015_Link.uniqueExtend(rhs.vs2015_Link);
 }
 
 void Config::computeFinal() {

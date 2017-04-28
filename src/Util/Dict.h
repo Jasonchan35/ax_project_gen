@@ -137,7 +137,7 @@ public:
 		return s;
 	}
 
-	void uniqueExtends(const Dict& r_) {
+	void uniqueExtend(const Dict& r_) {
 		auto& r = const_cast<Dict&>(r_);
 		for (auto& p : r.pairs()) {
 			auto* dst = addIfNotExists(p.key);
