@@ -135,7 +135,10 @@ void Config::dump(StringStream& s) {
 	s << "." << name << "] --\n";
 
 	ax_dump(s, outputTarget);
-	if (warning_as_error) ax_dump(s, warning_as_error);
+	if (warning_as_error)	ax_dump(s, warning_as_error);
+	if (xcode_settings)		ax_dump(s, xcode_settings);
+	if (vs2015_ClCompile)	ax_dump(s, vs2015_ClCompile);
+	if (vs2015_Link)		ax_dump(s, vs2015_Link);
 
 	for (auto& p : _settings) {
 		p->dump(s);
@@ -163,6 +166,10 @@ void Config::inherit(const Config& rhs) {
 	if (t) {
 		link_files._inherit.add(t, g_ws->buildDir);
 	}
+
+	xcode_settings.uniqueExtends(rhs.xcode_settings);
+	vs2015_ClCompile.uniqueExtends(rhs.vs2015_ClCompile);
+	vs2015_Link.uniqueExtends(rhs.vs2015_Link);
 }
 
 void Config::computeFinal() {
@@ -229,7 +236,7 @@ void Config::readJson(JsonReader& r) {
 		if (r.member("xcode_settings")) {
 			r.beginObject();
 			while (!r.endObject()) {
-				String key, value;
+				String key;
 				r.getMemberName(key);
 				auto* v	= xcode_settings.add(key);
 				r.getValue(*v);
@@ -240,7 +247,7 @@ void Config::readJson(JsonReader& r) {
 		if (r.member("vs2015_ClCompile")) {
 			r.beginObject();
 			while (!r.endObject()) {
-				String key, value;
+				String key;
 				r.getMemberName(key);
 				auto* v	= vs2015_ClCompile.add(key);
 				r.getValue(*v);
@@ -251,7 +258,7 @@ void Config::readJson(JsonReader& r) {
 		if (r.member("vs2015_Link")) {
 			r.beginObject();
 			while (!r.endObject()) {
-				String key, value;
+				String key;
 				r.getMemberName(key);
 				auto* v	= vs2015_Link.add(key);
 				r.getValue(*v);

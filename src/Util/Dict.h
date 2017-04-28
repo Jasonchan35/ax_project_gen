@@ -20,9 +20,11 @@ public:
 	const	VALUE& operator[](int i) const	{ return *_pairs[i].value; }
 
 	int size() const { return _pairs.size(); }
+	explicit operator bool() const { return size() != 0; }
 
+	VALUE* getOrAdd(const InKey& key);
 	VALUE* add(const InKey& key);
-	VALUE* uniqueAdd(const InKey& key);
+	VALUE* addIfNotExists(const InKey& key);
 
 	class Pair : NonCopyable {
 	public:
@@ -124,10 +126,41 @@ public:
 	Value*	find(const InKey& key);
 	bool	remove(const InKey& key);
 
+	template<typename S>
+	S& onStreamOut(S& s) {
+		int i = 0;
+		for (auto& it : pairs()) {
+			if (i > 0) s << "\n" << std::setw(ax_dump_padding + 3) << " ";
+			s << it.key << " : " << *it.value;
+			i++;
+		}
+		return s;
+	}
+
+	void uniqueExtends(const Dict& r_) {
+		auto& r = const_cast<Dict&>(r_);
+		for (auto& p : r.pairs()) {
+			auto* dst = addIfNotExists(p.key);
+			if (!dst) continue;
+			*dst = *p.value;
+		}
+	}
+
 protected:
 	Vector<Pair>			_pairs; // keep add order
 	std::map<Key, Value*>	_map;
 };
+
+template<typename KEY, typename VALUE, typename IN_KEY /*= KEY*/>
+VALUE* ax_gen::Dict<KEY, VALUE, IN_KEY>::getOrAdd(const InKey& key) {
+	auto* o = find(key);
+	return o ? o : add(key);
+}
+
+template<typename KEY, typename VALUE, typename IN_KEY>
+inline std::ostream& operator<<(std::ostream& s, Dict<KEY, VALUE, IN_KEY>& v) {
+	return v.onStreamOut(s); 
+}
 
 template<typename KEY, typename VALUE, typename IN_KEY> inline
 bool Dict<KEY, VALUE, IN_KEY>::remove(const InKey& key) {
@@ -161,7 +194,7 @@ void Dict<KEY, VALUE, IN_KEY>::clear() {
 }
 
 template<typename KEY, typename VALUE, typename IN_KEY> inline
-VALUE* Dict<KEY, VALUE, IN_KEY>::uniqueAdd(const InKey& key) {
+VALUE* Dict<KEY, VALUE, IN_KEY>::addIfNotExists(const InKey& key) {
 	if (find(key)) return nullptr;
 	return add(key);
 }
@@ -182,8 +215,6 @@ void Dict<KEY, VALUE, IN_KEY>::Pair::operator=(Pair && rhs) {
 	value = rhs.value;
 	rhs.value = nullptr;
 }
-
-
 
 template<typename VALUE>
 using StringDict = Dict<String, VALUE, StrView>;
