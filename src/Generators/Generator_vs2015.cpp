@@ -489,14 +489,12 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 				if (config.isDebug) {
 					wr.tagWithBody("Optimization",				"Disabled");
 					wr.tagWithBody("DebugInformationFormat",	"ProgramDatabase");
-					wr.tagWithBody("MinimalRebuild",			"true");
 					wr.tagWithBody("RuntimeLibrary",			"MultiThreadedDebugDLL");
 					wr.tagWithBody("LinkIncremental",			"true");
 				}
 				else {
 					wr.tagWithBody("Optimization",				"MaxSpeed");
 					wr.tagWithBody("DebugInformationFormat",	"None");
-					wr.tagWithBody("MinimalRebuild",			"false");
 					wr.tagWithBody("WholeProgramOptimization",	"true");
 					wr.tagWithBody("RuntimeLibrary",			"MultiThreadedDLL");
 					wr.tagWithBody("FunctionLevelLinking",		"true");
@@ -508,7 +506,7 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 
 			if (proj.pch_header) {
 				wr.tagWithBody("PrecompiledHeader",		"Use");
-				//auto pch = Path::basename(proj.pch_header->path(), true);
+
 				String pch("$(ProjectDir)", proj.pch_header->path());
 				wr.tagWithBody("PrecompiledHeaderFile",	pch);
 				wr.tagWithBody("ForcedIncludeFiles",	pch);
@@ -523,6 +521,10 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 			gen_config_option(wr, "DisableSpecificWarnings",		config.disable_warning._final);
 			gen_config_option(wr, "PreprocessorDefinitions",		config.cpp_defines._final);
 			gen_config_option(wr, "AdditionalIncludeDirectories",	config.include_dirs._final);
+
+			for (auto& s : config.vs2015_ClCompile.pairs()) {
+				wr.tagWithBody(s.key, *s.value);
+			}
 		}
 		{
 			auto tag = wr.tagScope("Link");
@@ -570,6 +572,10 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 					wr.tagWithBodyBool("EnableCOMDATFolding", true);
 					wr.tagWithBodyBool("OptimizeReferences",  true);
 				}
+			}
+
+			for (auto& s : config.vs2015_Link.pairs()) {
+				wr.tagWithBody(s.key, *s.value);
 			}
 		}
 

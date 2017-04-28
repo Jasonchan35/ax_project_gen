@@ -50,6 +50,7 @@ void Config::init(Project& proj, StrView name_) {
 	}
 	_build_tmp_dir.init(String(g_ws->buildDir, "_build_tmp/", name, '/', proj.name), false, true);
 	_init_xcode_settings();
+	_init_vs2015_settings();
 }
 
 void Config::_init_xcode_settings() {
@@ -116,6 +117,10 @@ void Config::_init_xcode_settings() {
 	xcode_settings.add("GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS"    )->set("YES");
 	xcode_settings.add("GCC_WARN_UNUSED_LABEL"                                 )->set("YES");
 //	xcode_settings.add("GCC_WARN_ABOUT_MISSING_PROTOTYPES"                     )->set("YES");
+}
+
+void Config::_init_vs2015_settings() {
+	vs2015_ClCompile.add("MinimalRebuild")->set("false");	
 }
 
 void Config::dump(StringStream& s) {
@@ -227,6 +232,28 @@ void Config::readJson(JsonReader& r) {
 				String key, value;
 				r.getMemberName(key);
 				auto* v	= xcode_settings.add(key);
+				r.getValue(*v);
+			}
+			continue;
+		}
+
+		if (r.member("vs2015_ClCompile")) {
+			r.beginObject();
+			while (!r.endObject()) {
+				String key, value;
+				r.getMemberName(key);
+				auto* v	= vs2015_ClCompile.add(key);
+				r.getValue(*v);
+			}
+			continue;
+		}
+
+		if (r.member("vs2015_Link")) {
+			r.beginObject();
+			while (!r.endObject()) {
+				String key, value;
+				r.getMemberName(key);
+				auto* v	= vs2015_Link.add(key);
 				r.getValue(*v);
 			}
 			continue;

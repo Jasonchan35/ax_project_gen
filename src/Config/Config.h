@@ -17,6 +17,7 @@ public:
 
 	void init(Project& proj, StrView name_);
 	void _init_xcode_settings();
+	void _init_vs2015_settings();
 
 	String	name;
 
@@ -116,6 +117,8 @@ public:
 	Vector<Setting*>	_settings;
 
 	StringDict<String>	xcode_settings;
+	StringDict<String>	vs2015_ClCompile;
+	StringDict<String>	vs2015_Link;
 	
 	void inherit(const Config& rhs);
 	void computeFinal();
