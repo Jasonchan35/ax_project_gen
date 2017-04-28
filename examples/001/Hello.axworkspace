@@ -18,7 +18,10 @@
 		"warning_as_error": true,
 
 		"generator==vs2015": {
-			"cpp_defines":[]
+			"cpp_defines":[],
+			"vs2015_ClCompile": {
+			//	"ShowIncludes": "true"
+			}			
 		},
 		"os==windows": {
 			"cpp_flags":[]
