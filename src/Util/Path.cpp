@@ -112,8 +112,8 @@ void Path::getRel(String& out_str, const StrView& path, const StrView& relativeT
 	auto tv = to.view();
 	
 	//unix path starts with /
-	if (sv && sv[0] == '/') sv = sv.slice(1);
-	if (tv && tv[0] == '/') tv = tv.slice(1);
+	if (sv && sv[0] == '/') sv = sv.sliceFrom(1);
+	if (tv && tv[0] == '/') tv = tv.sliceFrom(1);
 	
 	for(;;) {
 		auto sp = sv.splitByChar('/');

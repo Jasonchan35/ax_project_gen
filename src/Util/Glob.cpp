@@ -135,7 +135,7 @@ public:
 					  .splitEndByChar('/').first;
 
 		_curPath = start;
-		auto remain = p.slice(start.size() + 1);
+		auto remain = p.sliceFrom(start.size() + 1);
 		_step(remain);
 	}
 

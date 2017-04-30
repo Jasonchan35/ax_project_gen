@@ -32,13 +32,13 @@ bool StrView::equals(const StrView& rhs, bool ignoreCase) const {
 StrView StrView::getFromPrefix(const StrView& prefix) {
 	if (prefix._size <= _size) {
 		if (strncmp(_data, prefix._data, (size_t)prefix._size) == 0) {
-			return slice(prefix._size);
+			return sliceFrom(prefix._size);
 		}
 	}
 	return StrView();
 }
 
-StrView StrView::slice(int from) const {
+StrView StrView::sliceFrom(int from) const {
 	if (from < 0) from = 0;
 	return slice(from, _size - from);
 }
@@ -105,7 +105,7 @@ StrView::SplitResult StrView::splitByChar(char ch) const {
 	if (index < 0) {
 		return SplitResult(*this, StrView());
 	}
-	return SplitResult(slice(0, index), slice(index + 1));
+	return SplitResult(slice(0, index), sliceFrom(index + 1));
 }
 
 StrView::SplitResult StrView::splitByCharInList(const StrView& charList) const {
@@ -113,7 +113,7 @@ StrView::SplitResult StrView::splitByCharInList(const StrView& charList) const {
 	if (index < 0) {
 		return SplitResult(*this, StrView());
 	}
-	return SplitResult(slice(0, index), slice(index + 1));
+	return SplitResult(slice(0, index), sliceFrom(index + 1));
 }
 
 StrView::SplitResult StrView::splitEndByChar(char ch) const {
@@ -121,7 +121,7 @@ StrView::SplitResult StrView::splitEndByChar(char ch) const {
 	if (index < 0) {
 		return SplitResult(*this, StrView());
 	}
-	return SplitResult(slice(0, index), slice(index + 1));
+	return SplitResult(slice(0, index), sliceFrom(index + 1));
 }
 
 StrView::SplitResult StrView::splitEndByAnyCharIn(const StrView& charList) const {
@@ -129,7 +129,7 @@ StrView::SplitResult StrView::splitEndByAnyCharIn(const StrView& charList) const
 	if (index < 0) {
 		return SplitResult(*this, StrView());
 	}
-	return SplitResult(slice(0, index), slice(index + 1));
+	return SplitResult(slice(0, index), sliceFrom(index + 1));
 }
 
 bool StrView::matchWildcard(const StrView& wildcard, bool ignoreCase) const {

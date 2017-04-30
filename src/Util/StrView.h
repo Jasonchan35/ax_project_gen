@@ -21,8 +21,8 @@ public:
 
 	StrView	getFromPrefix(const StrView& prefix);
 
-	StrView slice(int from) const;
 	StrView slice(int from, int size) const;
+	StrView sliceFrom(int from) const;
 
 	bool startsWith(const StrView& v) const;
 
