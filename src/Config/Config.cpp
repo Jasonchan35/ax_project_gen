@@ -238,7 +238,7 @@ void Config::readJson(JsonReader& r) {
 			while (!r.endObject()) {
 				String key;
 				r.getMemberName(key);
-				auto* v	= xcode_settings.add(key);
+				auto* v	= xcode_settings.getOrAdd(key);
 				r.getValue(*v);
 			}
 			continue;
@@ -249,7 +249,7 @@ void Config::readJson(JsonReader& r) {
 			while (!r.endObject()) {
 				String key;
 				r.getMemberName(key);
-				auto* v	= vs2015_ClCompile.add(key);
+				auto* v	= vs2015_ClCompile.getOrAdd(key);
 				r.getValue(*v);
 			}
 			continue;
