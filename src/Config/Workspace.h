@@ -75,6 +75,8 @@ public:
 	ExtraWorkspace		masterWorkspace;
 	StringDict<ExtraWorkspace> extraWorkspaces;
 
+	ConditionResult checkCondition(StrView expr);
+
 	bool os_has_objc();
 
 	void dump(StringStream& s);

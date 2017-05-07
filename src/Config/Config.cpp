@@ -279,34 +279,17 @@ void Config::readJson(JsonReader& r) {
 				continue;
 			}
 
-			if (auto v = memberName.getFromPrefix("os==")) {
-				if (v != g_ws->os) { 
-					r.skipValue();
-				}else{				
+			switch (g_ws->checkCondition(memberName)) {
+				case ConditionResult::None: break;
+				case ConditionResult::True: {
 					r.skipMemberName();
 					readJson(r);
+					continue;
 				}
-				continue;
-			}
-
-			if (auto v = memberName.getFromPrefix("compiler==")) {
-				if (v != g_ws->compiler) {
+				case ConditionResult::False: {
 					r.skipValue();
-				}else{
-					r.skipMemberName();
-					readJson(r);
+					continue;
 				}
-				continue;
-			}
-
-			if (auto v = memberName.getFromPrefix("generator==")) {
-				if (v != g_ws->generator) { 
-					r.skipValue();
-				}else{
-					r.skipMemberName();
-					readJson(r);
-				}
-				continue;
 			}
 		}
 	}

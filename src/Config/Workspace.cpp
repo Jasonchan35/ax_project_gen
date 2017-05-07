@@ -204,34 +204,17 @@ void Workspace::readJson(JsonReader& r) {
 		//----- condition check -----
 		String memberName;
 		if (r.peekMemberName(memberName)) {
-			if (auto v = memberName.getFromPrefix("os==")) {
-				if (v != g_ws->os) { 
-					r.skipValue();
-				}else{				
+			switch (checkCondition(memberName)) {
+				case ConditionResult::None: break;
+				case ConditionResult::True: {
 					r.skipMemberName();
 					readJson(r);
+					continue;
 				}
-				continue;
-			}
-
-			if (auto v = memberName.getFromPrefix("compiler==")) {
-				if (v != g_ws->compiler) {
+				case ConditionResult::False: {
 					r.skipValue();
-				}else{
-					r.skipMemberName();
-					readJson(r);
+					continue;
 				}
-				continue;
-			}
-
-			if (auto v = memberName.getFromPrefix("generator==")) {
-				if (v != g_ws->generator) { 
-					r.skipValue();
-				}else{
-					r.skipMemberName();
-					readJson(r);
-				}
-				continue;
 			}
 		}
 	}
@@ -261,6 +244,27 @@ void Workspace::resolve() {
 	for (auto& ew : extraWorkspaces) {
 		ew.resolve();
 	}
+}
+
+
+ConditionResult Workspace::checkCondition(StrView expr) {
+	if (auto v = expr.getFromPrefix("os==")) {
+		return (v == os) ? ConditionResult::True : ConditionResult::False;
+	}
+
+	if (auto v = expr.getFromPrefix("compiler==")) {
+		return (v == compiler) ? ConditionResult::True : ConditionResult::False;
+	}
+
+	if (auto v = expr.getFromPrefix("cpu==")) {
+		return (v == cpu) ? ConditionResult::True : ConditionResult::False;
+	}
+
+	if (auto v = expr.getFromPrefix("generator==")) {
+		return (v == generator) ? ConditionResult::True : ConditionResult::False;
+	}
+
+	return ConditionResult::None;
 }
 
 bool Workspace::os_has_objc() {

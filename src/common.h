@@ -61,6 +61,12 @@ public:
 	}
 };
 
+enum class ConditionResult {
+	None,
+	True,
+	False,
+};
+
 } //namespace
 
 //---------
