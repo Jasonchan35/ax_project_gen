@@ -854,12 +854,12 @@ void Generator_xcode::writeCacheFile(const StrView& filename) {
 	JsonWriter wr;
 	{
 		auto scope = wr.objectScope();
-		wr.write("lastGenId", (double)_lastGenId.v64);
+		wr.member("lastGenId", (double)_lastGenId.v64);
 		{
 			auto scope = wr.objectScope("projects");
 			for (auto& proj : g_ws->projects) {
 				auto scope = wr.objectScope(proj.name);
-				#define ENTRY(T) do{ wr.write(#T, proj.genData_xcode.T); }while(false)
+				#define ENTRY(T) do{ wr.member(#T, proj.genData_xcode.T); }while(false)
 					ENTRY(uuid);
 					ENTRY(targetUuid);
 					ENTRY(targetProductUuid);
@@ -874,9 +874,9 @@ void Generator_xcode::writeCacheFile(const StrView& filename) {
 					auto scope = wr.objectScope("configs");
 					for (auto& f : proj.configs) {
 						auto scope = wr.objectScope(f.name);
-						wr.write("projectConfigUuid",	f.genData_xcode.projectConfigUuid);
-						wr.write("targetUuid",			f.genData_xcode.targetUuid);
-						wr.write("targetConfigUuid",	f.genData_xcode.targetConfigUuid);
+						wr.member("projectConfigUuid",	f.genData_xcode.projectConfigUuid);
+						wr.member("targetUuid",			f.genData_xcode.targetUuid);
+						wr.member("targetConfigUuid",	f.genData_xcode.targetConfigUuid);
 					}
 				}
 				
@@ -884,15 +884,15 @@ void Generator_xcode::writeCacheFile(const StrView& filename) {
 					auto scope = wr.objectScope("fileEntries");
 					for (auto& f : proj.fileEntries) {
 						auto scope = wr.objectScope(f.path());
-						wr.write("uuid",		f.genData_xcode.uuid);
-						wr.write("buildUuid",	f.genData_xcode.buildUuid);
+						wr.member("uuid",		f.genData_xcode.uuid);
+						wr.member("buildUuid",	f.genData_xcode.buildUuid);
 					}
 				}
 				{
 					auto scope = wr.objectScope("virtualFolders");
 					for (auto& f : proj.virtualFolders.dict) {
 						auto scope = wr.objectScope(f.path);
-						wr.write("uuid", f.genData_xcode.uuid);
+						wr.member("uuid", f.genData_xcode.uuid);
 					}
 				}
 			}

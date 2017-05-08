@@ -48,7 +48,7 @@ public:
 	void write(const StrView& value);
 
 	template<typename VALUE>
-	void write(const StrView& name, const VALUE& value) {
+	void member(const StrView& name, const VALUE& value) {
 		memberName(name);
 		write(value);
 	}

@@ -152,19 +152,19 @@ void Generator_vs2015::writeCacheFile(const StrView& filename) {
 	JsonWriter wr;
 	{
 		auto scope = wr.objectScope();
-		wr.write("lastGenId", (double)_lastGenId.v64);
+		wr.member("lastGenId", (double)_lastGenId.v64);
 		{
 			auto scope = wr.objectScope("projects");
 			for (auto& proj : g_ws->projects) {
 				auto scope = wr.objectScope(proj.name);
-				wr.write("uuid", proj.genData_vs2015.uuid);
+				wr.member("uuid", proj.genData_vs2015.uuid);
 			}
 		}
 		{
 			auto scope = wr.objectScope("groups");
 			for (auto& group : g_ws->projectGroups.dict) {
 				auto scope = wr.objectScope(group.path);
-				wr.write("uuid", group.genData_vs2015.uuid);
+				wr.member("uuid", group.genData_vs2015.uuid);
 			}
 		}
 	}
