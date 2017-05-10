@@ -5,6 +5,7 @@
 
 namespace ax_gen {
 
+//! Copyable - no copy for json, therefore json and filename should not be changed during paring
 class JsonReader {
 public:
 	enum class ValueType {
@@ -126,7 +127,7 @@ private:
 		bool		boolValue;
 	};
 
-	String		_filename;
+	StrView		_filename;
 	int			_lineNumber;
 	Token		_token;
 	ValueType	_valueType;
