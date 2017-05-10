@@ -51,19 +51,19 @@ void App::readArgs(int argc, char* argv[]) {
 		}else if (s == "-verbose") {
 			options.verbose = true;
 
-		}else if (auto v = s.getFromPrefix("config=")) {
+		}else if (auto v = s.removePrefix("config=")) {
 			options.config = v;
 
-		}else if (auto v = s.getFromPrefix("ws=")) {
+		}else if (auto v = s.removePrefix("ws=")) {
 			options.workspaceFile = v;
 
-		}else if (auto v = s.getFromPrefix("os=")) {
+		}else if (auto v = s.removePrefix("os=")) {
 			workspace.os = v;
 
-		}else if (auto v = s.getFromPrefix("compiler=")) {
+		}else if (auto v = s.removePrefix("compiler=")) {
 			workspace.compiler = v;
 
-		}else if (auto v = s.getFromPrefix("gen=")) {
+		}else if (auto v = s.removePrefix("gen=")) {
 			workspace.generator = v;
 
 		}else{

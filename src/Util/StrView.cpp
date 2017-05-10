@@ -29,11 +29,9 @@ bool StrView::equals(const StrView& rhs, bool ignoreCase) const {
 	return true;
 }
 
-StrView StrView::getFromPrefix(const StrView& prefix) {
-	if (prefix._size <= _size) {
-		if (strncmp(_data, prefix._data, (size_t)prefix._size) == 0) {
-			return sliceFrom(prefix._size);
-		}
+StrView StrView::removePrefix(const StrView& prefix) {
+	if (startsWith(prefix)) {
+		return sliceFrom(prefix._size);
 	}
 	return StrView();
 }

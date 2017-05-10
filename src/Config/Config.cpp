@@ -269,7 +269,7 @@ void Config::readJson(JsonReader& r) {
 		//----------
 		String memberName;
 		if (r.peekMemberName(memberName)) {
-			if (auto v = memberName.getFromPrefix("config==")) {
+			if (auto v = memberName.removePrefix("config==")) {
 				if (v != name) { 
 					r.skipValue();
 				}else{

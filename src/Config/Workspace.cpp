@@ -248,19 +248,19 @@ void Workspace::resolve() {
 
 
 ConditionResult Workspace::checkCondition(StrView expr) {
-	if (auto v = expr.getFromPrefix("os==")) {
+	if (auto v = expr.removePrefix("os==")) {
 		return (v == os) ? ConditionResult::True : ConditionResult::False;
 	}
 
-	if (auto v = expr.getFromPrefix("compiler==")) {
+	if (auto v = expr.removePrefix("compiler==")) {
 		return (v == compiler) ? ConditionResult::True : ConditionResult::False;
 	}
 
-	if (auto v = expr.getFromPrefix("cpu==")) {
+	if (auto v = expr.removePrefix("cpu==")) {
 		return (v == cpu) ? ConditionResult::True : ConditionResult::False;
 	}
 
-	if (auto v = expr.getFromPrefix("generator==")) {
+	if (auto v = expr.removePrefix("generator==")) {
 		return (v == generator) ? ConditionResult::True : ConditionResult::False;
 	}
 

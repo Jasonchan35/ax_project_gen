@@ -147,7 +147,7 @@ bool JsonReader::member(const StrView& name) {
 StrView JsonReader::memberWithPrefix(const StrView& prefix) {
 	if (_valueType != ValueType::Member) error("value is not member");
 	auto name = StrView(_token.str);	
-	auto suffix = name.getFromPrefix(prefix);
+	auto suffix = name.removePrefix(prefix);
 	if (suffix) next();
 	return suffix;
 }

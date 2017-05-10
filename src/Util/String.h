@@ -78,7 +78,7 @@ public:
 
 	StrView view() const { return StrView(_p.data(), (int)_p.size()); }
 
-	StrView	getFromPrefix(const StrView& prefix) { return view().getFromPrefix(prefix); }
+	StrView	removePrefix(const StrView& prefix) { return view().removePrefix(prefix); }
 
 private:
 	void _append(char    ch)						{ _p.push_back(ch); }

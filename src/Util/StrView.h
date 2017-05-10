@@ -19,7 +19,7 @@ public:
 	template<int N>
 	StrView(const char (&sz)[N]) : _data((const char*)sz), _size(N ? N-1 : 0) {}
 
-	StrView	getFromPrefix(const StrView& prefix);
+	StrView	removePrefix(const StrView& prefix);
 
 	StrView slice(int from, int size) const;
 	StrView sliceFrom(int from) const;
