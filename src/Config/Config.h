@@ -15,7 +15,7 @@ public:
 	void readJson(JsonReader& r);
 	bool _readSettings(JsonReader& r);
 
-	void init(Project& proj, StrView name_);
+	void init(Project* proj, Config* source, StrView name_);
 	void _init_xcode_settings();
 	void _init_vs2015_settings();
 

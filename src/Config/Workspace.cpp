@@ -141,7 +141,7 @@ void Workspace::readJson(JsonReader& r) {
 		if (r.member("config_list", input.config_list)) {
 			for (auto& config_name : input.config_list) {
 				auto* c = configs.add(config_name);
-				c->name = config_name;
+				c->init(nullptr, nullptr, config_name);
 			}
 			continue;
 		}

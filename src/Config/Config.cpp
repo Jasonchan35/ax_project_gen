@@ -42,13 +42,22 @@ Config::Config() {
 	}
 }
 
-void Config::init(Project& proj, StrView name_) {
-	_project = &proj;
+void Config::init(Project* proj, Config* source, StrView name_) {
+	_project = proj;
 	name = name_;
 	if (name == "Debug") {
 		isDebug = true;
 	}
-	_build_tmp_dir.init(String(g_ws->buildDir, "_build_tmp/", name, '/', proj.name), false, true);
+
+	if (proj) {
+		_build_tmp_dir.init(String(g_ws->buildDir, "_build_tmp/", name, '/', proj->name), false, true);
+	}
+
+	if (source) {
+		warning_as_error = source->warning_as_error;
+		warning_level    = source->warning_level;
+	}
+
 	_init_xcode_settings();
 	_init_vs2015_settings();
 }

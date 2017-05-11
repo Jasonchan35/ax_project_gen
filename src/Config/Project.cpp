@@ -128,7 +128,7 @@ void Project::init(const StrView& name_) {
 	
 	for (auto& src : g_ws->configs) {
 		auto* dst = configs.add(src.name);
-		dst->init(*this, src.name);
+		dst->init(this, &src, src.name);
 	}
 }
 	
