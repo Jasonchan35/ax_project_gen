@@ -121,13 +121,6 @@ bool JsonReader::endArray() {
 		if (!_levels) {
 			throw Error("endArray out of arrange");
 		}
-		auto& lv = _levels.back();
-		if (lv.pos == _r) {
-			assert(false);
-			skipValue(); // unread value
-		}
-		lv.pos = _r;
-		
 		if (_valueType != ValueType::EndArray) { // valueType may changed after skipValue
 			return false;
 		}
