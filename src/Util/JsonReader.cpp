@@ -58,7 +58,8 @@ bool JsonReader::beginObject(const StrView& name) {
 
 bool JsonReader::endObject() {
 	if (_valueType != ValueType::EndObject) {
-		errorOnUnhandledMemeber();		
+		if (errorOnUnhandledMemeber()) return false;
+
 		if (!_levels) {
 			throw Error("calling endObject from root");
 		}
