@@ -128,13 +128,13 @@ void Generator_makefile::gen_common_var(String& o) {
 		o.append("cmd_cpp   := clang++","\n");
 		o.append("cmd_c     := clang",  "\n");
 		o.append("cmd_link  := clang++","\n");
-		o.append("cpp_std   := -std=c++11","\n");
+		o.append("CPP_STD   := -std=c++11","\n");
 
 	}else if (g_ws->compiler == "gcc") {
 		o.append("cmd_cpp   := g++",  "\n");
 		o.append("cmd_c     := gcc",  "\n");
 		o.append("cmd_link  := g++",  "\n");
-		o.append("cpp_std   := -std=gnu++11","\n");
+		o.append("CPP_STD   := -std=gnu++11","\n");
 
 	}else{
 		throw Error("Unsupported compiler ", g_ws->compiler);
