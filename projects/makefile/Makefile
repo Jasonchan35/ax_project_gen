@@ -11,7 +11,7 @@ pwd = $$(pwd)
 
 
 CC = g++
-CCFLAGS = -std=c++11 -Wall -Werror 
+CCFLAGS = -std=gnu++11 -Wall -Werror 
 # CCFLAGS += -g  # Debug
 
 $(OUTPUT_TARGET):
