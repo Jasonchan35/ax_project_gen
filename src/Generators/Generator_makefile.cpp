@@ -367,7 +367,7 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 	o.append(config.name, "__CPP_FLAGS         = ", cpp_flags,     "\n");
 	o.append(config.name, "__CPP_DEFINES       = ", cpp_defines,   "\n");		
 	o.append(config.name, "__C_FLAGS           = ", c_flags,       "\n");
-	o.append(config.name, "__CPP_DEFINES       = ", c_defines,     "\n");		
+	o.append(config.name, "__C_DEFINES         = ", c_defines,     "\n");		
 	o.append(config.name, "__LINK_FLAGS        = ", link_flags,    "\n");
 	o.append(config.name, "__LINK_FILES        = ", link_files,    "\n");
 	o.append(config.name, "__CPP_OBJ_FILES     = ", cpp_obj_files, "\n");
