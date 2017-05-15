@@ -125,6 +125,8 @@ void Project::init(const StrView& name_) {
 	//carry workspace global setting as project default
 	input.unite_build = g_ws->input.unite_build;
 	input.unite_filesize = g_ws->input.unite_filesize;
+
+	input.multithread_build = g_ws->input.multithread_build;
 	
 	for (auto& src : g_ws->configs) {
 		auto* dst = configs.add(src.name);

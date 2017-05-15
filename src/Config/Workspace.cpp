@@ -135,6 +135,7 @@ void Workspace::readJson(JsonReader& r) {
 	while (!r.endObject()) {
 		if (r.member("build_dir",			input.build_dir )) continue;
 		if (r.member("startup_project",		input.startup_project)) continue;
+		if (r.member("multithread_build",	input.multithread_build)) continue;
 		if (r.member("unite_build",			input.unite_build)) continue;
 		if (r.member("unite_filesize",		input.unite_filesize )) continue;
 

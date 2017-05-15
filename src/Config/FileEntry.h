@@ -30,6 +30,9 @@ public:
 	const String&	path		() const { return _path; }
 
 	FileType		type		() const { return _type; }
+	bool			type_is_c	() const { return _type == FileType::c_source; }
+	bool			type_is_cpp	() const { return _type == FileType::cpp_source; }
+	bool			type_is_c_or_cpp() const { return type_is_c() || type_is_cpp(); }
 
 	struct GenData_xcode {
 		String		uuid;

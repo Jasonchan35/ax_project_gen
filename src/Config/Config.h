@@ -107,6 +107,10 @@ public:
 
 	Setting		cpp_defines;
 	Setting		cpp_flags;
+
+	Setting		c_defines;
+	Setting		c_flags;
+	
 	Setting		include_dirs;
 	Setting		include_files;
 	Setting		link_dirs;

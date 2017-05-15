@@ -92,7 +92,7 @@ void Generator_makefile::gen_workspace() {
 
 		String mt_build;
 		if (proj.multithread_build()) {
-			mt_build.append(" -j ", System::cpuCount());
+			mt_build.append(" -j ");
 		}
 
 		o.append("\t@echo \"==============================================================\"\n");
@@ -125,11 +125,13 @@ void Generator_makefile::gen_common_var(String& o) {
 
 	if (g_ws->compiler == "clang") {
 		pch_suffix = ".pch";
-		o.append("cmd_cc    := clang++","\n");
+		o.append("cmd_cpp   := clang++","\n");
+		o.append("cmd_c     := clang",  "\n");
 		o.append("cmd_link  := clang++","\n");
 
 	}else if (g_ws->compiler == "gcc") {
-		o.append("cmd_cc    := g++",  "\n");
+		o.append("cmd_cpp   := g++",  "\n");
+		o.append("cmd_c     := gcc",    "\n");
 		o.append("cmd_link  := g++",  "\n");
 
 	}else{
@@ -197,9 +199,11 @@ void Generator_makefile::gen_project(Project& proj) {
 	if (g_ws->os_has_objc() && proj.input.cpp_as_objcpp) {
 		o.append("pch_header_compiler_language = objective-c++-header\n");
 		o.append("cpp_source_compiler_language = objective-c++\n");
+		o.append("c_source_compiler_language   = objective-c\n");
 	}else{
 		o.append("pch_header_compiler_language = c++-header\n");
 		o.append("cpp_source_compiler_language = c++\n");
+		o.append("c_source_compiler_language   = c\n");
 	}
 	o.append("\n");
 	o.append("pwd=$$(pwd)\n");
@@ -231,6 +235,8 @@ void Generator_makefile::gen_project(Project& proj) {
 	o.append("CPP_INCLUDE_FILES  = $($(config)__CPP_INCLUDE_FILES)\n");
 	o.append("CPP_FLAGS          = $($(config)__CPP_FLAGS)\n");
 	o.append("CPP_DEFINES        = $($(config)__CPP_DEFINES)\n");
+	o.append("C_FLAGS            = $($(config)__C_FLAGS)\n");
+	o.append("C_DEFINES          = $($(config)__C_DEFINES)\n");
 	o.append("LINK_FLAGS         = $($(config)__LINK_FLAGS)\n");
 	o.append("LINK_FILES         = $($(config)__LINK_FILES)\n");
 	o.append("CPP_OBJ_FILES      = $($(config)__CPP_OBJ_FILES)\n");
@@ -294,7 +300,7 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 		o.append("\t@echo \"-------------------------------------------------------------\"\n");
 		o.append("\t@echo \"[precompiled header] $< => $@\"\n");
 		o.append("\t$(cmd_mkdir) ", quotePath(pch_header_pch_dir), "\n");
-		o.append("\t$(cmd_cc) -x $(pch_header_compiler_language) $(CPP_DEFINES) $(CPP_FLAGS) $(CPP_INCLUDE_DIRS) \\\n");
+		o.append("\t$(cmd_cpp) -x $(pch_header_compiler_language) $(CPP_DEFINES) $(CPP_FLAGS) $(CPP_INCLUDE_DIRS) \\\n");
 		o.append("\t\t-o \"$@\" -c ", quotePath(proj.pch_header->path()), " \\\n");
 		o.append("\t\t-MMD -MQ \"$@\" -MF ", quotePath(pch_header_dep), " \\\n");
 		o.append("\n");
@@ -307,12 +313,20 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 
 	String cpp_defines;
 	String cpp_flags;
+	String c_defines;
+	String c_flags;
 	String link_flags;
 	String link_files;
 	String include_files;
 	String include_dirs;
 	String cpp_obj_files;
 
+	for (auto& q : config.c_defines._final) {
+		c_defines.append("\\\n\t-D", q.path());
+	}
+	for (auto& q : config.c_flags._final) {
+		c_flags.append("\\\n\t", q.path());
+	}
 	for (auto& q : config.cpp_defines._final) {
 		cpp_defines.append("\\\n\t-D", q.path());
 	}
@@ -352,6 +366,8 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 	o.append(config.name, "__CPP_INCLUDE_FILES = ", include_files, "\n");
 	o.append(config.name, "__CPP_FLAGS         = ", cpp_flags,     "\n");
 	o.append(config.name, "__CPP_DEFINES       = ", cpp_defines,   "\n");		
+	o.append(config.name, "__C_FLAGS           = ", c_flags,       "\n");
+	o.append(config.name, "__CPP_DEFINES       = ", c_defines,     "\n");		
 	o.append(config.name, "__LINK_FLAGS        = ", link_flags,    "\n");
 	o.append(config.name, "__LINK_FILES        = ", link_files,    "\n");
 	o.append(config.name, "__CPP_OBJ_FILES     = ", cpp_obj_files, "\n");
@@ -364,23 +380,35 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 		String cpp_obj = get_obj_file(config, f);
 		String cpp_dep(cpp_obj, ".d");
 		String cpp_src(f.path());
+	
+		if (f.type_is_c()) {
+			//makefile optional include cpp_dep
+			o.append("-include ", escapeString(cpp_dep), "\n");
 
-		if (proj.pch_header) {
-			o.append(escapeString(cpp_obj), ": ", escapeString(pch_header_pch), "\n");
+			o.append(escapeString(cpp_obj), ":", escapeString(cpp_src), "\n");
+			o.append("\t@echo \"-------------------------------------------------------------\"\n");
+			o.append("\t@echo \"[compile c] => $@\"\n");
+			o.append("\t$(cmd_mkdir) ", quotePath(Path::dirname(cpp_obj)), "\n");
+			o.append("\t$(cmd_c) -x $(c_source_compiler_language) $(C_DEFINES) $(C_FLAGS) $(CPP_INCLUDE_DIRS) $(CPP_INCLUDE_FILES) \\\n");
+			o.append("\t\t-o \"$@\" -c ", quotePath(cpp_src), "\\\n");
+			o.append("\t\t-MMD -MQ \"$@\" -MF ", quotePath(cpp_dep), "\\\n");
+			o.append("\n");
+		}else if (f.type_is_cpp()) {
+			if (proj.pch_header) {
+				o.append(escapeString(cpp_obj), ": ", escapeString(pch_header_pch), "\n");
+			}
+			//makefile optional include cpp_dep
+			o.append("-include ", escapeString(cpp_dep), "\n");
+			//--------
+			o.append(escapeString(cpp_obj), ":", escapeString(cpp_src), "\n");
+			o.append("\t@echo \"-------------------------------------------------------------\"\n");
+			o.append("\t@echo \"[compile cpp] => $@\"\n");
+			o.append("\t$(cmd_mkdir) ", quotePath(Path::dirname(cpp_obj)), "\n");
+			o.append("\t$(cmd_cpp) -x $(cpp_source_compiler_language) $(PCH_CC_FLAGS) $(CPP_DEFINES) $(CPP_FLAGS) $(CPP_INCLUDE_DIRS) $(CPP_INCLUDE_FILES) \\\n");
+			o.append("\t\t-o \"$@\" -c ", quotePath(cpp_src), "\\\n");
+			o.append("\t\t-MMD -MQ \"$@\" -MF ", quotePath(cpp_dep), "\\\n");
+			o.append("\n");
 		}
-
-		//makefile optional include cpp_dep
-		o.append("-include ", escapeString(cpp_dep), "\n");
-		//--------
-		o.append(escapeString(cpp_obj), ":", escapeString(cpp_src), "\n");
-		o.append("\t@echo \"-------------------------------------------------------------\"\n");
-		o.append("\t@echo \"[compile cpp] => $@\"\n");
-		o.append("\t$(cmd_mkdir) ", quotePath(Path::dirname(cpp_obj)), "\n");
-		o.append("\t$(cmd_cc) -x $(cpp_source_compiler_language) $(PCH_CC_FLAGS) $(CPP_DEFINES) $(CPP_FLAGS) $(CPP_INCLUDE_DIRS) $(CPP_INCLUDE_FILES) \\\n");
-		o.append("\t\t-o \"$@\" -c ", quotePath(cpp_src), "\\\n");
-		o.append("\t\t-MMD -MQ \"$@\" -MF ", quotePath(cpp_dep), "\\\n");
-		o.append("\n");
-
 	}
 	o.append("\n");
 	//-------------------------------
