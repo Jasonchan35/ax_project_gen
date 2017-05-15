@@ -125,17 +125,13 @@ void Generator_makefile::gen_common_var(String& o) {
 
 	if (g_ws->compiler == "clang") {
 		pch_suffix = ".pch";
-		o.append("cmd_cpp   := clang++","\n");
+		o.append("cmd_cpp   := clang++ -std=c++11","\n");
 		o.append("cmd_c     := clang",  "\n");
 		o.append("cmd_link  := clang++","\n");
-		o.append("CPP_STD   := -std=c++11","\n");
-
 	}else if (g_ws->compiler == "gcc") {
-		o.append("cmd_cpp   := g++",  "\n");
+		o.append("cmd_cpp   := g++ -std=gnu++11",  "\n");
 		o.append("cmd_c     := gcc",  "\n");
 		o.append("cmd_link  := g++",  "\n");
-		o.append("CPP_STD   := -std=gnu++11","\n");
-
 	}else{
 		throw Error("Unsupported compiler ", g_ws->compiler);
 	}
@@ -396,7 +392,7 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 			o.append("\t@echo \"-------------------------------------------------------------\"\n");
 			o.append("\t@echo \"[compile cpp] => $@\"\n");
 			o.append("\t$(cmd_mkdir) ", quotePath(Path::dirname(cpp_obj)), "\n");
-			o.append("\t$(cmd_cpp) -x $(cpp_source_compiler_language) $(CPP_STD) $(PCH_CC_FLAGS) $(CPP_DEFINES) $(CPP_FLAGS) $(CPP_INCLUDE_DIRS) $(CPP_INCLUDE_FILES) \\\n");
+			o.append("\t$(cmd_cpp) -x $(cpp_source_compiler_language) $(PCH_CC_FLAGS) $(CPP_DEFINES) $(CPP_FLAGS) $(CPP_INCLUDE_DIRS) $(CPP_INCLUDE_FILES) \\\n");
 			o.append("\t\t-o \"$@\" -c ", quotePath(cpp_src), "\\\n");
 			o.append("\t\t-MMD -MQ \"$@\" -MF ", quotePath(cpp_dep), "\\\n");
 			o.append("\n");
