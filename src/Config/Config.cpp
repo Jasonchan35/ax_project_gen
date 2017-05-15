@@ -12,8 +12,6 @@ Config::Config() {
 		V.name = #V; \
 		_settings.append(&V); \
 	//------
-		InitSetting(c_defines);
-		InitSetting(c_flags);
 		InitSetting(cpp_defines);
 		InitSetting(cpp_flags);
 		InitSetting(include_dirs);

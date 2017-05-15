@@ -128,11 +128,13 @@ void Generator_makefile::gen_common_var(String& o) {
 		o.append("cmd_cpp   := clang++","\n");
 		o.append("cmd_c     := clang",  "\n");
 		o.append("cmd_link  := clang++","\n");
+		o.append("cpp_std   := -std=c++11","\n");
 
 	}else if (g_ws->compiler == "gcc") {
 		o.append("cmd_cpp   := g++",  "\n");
-		o.append("cmd_c     := gcc",    "\n");
+		o.append("cmd_c     := gcc",  "\n");
 		o.append("cmd_link  := g++",  "\n");
+		o.append("cpp_std   := -std=gnu++11","\n");
 
 	}else{
 		throw Error("Unsupported compiler ", g_ws->compiler);
@@ -313,20 +315,12 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 
 	String cpp_defines;
 	String cpp_flags;
-	String c_defines;
-	String c_flags;
 	String link_flags;
 	String link_files;
 	String include_files;
 	String include_dirs;
 	String cpp_obj_files;
 
-	for (auto& q : config.c_defines._final) {
-		c_defines.append("\\\n\t-D", q.path());
-	}
-	for (auto& q : config.c_flags._final) {
-		c_flags.append("\\\n\t", q.path());
-	}
 	for (auto& q : config.cpp_defines._final) {
 		cpp_defines.append("\\\n\t-D", q.path());
 	}
@@ -366,8 +360,6 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 	o.append(config.name, "__CPP_INCLUDE_FILES = ", include_files, "\n");
 	o.append(config.name, "__CPP_FLAGS         = ", cpp_flags,     "\n");
 	o.append(config.name, "__CPP_DEFINES       = ", cpp_defines,   "\n");		
-	o.append(config.name, "__C_FLAGS           = ", c_flags,       "\n");
-	o.append(config.name, "__C_DEFINES         = ", c_defines,     "\n");		
 	o.append(config.name, "__LINK_FLAGS        = ", link_flags,    "\n");
 	o.append(config.name, "__LINK_FILES        = ", link_files,    "\n");
 	o.append(config.name, "__CPP_OBJ_FILES     = ", cpp_obj_files, "\n");
@@ -389,7 +381,7 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 			o.append("\t@echo \"-------------------------------------------------------------\"\n");
 			o.append("\t@echo \"[compile c] => $@\"\n");
 			o.append("\t$(cmd_mkdir) ", quotePath(Path::dirname(cpp_obj)), "\n");
-			o.append("\t$(cmd_c) -x $(c_source_compiler_language) $(C_DEFINES) $(C_FLAGS) $(CPP_INCLUDE_DIRS) $(CPP_INCLUDE_FILES) \\\n");
+			o.append("\t$(cmd_c) -x $(c_source_compiler_language) $(CPP_DEFINES) $(CPP_FLAGS) $(CPP_INCLUDE_DIRS) $(CPP_INCLUDE_FILES) \\\n");
 			o.append("\t\t-o \"$@\" -c ", quotePath(cpp_src), "\\\n");
 			o.append("\t\t-MMD -MQ \"$@\" -MF ", quotePath(cpp_dep), "\\\n");
 			o.append("\n");
@@ -404,7 +396,7 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 			o.append("\t@echo \"-------------------------------------------------------------\"\n");
 			o.append("\t@echo \"[compile cpp] => $@\"\n");
 			o.append("\t$(cmd_mkdir) ", quotePath(Path::dirname(cpp_obj)), "\n");
-			o.append("\t$(cmd_cpp) -x $(cpp_source_compiler_language) $(PCH_CC_FLAGS) $(CPP_DEFINES) $(CPP_FLAGS) $(CPP_INCLUDE_DIRS) $(CPP_INCLUDE_FILES) \\\n");
+			o.append("\t$(cmd_cpp) -x $(cpp_source_compiler_language) $(CPP_STD) $(PCH_CC_FLAGS) $(CPP_DEFINES) $(CPP_FLAGS) $(CPP_INCLUDE_DIRS) $(CPP_INCLUDE_FILES) \\\n");
 			o.append("\t\t-o \"$@\" -c ", quotePath(cpp_src), "\\\n");
 			o.append("\t\t-MMD -MQ \"$@\" -MF ", quotePath(cpp_dep), "\\\n");
 			o.append("\n");
@@ -422,7 +414,7 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 		o.append("\t@echo \"-------------------------------------------------------------\"\n");
 		o.append("\t@echo \"[cpp_exe] $@\"\n");
 		o.append("\t$(cmd_mkdir) ", quotePath(outputTargetDir), "\n"); //gmake cannot handle path contain 'space' in function $(@D)
-		o.append("\t$(cmd_link) -o \"$@\" $(CPP_OBJ_FILES) -Wl,--start-group $(LINK_FILES) -Wl,--end-group $(LINK_FLAGS)\n");
+		o.append("\t$(cmd_link) -o \"$@\" $(CPP_OBJ_FILES) -lstdc++ -Wl,--start-group $(LINK_FILES) -Wl,--end-group $(LINK_FLAGS)\n");
 		o.append("\n");
 		o.append(config.name, "__run: ", escapeString(outputTarget), "\n");
 		o.append("\t", quotePath(outputTarget), "\n");
