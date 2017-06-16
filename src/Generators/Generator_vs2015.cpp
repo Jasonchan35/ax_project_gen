@@ -376,8 +376,7 @@ void Generator_vs2015::gen_project_files(XmlWriter& wr, Project& proj) {
 				excludedFromBuild = f.excludedFromBuild;
 			}break;
 
-			case FileType::cpp_header: { tagName = "ClInclude"; }break;
-			default: { tagName = "None"; }break;
+			default: { tagName = "ClInclude"; }break;
 		}
 
 		auto tag = wr.tagScope(tagName);
