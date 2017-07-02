@@ -28,6 +28,7 @@ public:
 
 	Project*		_project {nullptr};
 	FileEntry		outputTarget;
+	FileEntry		outputLib;
 	FileEntry		_build_tmp_dir;
 
 	class Entry {
