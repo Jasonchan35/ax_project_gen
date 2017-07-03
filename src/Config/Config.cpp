@@ -144,6 +144,8 @@ void Config::dump(StringStream& s) {
 	s << "." << name << "] --\n";
 
 	ax_dump(s, outputTarget);
+	ax_dump(s, outputLib);
+
 	if (warning_as_error)	ax_dump(s, warning_as_error);
 	if (xcode_settings)		ax_dump(s, xcode_settings);
 	if (vs2015_ClCompile)	ax_dump(s, vs2015_ClCompile);
