@@ -77,7 +77,7 @@ int StrView::lastIndexOfChar(char ch) const {
 	return -1;
 }
 
-int StrView::indexOfAnyCharIn(const StrView& charList) const {
+int StrView::indexOfAnyChar(const StrView& charList) const {
 	auto* end = _data + _size;
 	for (auto* p = _data; p < end; p++) {
 		if (charList.indexOfChar(*p) >= 0) {
@@ -87,7 +87,7 @@ int StrView::indexOfAnyCharIn(const StrView& charList) const {
 	return -1;
 }
 
-int StrView::lastIndexOfAnyCharIn(const StrView& charList) const {
+int StrView::lastIndexOfAnyChar(const StrView& charList) const {
 	if (_size <= 0) return false;
 	auto* end = _data + _size;
 	for (auto* p = end - 1; p >= _data; p--) {
@@ -106,8 +106,8 @@ StrView::SplitResult StrView::splitByChar(char ch) const {
 	return SplitResult(slice(0, index), sliceFrom(index + 1));
 }
 
-StrView::SplitResult StrView::splitByCharInList(const StrView& charList) const {
-	auto index = indexOfAnyCharIn(charList);
+StrView::SplitResult StrView::splitByAnyChar(const StrView& charList) const {
+	auto index = indexOfAnyChar(charList);
 	if (index < 0) {
 		return SplitResult(*this, StrView());
 	}
@@ -122,8 +122,8 @@ StrView::SplitResult StrView::splitEndByChar(char ch) const {
 	return SplitResult(slice(0, index), sliceFrom(index + 1));
 }
 
-StrView::SplitResult StrView::splitEndByAnyCharIn(const StrView& charList) const {
-	auto index = lastIndexOfAnyCharIn(charList);
+StrView::SplitResult StrView::splitEndByAnyChar(const StrView& charList) const {
+	auto index = lastIndexOfAnyChar(charList);
 	if (index < 0) {
 		return SplitResult(*this, StrView());
 	}

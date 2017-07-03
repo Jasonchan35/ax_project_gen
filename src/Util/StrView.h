@@ -27,17 +27,17 @@ public:
 	bool startsWith(const StrView& v) const;
 
 	int indexOfChar			(char ch) const;
-	int indexOfAnyCharIn	(const StrView& charList) const;
+	int indexOfAnyChar		(const StrView& charList) const;
 
 	int lastIndexOfChar		(char ch) const;
-	int lastIndexOfAnyCharIn(const StrView& charList) const;
+	int lastIndexOfAnyChar	(const StrView& charList) const;
 
 	using SplitResult = std::pair<StrView, StrView>;
 	SplitResult splitByChar			(char ch) const;
-	SplitResult splitByCharInList	(const StrView& charList) const;
+	SplitResult splitByAnyChar		(const StrView& charList) const;
 
 	SplitResult splitEndByChar		(char ch) const;
-	SplitResult splitEndByAnyCharIn	(const StrView& charList) const;
+	SplitResult splitEndByAnyChar	(const StrView& charList) const;
 
 	std::ostream& onStreamOut(std::ostream& s) const;
 

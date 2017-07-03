@@ -14,12 +14,12 @@ bool Path::isAbs(const StrView& path) {
 }
 
 StrView Path::dirname(const StrView& path) {
-	auto s = path.splitEndByAnyCharIn("\\/");
+	auto s = path.splitEndByAnyChar("\\/");
 	return s.second ? s.first : StrView();
 }
 
 StrView Path::basename(const StrView& path, bool withExtension) {
-	auto s = path.splitEndByAnyCharIn("\\/");
+	auto s = path.splitEndByAnyChar("\\/");
 	auto f = s.second ? s.second : s.first;
 	if (withExtension) return f;
 	s = f.splitEndByChar('.');
@@ -29,7 +29,7 @@ StrView Path::basename(const StrView& path, bool withExtension) {
 StrView Path::extension(const StrView& path) {
 	//	remove dir first to avoid corner case like: "/aaa/bbb/ccc.here/eee"
 	//	while should return "" instead or "here/eee"
-	auto s = path.splitEndByAnyCharIn("\\/");
+	auto s = path.splitEndByAnyChar("\\/");
 	auto f = s.second ? s.second : s.first;
 
 	s = f.splitEndByChar('.');
@@ -39,7 +39,7 @@ StrView Path::extension(const StrView& path) {
 Path::SpliteResult Path::splite(const StrView& path) {
 	SpliteResult o;
 
-	auto s = path.splitEndByAnyCharIn("\\/");
+	auto s = path.splitEndByAnyChar("\\/");
 	o.dir  = s.second ? s.first : StrView();
 	
 	auto basename = s.second ? s.second : s.first;
@@ -75,13 +75,13 @@ void Path::getAbs(String& out_str, const StrView& path) {
 
 	StrView p = path;
 	while (p) {
-		auto s = p.splitByCharInList("\\/");
+		auto s = p.splitByAnyChar("\\/");
 		if (s.first == ".") {
 			//skip '.'
 		}else if (!s.first) {
 			//skip '/'
 		}else if (s.first == "..") {
-			auto idx = out_str.view().lastIndexOfAnyCharIn("\\/");
+			auto idx = out_str.view().lastIndexOfAnyChar("\\/");
 			if (idx < 0) {
 				out_str.clear(); //no more parent folder
 				return;

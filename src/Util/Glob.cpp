@@ -131,7 +131,7 @@ public:
 		Path::getAbs(absPath, path);
 
 		auto p = absPath.view();
-		auto start = p.splitByCharInList("*?").first
+		auto start = p.splitByAnyChar("*?").first
 					  .splitEndByChar('/').first;
 
 		_curPath = start;
@@ -146,7 +146,7 @@ private:
 	}
 
 	void _step2(const StrView& name, const StrView& remain) {
-		if (name.indexOfAnyCharIn("*?") < 0) {
+		if (name.indexOfAnyChar("*?") < 0) {
 			auto oldSize = _curPath.size();
 			if (name) {
 				_curPath += '/';
@@ -208,7 +208,7 @@ private:
 
 void Glob::search(Vector<String>& out_paths, const StrView& path, bool needDir, bool needFile, bool needHidden) {
 	out_paths.clear();
-	int index = path.indexOfAnyCharIn("*?");
+	int index = path.indexOfAnyChar("*?");
 	if (index < 0) {
 		out_paths.append(path);
 		return;
