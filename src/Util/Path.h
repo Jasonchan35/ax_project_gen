@@ -15,14 +15,14 @@ struct Path {
 	static StrView	basename  (const StrView& path, bool withExtension);
 	static StrView	extension (const StrView& path);
 
-	struct SpliteResult	{
-		//StrView driver;
+	struct SplitResult	{
+		StrView driver;
 		StrView dir;
 		StrView name;
 		StrView ext;
 	};
 		
-	static SpliteResult	splite(const StrView& path);
+	static SplitResult	split	(const StrView& path);
 
 	static void		makeFullPath(String& out_str, const StrView& dir, const StrView& path);
 

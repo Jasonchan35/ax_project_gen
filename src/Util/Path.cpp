@@ -36,16 +36,25 @@ StrView Path::extension(const StrView& path) {
 	return s.second;
 }
 
-Path::SpliteResult Path::splite(const StrView& path) {
-	SpliteResult o;
+Path::SplitResult Path::split(const StrView& path) {
+	SplitResult o;
 
-	auto s = path.splitEndByAnyChar("\\/");
-	o.dir  = s.second ? s.first : StrView();
-	
-	auto basename = s.second ? s.second : s.first;
-	s = basename.splitEndByChar('.');
+	auto p = path;
+	auto s = p.splitByChar(':');
+	if (s.second) {
+		o.driver = s.first;
+		p = s.second;
+	}
+
+	s = p.splitEndByAnyChar("\\/");
+	if (s.second) {
+		o.dir = s.first;
+		p = s.second;
+	}
+
+	s = p.splitEndByChar('.');
 	o.name = s.first;
-	if (s.second) o.ext = s.second;
+	o.ext = s.second;
 
 	return o;
 }
