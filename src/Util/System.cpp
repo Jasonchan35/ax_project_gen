@@ -79,7 +79,7 @@ int System::createProcess(const StrView& exe, const StrView& args) {
 	
 	while (!feof(fs)) {
 		if (fgets(buf.data(), buf.size(), fs) != nullptr) {
-			Log::info(StrView_c_str(buf.data()));
+			std::cout << buf.data();
 		}
 	}
 
