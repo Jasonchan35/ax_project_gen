@@ -21,6 +21,9 @@ $(OUTPUT_TARGET):
 all: build
 
 build: $(OUTPUT_TARGET)
+
+install: build
+	cp -f $(OUTPUT_TARGET) /usr/bin/
 	
 clean:
 	rm $(OUTPUT_TARGET)
