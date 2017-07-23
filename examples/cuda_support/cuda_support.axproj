@@ -1,0 +1,15 @@
+{
+	"group": "cuda_support",
+	"type": "cpp_exe",
+	"enable_cuda": "8.0",
+	"dependencies": [
+	],
+	"files" : [
+		"./*.cpp",
+		"./*.cu",
+		"*.axproj"
+	],
+	"config": {
+		"include_dirs": ["$(CudaToolkitIncludeDir)"]
+	}
+}

@@ -1,0 +1,46 @@
+{
+	"build_dir": ".",
+	"config_list": ["Debug", "Release"],
+	"config": {
+		"config==Debug": {
+			"cpp_defines": ["DEBUG", "_DEBUG"]
+		},
+		"config==Release": {
+			"cpp_defines": ["NDEBUG"]
+		},
+		"cpp_defines": ["_UNICODE", "UNICODE"],
+
+		"generator==vs2015": {
+			"cpp_defines":[]
+		},
+		"os==windows": {
+			"cpp_flags":[]
+		},
+		"os==linux": {
+		},
+		"compiler==vc": {
+			"cpp_defines": ["_CRT_SECURE_NO_WARNINGS"],
+			"cpp_flags":[],
+			"link_flags":[],
+			"warning_level": "Level4", // "EnableAllWarnings"
+			"disable_warning":[
+				//"4189", // local variable is initialized but not referenced
+				//"4595", // non-member operator new or delete functions may not be declared inline
+				//"4127", // conditional expression is constant
+				"4100"  // unreferenced formal parameter
+			]
+		},
+		"compiler==gcc": {
+			"cpp_flags":["-std=c++11"],
+			"link_flags":["-lstdc++"],
+			"config==Debug": {
+				"cpp_flags":["-g"]
+			}
+		}
+	},
+
+	"startup_project": "cuda_support",
+	"projects": [
+		"cuda_support.axproj"
+	]
+}
