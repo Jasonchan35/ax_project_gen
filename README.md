@@ -25,6 +25,8 @@ means all c++ files within `src` folder including all sub-directories recursivel
 
 * Generate proejct / makefile with multi-thread settings
 
+* Support CUDA Visual Studio project
+
 
 **Command Line:**
 ```
