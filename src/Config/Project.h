@@ -34,6 +34,7 @@ public:
 		String				group;
 		String				type;
 		bool				gui_app {false};
+		String				enable_cuda;
 
 		String				pch_header;
 		Vector<String>		dependencies;

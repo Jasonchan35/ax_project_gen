@@ -151,6 +151,7 @@ void Project::readJson(JsonReader& r) {
 		#define ReadMember(T) r.member(#T, input.T);
 			ReadMember(group);
 			ReadMember(type);
+			ReadMember(enable_cuda);
 			ReadMember(gui_app);
 			ReadMember(pch_header);
 			ReadMember(unite_build);

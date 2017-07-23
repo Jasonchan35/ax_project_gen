@@ -355,6 +355,28 @@ void Generator_vs2015::gen_project(Project& proj) {
 			auto tag = wr.tagScope("ImportGroup");
 			wr.attr("Label", "ExtensionTargets");
 		}
+
+		if (proj.input.enable_cuda != ""){
+			String path;
+			{
+				auto group_tag = wr.tagScope("ImportGroup");
+				wr.attr("Label", "ExtensionSettings");
+				auto import_tag = wr.tagScope("Import");
+				path.set("$(VCTargetsPath)\\BuildCustomizations\\CUDA ", 
+					proj.input.enable_cuda, 
+					".props");
+				wr.attr("Project", path);
+			}
+			{
+				auto group_tag = wr.tagScope("ImportGroup");
+				wr.attr("Label", "ExtensionTargets");
+				auto import_tag = wr.tagScope("Import");
+				path.set("$(VCTargetsPath)\\BuildCustomizations\\CUDA ", 
+					proj.input.enable_cuda, 
+					".targets");
+				wr.attr("Project", path);
+			}
+		}
 	}
 
 	FileUtil::writeTextFile(proj.genData_vs2015.vcxproj, wr.buffer());
@@ -373,6 +395,10 @@ void Generator_vs2015::gen_project_files(XmlWriter& wr, Project& proj) {
 			case FileType::c_source: ax_fallthrough
 			case FileType::cpp_source: {
 				tagName = "ClCompile";
+				excludedFromBuild = f.excludedFromBuild;
+			}break;
+			case FileType::cu_source: {
+				tagName = "CudaCompile";
 				excludedFromBuild = f.excludedFromBuild;
 			}break;
 
@@ -461,7 +487,6 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 	{
 		auto tag = wr.tagScope("ItemDefinitionGroup");
 		wr.attr("Condition", cond);
-
 		{
 			auto tag = wr.tagScope("ClCompile");
 				
@@ -534,6 +559,9 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 				if (vsForLinux()) {
 					gen_config_option(wr, "AdditionalDependencies",		config.link_files._final, "$(RemoteRootDir)/");
 				}else{
+					if (proj.input.enable_cuda != ""){
+						config.link_files._final.add("cudart.lib");
+					}
 					gen_config_option(wr, "AdditionalDependencies",		config.link_files._final);
 				}
 			}

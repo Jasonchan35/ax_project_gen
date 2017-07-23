@@ -15,7 +15,7 @@ public:
 
 	virtual StrView slnFileHeader();
 	virtual StrView vcxprojToolsVersion() { return StrView("14.0"); }
-	virtual StrView visualc_PlatformToolset() { return StrView("v140_xp"); }
+	virtual StrView visualc_PlatformToolset() { return StrView("v140"); } // v140_xp doesn't work with CUDA' compiler
 private:
 
 	void gen_workspace(ExtraWorkspace& extraWorkspace);
