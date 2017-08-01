@@ -397,6 +397,7 @@ void Generator_vs2015::gen_project_files(XmlWriter& wr, Project& proj) {
 				tagName = "ClCompile";
 				excludedFromBuild = f.excludedFromBuild;
 			}break;
+			case FileType::cu_header: ax_fallthrough
 			case FileType::cu_source: {
 				tagName = "CudaCompile";
 				excludedFromBuild = f.excludedFromBuild;
