@@ -31,7 +31,7 @@ void FileEntry::init(const StrView& absPath, bool isAbs, bool isGenerated) {
 	}else if (ext == "c") {
 		_type = FileType::c_source;
 		excludedFromBuild = false;
-	}else if (ext == "cu") {
+	}else if (ext == "cu" || ext == "cuh") {
 		_type = FileType::cu_source;
 		excludedFromBuild = false;
 	}
