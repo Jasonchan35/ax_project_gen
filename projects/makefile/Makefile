@@ -23,7 +23,7 @@ all: build
 build: $(OUTPUT_TARGET)
 
 install: build
-	cp -f $(OUTPUT_TARGET) /usr/bin/
+	cp -f $(OUTPUT_TARGET) /usr/local/bin/
 	
 clean:
 	rm $(OUTPUT_TARGET)
