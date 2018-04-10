@@ -54,8 +54,9 @@ void Config::init(Project* proj, Config* source, StrView name_) {
 	}
 
 	if (source) {
-		warning_as_error = source->warning_as_error;
-		warning_level    = source->warning_level;
+		cpp_enable_modules	= source->cpp_enable_modules;
+		warning_as_error	= source->warning_as_error;
+		warning_level		= source->warning_level;
 	}
 
 	_init_xcode_settings();
@@ -146,6 +147,7 @@ void Config::dump(StringStream& s) {
 	ax_dump(s, outputTarget);
 	ax_dump(s, outputLib);
 
+	if (cpp_enable_modules)	ax_dump(s, cpp_enable_modules);
 	if (warning_as_error)	ax_dump(s, warning_as_error);
 	if (xcode_settings)		ax_dump(s, xcode_settings);
 	if (vs2015_ClCompile)	ax_dump(s, vs2015_ClCompile);
@@ -235,6 +237,7 @@ void Config::readJson(JsonReader& r) {
 
 		//---------
 		#define ReadMember(Value) if (r.member(#Value, Value)) continue;
+		ReadMember(cpp_enable_modules);
 		ReadMember(warning_as_error);
 		ReadMember(warning_level);
 		ReadMember(exe_target_prefix);
