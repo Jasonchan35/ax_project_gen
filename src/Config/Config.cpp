@@ -25,7 +25,7 @@ Config::Config() {
 	include_dirs.isPath  = true;
 	include_files.isPath = true;
 	link_dirs.isPath     = true;
-	link_files.isPath    = true;
+	link_files.isPath    = false;
 
 	if (g_ws->os == "windows") {
 		exe_target_suffix = ".exe";
