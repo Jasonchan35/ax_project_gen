@@ -19,6 +19,7 @@ enum class FileType {
 	c_source,
 	cu_header,	// cuda header
 	cu_source,	// cuda source
+	ixx, // cpp modules
 };
 
 class VirtualFolder;

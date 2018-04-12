@@ -392,6 +392,7 @@ void Generator_vs2015::gen_project_files(XmlWriter& wr, Project& proj) {
 		bool excludedFromBuild = false;
 
 		switch (f.type()) {
+			case FileType::ixx: ax_fallthrough
 			case FileType::c_source: ax_fallthrough
 			case FileType::cpp_source: {
 				tagName = "ClCompile";
@@ -540,6 +541,10 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 			if (config.warning_level) {
 				wr.tagWithBody("WarningLevel", config.warning_level);
 			}
+
+			if (config.cpp_enable_modules) {
+				wr.tagWithBodyBool("EnableModules", config.cpp_enable_modules);
+			}			
 
 			wr.tagWithBodyBool("TreatWarningAsError", config.warning_as_error);
 
@@ -721,6 +726,7 @@ void Generator_vs2015::gen_vcxproj_filters(Project& proj) {
 
 					auto type = StrView("ClInclude");
 					switch (f->type()) {
+						case FileType::ixx:	ax_fallthrough
 						case FileType::c_source: ax_fallthrough
 						case FileType::cpp_source: {
 							type = "ClCompile"; 
