@@ -46,6 +46,8 @@ public:
 		bool				multithread_build = true;
 		bool				unite_build = false;
 		int					unite_filesize = 1 * 1024 * 1024;
+		String				cuda_vs2015_props;
+		String				cuda_vs2015_targets;
 	};
 	Input	input;
 

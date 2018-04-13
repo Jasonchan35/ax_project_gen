@@ -138,6 +138,8 @@ void Workspace::readJson(JsonReader& r) {
 		if (r.member("multithread_build",	input.multithread_build)) continue;
 		if (r.member("unite_build",			input.unite_build)) continue;
 		if (r.member("unite_filesize",		input.unite_filesize )) continue;
+		if (r.member("cuda_vs2015_props",	input.cuda_vs2015_props )) continue;
+		if (r.member("cuda_vs2015_targets",	input.cuda_vs2015_targets )) continue;
 
 		if (r.member("config_list", input.config_list)) {
 			for (auto& config_name : input.config_list) {

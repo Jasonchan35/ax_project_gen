@@ -356,25 +356,21 @@ void Generator_vs2015::gen_project(Project& proj) {
 			wr.attr("Label", "ExtensionTargets");
 		}
 
-		if (proj.input.enable_cuda != ""){
+		if (proj.input.enable_cuda){
 			String path;
-			{
+
+			if (proj.input.cuda_vs2015_props) {
 				auto group_tag = wr.tagScope("ImportGroup");
 				wr.attr("Label", "ExtensionSettings");
 				auto import_tag = wr.tagScope("Import");
-				path.set("$(VCTargetsPath)\\BuildCustomizations\\CUDA ", 
-					proj.input.enable_cuda, 
-					".props");
-				wr.attr("Project", path);
+				wr.attr("Project", proj.input.cuda_vs2015_props);
 			}
-			{
+
+			if (proj.input.cuda_vs2015_targets) {
 				auto group_tag = wr.tagScope("ImportGroup");
 				wr.attr("Label", "ExtensionTargets");
 				auto import_tag = wr.tagScope("Import");
-				path.set("$(VCTargetsPath)\\BuildCustomizations\\CUDA ", 
-					proj.input.enable_cuda, 
-					".targets");
-				wr.attr("Project", path);
+				wr.attr("Project", proj.input.cuda_vs2015_targets);
 			}
 		}
 	}
@@ -562,13 +558,18 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 			if (proj.type_is_exe_or_dll()) {
 				gen_config_option(wr, "AdditionalLibraryDirectories",	config.link_dirs._final);
 
-				if (vsForLinux()) {
-					gen_config_option(wr, "AdditionalDependencies",		config.link_files._final, "$(RemoteRootDir)/");
-				}else{
-					if (proj.input.enable_cuda != ""){
-						config.link_files._final.add("cudart.lib");
+				{
+					String optName = "AdditionalDependencies";
+					auto relativeTo = vsForLinux() ? StrView("$(RemoteRootDir)/") : StrView("");
+					String tmp;
+					for (auto& p : config.link_libs._final) {
+						tmp.append(p.path(), ";");
 					}
-					gen_config_option(wr, "AdditionalDependencies",		config.link_files._final);
+					for (auto& p : config.link_files._final) {
+						tmp.append(relativeTo, p.path(), ";");
+					}
+					tmp.append("%(", optName, ")");
+					wr.tagWithBody(optName, tmp);
 				}
 			}
 

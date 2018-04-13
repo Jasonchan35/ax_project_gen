@@ -113,6 +113,7 @@ public:
 	Setting		include_dirs;
 	Setting		include_files;
 	Setting		link_dirs;
+	Setting		link_libs;
 	Setting		link_files;
 	Setting		link_flags;
 	Setting		disable_warning;
@@ -122,6 +123,9 @@ public:
 	StringDict<String>	xcode_settings;
 	StringDict<String>	vs2015_ClCompile;
 	StringDict<String>	vs2015_Link;
+	
+	String		cuda_vs2015_props;
+	String		cuda_vs2015_targets;
 	
 	void inherit(const Config& rhs);
 	void computeFinal();

@@ -17,6 +17,7 @@ Config::Config() {
 		InitSetting(include_dirs);
 		InitSetting(include_files);
 		InitSetting(link_dirs);
+		InitSetting(link_libs);
 		InitSetting(link_files);
 		InitSetting(link_flags);
 		InitSetting(disable_warning);
@@ -25,7 +26,8 @@ Config::Config() {
 	include_dirs.isPath  = true;
 	include_files.isPath = true;
 	link_dirs.isPath     = true;
-	link_files.isPath    = false;
+	link_libs.isPath	 = false;
+	link_files.isPath    = true;
 
 	if (g_ws->os == "windows") {
 		exe_target_suffix = ".exe";
@@ -38,6 +40,7 @@ Config::Config() {
 	if (g_ws->compiler == "vc") {
 		lib_target_suffix = ".lib";
 	}else{
+		lib_target_prefix = "lib";
 		lib_target_suffix = ".a";
 	}
 }
@@ -248,38 +251,22 @@ void Config::readJson(JsonReader& r) {
 		ReadMember(dll_target_suffix);
 		#undef ReadMember
 
-		if (r.member("xcode_settings")) {
-			r.beginObject();
-			while (!r.endObject()) {
-				String key;
-				r.getMemberName(key);
-				auto* v	= xcode_settings.getOrAdd(key);
-				r.getValue(*v);
-			}
-			continue;
-		}
-
-		if (r.member("vs2015_ClCompile")) {
-			r.beginObject();
-			while (!r.endObject()) {
-				String key;
-				r.getMemberName(key);
-				auto* v	= vs2015_ClCompile.getOrAdd(key);
-				r.getValue(*v);
-			}
-			continue;
-		}
-
-		if (r.member("vs2015_Link")) {
-			r.beginObject();
-			while (!r.endObject()) {
-				String key;
-				r.getMemberName(key);
-				auto* v	= vs2015_Link.add(key);
-				r.getValue(*v);
-			}
-			continue;
-		}
+		#define ReadDictMember(Value)		\
+			if (r.member(#Value)) {			\
+				r.beginObject();			\
+				while (!r.endObject()) {	\
+					String key;				\
+					r.getMemberName(key);	\
+					auto* v	= xcode_settings.getOrAdd(key);	\
+					r.getValue(*v);			\
+				}	\
+				continue;	\
+			} \
+		//---------
+			ReadDictMember(xcode_settings);
+			ReadDictMember(vs2015_ClCompile);
+			ReadDictMember(vs2015_Link);
+		#undef ReadDictMember
 
 		//----------
 		String memberName;

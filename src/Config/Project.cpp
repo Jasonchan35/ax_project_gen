@@ -126,7 +126,9 @@ void Project::init(const StrView& name_) {
 	input.unite_build = g_ws->input.unite_build;
 	input.unite_filesize = g_ws->input.unite_filesize;
 
-	input.multithread_build = g_ws->input.multithread_build;
+	input.multithread_build   = g_ws->input.multithread_build;
+	input.cuda_vs2015_props   = g_ws->input.cuda_vs2015_props;
+	input.cuda_vs2015_targets = g_ws->input.cuda_vs2015_targets;
 	
 	for (auto& src : g_ws->configs) {
 		auto* dst = configs.add(src.name);
@@ -152,6 +154,8 @@ void Project::readJson(JsonReader& r) {
 			ReadMember(group);
 			ReadMember(type);
 			ReadMember(enable_cuda);
+			ReadMember(cuda_vs2015_props);
+			ReadMember(cuda_vs2015_targets);
 			ReadMember(gui_app);
 			ReadMember(pch_header);
 			ReadMember(unite_build);

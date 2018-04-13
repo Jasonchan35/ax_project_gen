@@ -11,9 +11,24 @@
 	],
 
 	"os==linux": {
+		"config": {
+			"link_libs": ["pthread"]
+		},
 		"exclude_files": [
 			"some_file_not_for_linux"
-		]	
+		]
+	},
+
+	"os==macosx": {
+		"config": {
+			"link_libs": ["pthread"]
+		}
+	},
+
+	"os==windows": {
+		"config": {
+			"link_libs": ["Ws2_32.lib"]
+		}
 	},
 
 	"config": {
@@ -21,6 +36,7 @@
 		"cpp_flags": [],
 		"include_dirs": ["src"],
 		"link_dirs": [],
+		"link_libs": [""],
 		"link_files": [],
 		"link_flags": []
 	}

@@ -1,6 +1,10 @@
 {
 	"build_dir": ".",
 	"config_list": ["Debug", "Release"],
+
+	"cuda_vs2015_props":   "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.0/extras/visual_studio_integration/MSBuildExtensions/CUDA 9.0.props",
+	"cuda_vs2015_targets": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.0/extras/visual_studio_integration/MSBuildExtensions/CUDA 9.0.targets",
+	
 	"config": {
 		"config==Debug": {
 			"cpp_defines": ["DEBUG", "_DEBUG"]

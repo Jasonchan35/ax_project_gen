@@ -236,6 +236,7 @@ void Generator_makefile::gen_project(Project& proj) {
 	o.append("C_FLAGS            = $($(config)__C_FLAGS)\n");
 	o.append("C_DEFINES          = $($(config)__C_DEFINES)\n");
 	o.append("LINK_FLAGS         = $($(config)__LINK_FLAGS)\n");
+	o.append("LINK_LIB           = $($(config)__LINK_LIBS)\n");
 	o.append("LINK_FILES         = $($(config)__LINK_FILES)\n");
 	o.append("CPP_OBJ_FILES      = $($(config)__CPP_OBJ_FILES)\n");
 	o.append("\n");
@@ -312,6 +313,7 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 	String cpp_defines;
 	String cpp_flags;
 	String link_flags;
+	String link_libs;
 	String link_files;
 	String include_files;
 	String include_dirs;
@@ -327,7 +329,10 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 		link_flags.append("\\\n\t", q.path());
 	}
 	for (auto& q : config.link_dirs._final) {
-		link_files.append("\\\n\t-L", quotePath(q.path()));
+		link_libs.append("\\\n\t-L", quotePath(q.path()));
+	}
+	for (auto& q : config.link_libs._final) {
+		link_libs.append("\\\n\t-l", q.path());
 	}
 	for (auto& q : config.link_files._final) {
 		link_files.append("\\\n\t", quotePath(q.path()));
@@ -357,6 +362,7 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 	o.append(config.name, "__CPP_FLAGS         = ", cpp_flags,     "\n");
 	o.append(config.name, "__CPP_DEFINES       = ", cpp_defines,   "\n");		
 	o.append(config.name, "__LINK_FLAGS        = ", link_flags,    "\n");
+	o.append(config.name, "__LINK_LIBS         = ", link_libs,     "\n");
 	o.append(config.name, "__LINK_FILES        = ", link_files,    "\n");
 	o.append(config.name, "__CPP_OBJ_FILES     = ", cpp_obj_files, "\n");
 
@@ -410,7 +416,7 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 		o.append("\t@echo \"-------------------------------------------------------------\"\n");
 		o.append("\t@echo \"[cpp_exe] $@\"\n");
 		o.append("\t$(cmd_mkdir) ", quotePath(outputTargetDir), "\n"); //gmake cannot handle path contain 'space' in function $(@D)
-		o.append("\t$(cmd_link) -o \"$@\" $(CPP_OBJ_FILES) -lstdc++ -Wl,--start-group $(LINK_FILES) -Wl,--end-group $(LINK_FLAGS)\n");
+		o.append("\t$(cmd_link) -o \"$@\" $(CPP_OBJ_FILES) -lstdc++ -Wl,--start-group $(LINK_FILES) $(LINK_LIBS) -Wl,--end-group $(LINK_FLAGS)\n");
 		o.append("\n");
 		o.append(config.name, "__run: ", escapeString(outputTarget), "\n");
 		o.append("\t", quotePath(outputTarget), "\n");

@@ -579,6 +579,10 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 						wr.newline();
 						wr.write(quoteString(q.path()));
 					}
+					for (auto& q : config.link_libs._final) {
+						wr.newline();						;
+						wr.write(quoteString(String("-l", q.path())));
+					}
 					for (auto& q : config.link_files._final) {
 						wr.newline();
 						wr.write(quoteString2(q.path()));

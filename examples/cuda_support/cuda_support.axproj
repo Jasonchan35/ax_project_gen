@@ -1,7 +1,7 @@
 {
 	"group": "cuda_support",
 	"type": "cpp_exe",
-	"enable_cuda": "8.0",
+	"enable_cuda": true,
 	"dependencies": [
 	],
 	"files" : [
@@ -10,6 +10,7 @@
 		"*.axproj"
 	],
 	"config": {
-		"include_dirs": ["$(CudaToolkitIncludeDir)"]
+		"include_dirs": ["$(CudaToolkitIncludeDir)"],
+		"link_libs": ["cudart.lib"]
 	}
 }

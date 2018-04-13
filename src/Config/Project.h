@@ -34,7 +34,10 @@ public:
 		String				group;
 		String				type;
 		bool				gui_app {false};
-		String				enable_cuda;
+
+		bool				enable_cuda;
+		String				cuda_vs2015_props;
+		String				cuda_vs2015_targets;
 
 		String				pch_header;
 		Vector<String>		dependencies;

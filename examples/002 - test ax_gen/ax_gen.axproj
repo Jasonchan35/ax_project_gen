@@ -16,6 +16,7 @@
 		"cpp_flags": [],
 		"include_dirs": ["src"],
 		"link_dirs": [],
+		"link_libs": [],
 		"link_files": [],
 		"link_flags": [],
 		"compiler==gcc": {
