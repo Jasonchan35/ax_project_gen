@@ -559,7 +559,7 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 				gen_config_option(wr, "AdditionalLibraryDirectories",	config.link_dirs._final);
 
 				{
-					String optName = "AdditionalDependencies";
+					String optName = String("AdditionalDependencies");
 					auto relativeTo = vsForLinux() ? StrView("$(RemoteRootDir)/") : StrView("");
 					String tmp;
 					for (auto& p : config.link_libs._final) {
