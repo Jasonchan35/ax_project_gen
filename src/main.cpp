@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
 	#if _MSC_VER
 		if (IsDebuggerPresent() ) {
 			std::cout << "! Press any key to exit\n";
-			//_getch();
+			_getch();
 		}
 	#endif
 

@@ -133,13 +133,16 @@ void Workspace::readBuildDir(JsonReader& r) {
 void Workspace::readJson(JsonReader& r) {
 	r.beginObject();
 	while (!r.endObject()) {
-		if (r.member("build_dir",			input.build_dir )) continue;
-		if (r.member("startup_project",		input.startup_project)) continue;
-		if (r.member("multithread_build",	input.multithread_build)) continue;
-		if (r.member("unite_build",			input.unite_build)) continue;
-		if (r.member("unite_filesize",		input.unite_filesize )) continue;
-		if (r.member("cuda_vs2015_props",	input.cuda_vs2015_props )) continue;
-		if (r.member("cuda_vs2015_targets",	input.cuda_vs2015_targets )) continue;
+		#define ReadMember(T) if (r.member(#T, input.T)) continue;
+			ReadMember(build_dir)
+			ReadMember(startup_project)
+			ReadMember(multithread_build)
+			ReadMember(unite_build)
+			ReadMember(unite_filesize)
+			ReadMember(cuda_vs2015_props)
+			ReadMember(cuda_vs2015_targets)
+			ReadMember(visualc_PlatformToolset)
+		#undef ReadMember
 
 		if (r.member("config_list", input.config_list)) {
 			for (auto& config_name : input.config_list) {

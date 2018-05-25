@@ -17,6 +17,7 @@ public:
 	virtual StrView vcxprojToolsVersion() { return StrView("14.0"); }
 	virtual StrView visualc_PlatformToolset() { return StrView("v140"); } // v140_xp doesn't work with CUDA' compiler
 private:
+	bool isClang() { return g_ws->compiler == "clang"; }
 
 	void gen_workspace(ExtraWorkspace& extraWorkspace);
 	void gen_vcxproj_filters(Project& proj);
@@ -57,7 +58,12 @@ class Generator_vs2017 : public Generator_vs2015 {
 public:
 	virtual StrView slnFileHeader();
 	virtual StrView vcxprojToolsVersion() { return StrView("15.0"); }
-	virtual StrView visualc_PlatformToolset() { return StrView("v141_xp"); }
+	virtual StrView visualc_PlatformToolset() { 
+		if (g_ws->compiler == "clang") {
+			return StrView("v141_clang_c2");
+		}
+		return StrView("v141"); 
+	}
 };
 
 class Generator_vs2017_linux : public Generator_vs2017 {

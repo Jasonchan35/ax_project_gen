@@ -277,7 +277,7 @@ void Generator_vs2015::gen_project(Project& proj) {
 				if (g_ws->compiler=="gcc") {
 					wr.tagWithBody("RemoteCCompileToolExe","gcc");
 					wr.tagWithBody("RemoteCppCompileToolExe","g++");
-				}else if(g_ws->compiler=="clang") {
+				}else if(isClang()) {
 					wr.tagWithBody("RemoteCCompileToolExe","clang");
 					wr.tagWithBody("RemoteCppCompileToolExe","clang++");
 				}else{
@@ -510,7 +510,11 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 
 				if (config.isDebug) {
 					wr.tagWithBody("Optimization",				"Disabled");
-					wr.tagWithBody("DebugInformationFormat",	"ProgramDatabase");
+					if (isClang()) {
+						wr.tagWithBody("DebugInformationFormat",	"None");
+					} else {
+						wr.tagWithBody("DebugInformationFormat",	"ProgramDatabase");
+					}
 					wr.tagWithBody("RuntimeLibrary",			"MultiThreadedDebugDLL");
 					wr.tagWithBody("LinkIncremental",			"true");
 				}
