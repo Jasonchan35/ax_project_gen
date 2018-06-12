@@ -14,6 +14,7 @@ class Config;
 class Generator : public NonCopyable {
 public:
 	Generator();
+	virtual ~Generator() {}
 
 			void init		();
 			void generate	();
