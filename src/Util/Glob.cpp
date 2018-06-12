@@ -94,13 +94,16 @@ public:
 	bool getEntry(String& name) {
 		if (!_h) return false;
 
-		::dirent _entry;
-		::dirent* p = nullptr;
 
 		for (;;) {
-			if (0 != ::readdir_r(_h, &_entry, &p)) {
-				throw Error("error get directory entry");
-			}
+			// ----- readdir_r() is deprecated by gcc ----
+			// ::dirent _entry;
+			// ::dirent* p = nullptr;
+			// if (0 != ::readdir_r(_h, &_entry, &p)) {
+			// 	throw Error("error get directory entry");
+			// }
+
+			auto* p = ::readdir(_h);
 			if (!p) return false;
 
 			const auto* f = p->d_name;
