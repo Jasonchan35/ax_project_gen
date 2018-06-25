@@ -1,9 +1,12 @@
 *.vcxproj.user
 *.VC.VC.opendb
 *.VC.db
+*.iobj
+*.ipdb
+*.pdb
+
 _build_tmp
 xcuserdata
 .vs
 
-/bin
 /examples/001/_build
