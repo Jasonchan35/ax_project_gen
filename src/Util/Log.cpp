@@ -12,11 +12,15 @@ public:
 
 	std::ofstream file;
 	String fileBuffer;
+	Log::Level level = Log::Level::Warning;
 };
 
 LogImpl	g_log;
 
 void Log::onOutput(Level lv, const StrView& s) {
+	if (lv < g_log.level)
+		return;
+
 	std::cout.write(s.data(), s.size());
 
 	g_log.fileBuffer.append(s);
@@ -47,6 +51,10 @@ void Log::closeLogFile() {
 	if (!g_log.file.is_open()) return;
 	flushLogFile();
 	g_log.file.close();
+}
+
+void Log::setLogLevel(Level lv) {
+	g_log.level = lv;
 }
 
 } //namespace

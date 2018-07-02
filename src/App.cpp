@@ -28,7 +28,8 @@ int App::run(int argc, char* argv[]) {
 void App::readArgs(int argc, char* argv[]) {
 	for (int i=1; i<argc; i++) {
 		auto s = StrView_c_str(argv[i]);
-		Log::info("\targ[", i, "]: ", s);
+
+		//Log::info("\targ[", i, "]: ", s);
 
 		if (s == "-help" || s == "--help") {
 			options.help = true;
@@ -67,8 +68,12 @@ void App::readArgs(int argc, char* argv[]) {
 			workspace.generator = v;
 
 		}else{
-			Log::info("Unknown arg ", s);
+			Log::warning("Unknown arg ", s);
 		}
+	}
+
+	if (options.verbose) {
+		Log::setLogLevel(Log::Level::Info);
 	}
 }
 
@@ -117,7 +122,10 @@ int App::_run(int argc, char* argv[]) {
 	StringStream ss;
 
 	workspace.resolve();
-	workspace.dump(ss);
+
+	if (options.verbose) {
+		workspace.dump(ss);
+	}
 
 	Log::info(ss.str());
 

@@ -35,6 +35,7 @@ public:
 	static void createLogFile(const StrView& filename);
 	static void flushLogFile();
 	static void closeLogFile();
+	static void setLogLevel(Level lv);
 };
 
 } //namespace
