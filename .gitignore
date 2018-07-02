@@ -10,3 +10,4 @@ xcuserdata
 .vs
 
 /examples/001/_build
+bin/ax_gen
