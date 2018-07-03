@@ -12,7 +12,7 @@ public:
 
 	std::ofstream file;
 	String fileBuffer;
-	Log::Level level = Log::Level::Warning;
+	Log::Level level = Log::Level::Info;
 };
 
 LogImpl	g_log;

@@ -37,11 +37,11 @@ void FileUtil::writeTextFile(const StrView& filename, const StrView& text, bool 
 		type = (tmp == text) ? '=' : 'U';
 	}
 
-	if (type == '=') return;
-
 	if (verbose) {
 		Log::info("[", type, "] ", filename);
 	}
+
+	if (type == '=') return;
 	
 	auto dir = Path::dirname(filename);
 	if (dir) {

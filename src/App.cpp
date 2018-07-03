@@ -61,6 +61,9 @@ void App::readArgs(int argc, char* argv[]) {
 		}else if (auto v = s.removePrefix("os=")) {
 			workspace.os = v;
 
+		}else if (auto v = s.removePrefix("cpu=")) {
+			workspace.cpu = v;
+
 		}else if (auto v = s.removePrefix("compiler=")) {
 			workspace.compiler = v;
 
