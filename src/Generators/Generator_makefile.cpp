@@ -125,11 +125,11 @@ void Generator_makefile::gen_common_var(String& o) {
 
 	if (g_ws->compiler == "clang") {
 		pch_suffix = ".pch";
-		o.append("cmd_cpp   := clang++ -std=c++11","\n");
+		o.append("cmd_cpp   := clang++ -std=c++14","\n");
 		o.append("cmd_c     := clang",  "\n");
 		o.append("cmd_link  := clang++","\n");
 	}else if (g_ws->compiler == "gcc") {
-		o.append("cmd_cpp   := g++ -std=gnu++11",  "\n");
+		o.append("cmd_cpp   := g++ -std=gnu++14",  "\n");
 		o.append("cmd_c     := gcc",  "\n");
 		o.append("cmd_link  := g++",  "\n");
 	}else{
