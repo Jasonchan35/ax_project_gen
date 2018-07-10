@@ -77,6 +77,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\src\Generators\Generator_android.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\src\Generators\Generator_makefile.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -185,6 +191,7 @@
     <ClInclude Include="..\..\src\Config\VirtualFolder.h" />
     <ClInclude Include="..\..\src\Config\Workspace.h" />
     <ClInclude Include="..\..\src\Generators\Generator.h" />
+    <ClInclude Include="..\..\src\Generators\Generator_android.h" />
     <ClInclude Include="..\..\src\Generators\Generator_makefile.h" />
     <ClInclude Include="..\..\src\Generators\Generator_vs2015.h" />
     <ClInclude Include="..\..\src\Generators\Generator_xcode.h" />
