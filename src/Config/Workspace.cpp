@@ -86,7 +86,12 @@ void Workspace::readFile(const StrView& filename) {
 
 
 	_platformName.clear();
-	_platformName.append(workspace_name, '-', generator, '-', compiler, '-', os, '-', cpu);
+
+	if (generator == "android") {
+		_platformName.append(workspace_name, '-', generator);
+	} else {
+		_platformName.append(workspace_name, '-', generator, '-', compiler, '-', os, '-', cpu);
+	}
 
 	String json;
 	FileUtil::readTextFile(filename, json);
