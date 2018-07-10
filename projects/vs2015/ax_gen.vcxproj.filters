@@ -97,6 +97,9 @@
     <ClCompile Include="..\..\src\Util\StrView.cpp">
       <Filter>src\Util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Generators\Generator_android.cpp">
+      <Filter>src\Generators</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\common.h">
@@ -188,6 +191,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Util\StrView.h">
       <Filter>src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Generators\Generator_android.h">
+      <Filter>src\Generators</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

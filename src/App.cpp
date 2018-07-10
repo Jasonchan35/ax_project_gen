@@ -3,6 +3,7 @@
 #include "Generators/Generator_vs2015.h"
 #include "Generators/Generator_makefile.h"
 #include "Generators/Generator_xcode.h"
+#include "Generators/Generator_android.h"
 
 namespace ax_gen {
 
@@ -105,6 +106,9 @@ int App::_run(int argc, char* argv[]) {
 
 	}else if (workspace.generator == "xcode"   ) { 
 		_generator.reset(new Generator_xcode());
+
+	}else if (workspace.generator == "android"   ) {
+		_generator.reset(new Generator_android());
 
 	}else{
 		throw Error("Unsupported generator '", workspace.generator, "'");

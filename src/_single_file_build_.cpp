@@ -31,4 +31,5 @@
 #include "Generators/Generator_makefile.cpp"
 #include "Generators/Generator_xcode.cpp"
 #include "Generators/XCodePbxWriter.cpp"
+#include "Generators/Generator_android.cpp"
 
