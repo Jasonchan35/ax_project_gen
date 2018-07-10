@@ -179,7 +179,7 @@ void Config::inherit(const Config& rhs) {
 	}
 
 	auto& t = rhs.outputLib.path();
-	if (t) {
+	if (t && g_ws->generator != "android") {
 		link_files._inherit.add(t, g_ws->buildDir);
 	}
 

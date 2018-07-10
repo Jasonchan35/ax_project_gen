@@ -87,7 +87,7 @@
 	"startup_project": "Hello",
 	"projects": [
 		"Hello.axproj",
-		"My - Lib/MyLib.axproj"
+		"MyLib/MyLib.axproj"
 	],
 	"extra_workspaces": {
 		"MyLibs_Only" : {
