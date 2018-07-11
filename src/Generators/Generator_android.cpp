@@ -42,7 +42,13 @@ void Generator_android::gen_project(Project& proj) {
 
 	o.append("include $(CLEAR_VARS)\n");
 	o.append("LOCAL_PATH := .\n");
-	o.append("LOCAL_MODULE := ", proj.name, "\n");
+
+	String moduleName(proj.name);
+	if (proj.type_is_lib()) {
+		moduleName.set("build_", proj.name);
+	}
+
+	o.append("LOCAL_MODULE := ", moduleName, "\n");
 	o.append("LOCAL_CPP_FEATURES := exceptions\n");
 	o.append("LOCAL_CPP_EXTENSION := .cxx .cpp .cc\n");
 
@@ -99,11 +105,11 @@ void Generator_android::gen_project(Project& proj) {
 	{
 		String dep_libs;
 		String dep_dlls;
-		for (auto& dp : proj._dependencies) {
+		for (auto& dp : proj._dependencies_inherit) {
 			if (dp->type_is_lib()) {
-				dep_libs.append(dp->name);
+				dep_libs.append(" build_", dp->name);
 			} else if (dp->type_is_dll()) {
-				dep_dlls.append(dp->name);
+				dep_dlls.append(" ", dp->name);
 			}
 		}
 
@@ -129,10 +135,10 @@ void Generator_android::gen_project(Project& proj) {
 
 		o.append("\n#==== dummy target to force build static lib ========\n");
 		o.append("include $(CLEAR_VARS)\n");
-		o.append("LOCAL_MODULE := ", proj.name, "-dummy\n");
+		o.append("LOCAL_MODULE := ", moduleName, "-dummy\n");
 		o.append("LOCAL_CFLAGS := -DANDROID_NDK\n");
 		o.append("LOCAL_SRC_FILES := jni/dummy_main.cpp\n");
-		o.append("LOCAL_STATIC_LIBRARIES := ", proj.name, "\n");
+		o.append("LOCAL_STATIC_LIBRARIES := ", moduleName, "\n");
 		o.append("include $(BUILD_EXECUTABLE)\n");
 	}
 
