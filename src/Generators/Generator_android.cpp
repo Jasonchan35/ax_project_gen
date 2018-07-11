@@ -58,6 +58,7 @@ void Generator_android::gen_project(Project& proj) {
 		String cpp_defines;
 		String cpp_flags;
 		String link_flags;
+		String link_dirs;
 		String link_libs;
 		String link_files;
 		String include_files;
@@ -74,7 +75,7 @@ void Generator_android::gen_project(Project& proj) {
 			link_flags.append("\\\n\t", q.path());
 		}
 		for (auto& q : config.link_dirs._final) {
-			link_libs.append("\\\n\t-L", quotePath(q.path()));
+			link_dirs.append("\\\n\t-L", quotePath(q.path()));
 		}
 		for (auto& q : config.link_libs._final) {
 			link_libs.append("\\\n\t-l", q.path());
@@ -95,13 +96,15 @@ void Generator_android::gen_project(Project& proj) {
 		}
 
 		o.append(config.name, "__LOCAL_CFLAGS  := ", cpp_flags, cpp_defines, include_dirs, include_files, "\n\n");
-		o.append(config.name, "__LOCAL_LDFLAGS := ", link_flags, link_libs, link_files, "\n\n");
+		o.append(config.name, "__LOCAL_LDFLAGS := ", link_flags, link_dirs, link_files, "\n\n");
+		o.append(config.name, "__LOCAL_LDLIBS := ", link_libs, "\n\n");
 	}
 	o.append("LOCAL_CFLAGS   := $($(config)__LOCAL_CFLAGS)\n");
 	o.append("LOCAL_CPPFLAGS := -std=c++14\n");
 
 	if (!proj.type_is_lib()) {
 		o.append("LOCAL_LDFLAGS := $($(config)__LOCAL_LDFLAGS)\n");
+		o.append("LOCAL_LDLIBS  := $($(config)__LOCAL_LDLIBS)\n");
 	}
 
 	{
