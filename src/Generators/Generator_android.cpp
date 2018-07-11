@@ -45,7 +45,9 @@ void Generator_android::gen_project(Project& proj) {
 
 	String moduleName(proj.name);
 	if (proj.type_is_lib()) {
-		moduleName.set("build_", proj.name);
+		// NDK_build will remove prefix "lib" for any module, 
+		// it became a problem for workspace contain both libMyProgram and MyProgram in the same time
+		moduleName.set("static_", proj.name);
 	}
 
 	o.append("LOCAL_MODULE := ", moduleName, "\n");
@@ -107,7 +109,7 @@ void Generator_android::gen_project(Project& proj) {
 		String dep_dlls;
 		for (auto& dp : proj._dependencies_inherit) {
 			if (dp->type_is_lib()) {
-				dep_libs.append(" build_", dp->name);
+				dep_libs.append(" static_", dp->name);
 			} else if (dp->type_is_dll()) {
 				dep_dlls.append(" ", dp->name);
 			}
