@@ -14,6 +14,7 @@ private:
 	void gen_project(Project& proj);
 	void gen_AndroidManifest();
 	void gen_Application_mk();
+	void gen_dummy_main_cpp();
 
 	String escapeString	(const StrView& v);
 	String quotePath	(const StrView& v);

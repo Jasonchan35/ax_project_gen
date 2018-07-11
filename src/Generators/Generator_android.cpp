@@ -17,9 +17,10 @@ void Generator_android::onBuild() {
 
 void Generator_android::gen_workspace() {
 	gen_AndroidManifest();
+	gen_Application_mk();
+	gen_dummy_main_cpp();
 
 	String o;
-
 	for (auto& proj : g_ws->projects) {
 		gen_project(proj);
 		o.append("include ", proj.name, ".make\n");
@@ -88,8 +89,12 @@ void Generator_android::gen_project(Project& proj) {
 		o.append(config.name, "__LOCAL_CFLAGS  := ", cpp_flags, cpp_defines, include_dirs, include_files, "\n\n");
 		o.append(config.name, "__LOCAL_LDFLAGS := ", link_flags, link_libs, link_files, "\n\n");
 	}
-	o.append("LOCAL_CFLAGS  := $($(config)__LOCAL_CFLAGS)\n");
-	o.append("LOCAL_LDFLAGS := $($(config)__LOCAL_LDFLAGS)\n");
+	o.append("LOCAL_CFLAGS   := $($(config)__LOCAL_CFLAGS)\n");
+	o.append("LOCAL_CPPFLAGS := -std=c++14\n");
+
+	if (!proj.type_is_lib()) {
+		o.append("LOCAL_LDFLAGS := $($(config)__LOCAL_LDFLAGS)\n");
+	}
 
 	{
 		String dep_libs;
@@ -107,20 +112,28 @@ void Generator_android::gen_project(Project& proj) {
 	}
 	
 	{
-		o += "LOCAL_SRC_FILES := ";
+		o.append("LOCAL_SRC_FILES := ");
 		for (auto& q : proj.fileEntries) {
 			if (q.excludedFromBuild) continue;
 			o.append("\\\n\t", escapeString(q.path()));
 		}
-		o += "\n\n";
+		o.append("\n\n");
 	}
 
 	if (proj.type_is_exe()) {
-		o += "include $(BUILD_EXECUTABLE)\n";
+		o.append("include $(BUILD_EXECUTABLE)\n");
 	} else if (proj.type_is_dll()) {
-		o += "include $(BUILD_SHARED_LIBRARY)\n";
+		o.append("include $(BUILD_SHARED_LIBRARY)\n");
 	} else if (proj.type_is_lib()) {
-		o += "include $(BUILD_STATIC_LIBRARY)\n";
+		o.append("include $(BUILD_STATIC_LIBRARY)\n");
+
+		o.append("\n#==== dummy target to force build static lib ========\n");
+		o.append("include $(CLEAR_VARS)\n");
+		o.append("LOCAL_MODULE := ", proj.name, "-dummy\n");
+		o.append("LOCAL_CFLAGS := -DANDROID_NDK\n");
+		o.append("LOCAL_SRC_FILES := jni/dummy_main.cpp\n");
+		o.append("LOCAL_STATIC_LIBRARIES := ", proj.name, "\n");
+		o.append("include $(BUILD_EXECUTABLE)\n");
 	}
 
 	String outFilename(g_ws->buildDir, proj.genData_makefile.makefile);
@@ -143,9 +156,14 @@ void Generator_android::gen_AndroidManifest() {
 
 void Generator_android::gen_Application_mk() {
 	String o =	"APP_STL := c++_static\n";
-
-	String filename(g_ws->buildDir, "/AndroidManifest.xml");
+	String filename(g_ws->buildDir, "/jni/Application.mk");
 	FileUtil::writeTextFile(filename, o);
+}
+
+void Generator_android::gen_dummy_main_cpp() {
+	String o =	"int main() { return 0; }\n";
+	String filename(g_ws->buildDir, "/jni/dummy_main.cpp");
+	FileUtil::writeTextFile(filename, o);	
 }
 
 String Generator_android::quotePath(const StrView& v) {
@@ -174,4 +192,5 @@ String Generator_android::escapeString(const StrView& v) {
 	}
 	return o;
 }
+
 } //namespace
