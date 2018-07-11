@@ -13,6 +13,7 @@ private:
 	void gen_workspace();
 	void gen_project(Project& proj);
 	void gen_AndroidManifest();
+	void gen_Application_mk();
 
 	String escapeString	(const StrView& v);
 	String quotePath	(const StrView& v);

@@ -42,9 +42,8 @@ void Generator_android::gen_project(Project& proj) {
 	o.append("include $(CLEAR_VARS)\n");
 	o.append("LOCAL_PATH := .\n");
 	o.append("LOCAL_MODULE := ", proj.name, "\n");
+	o.append("LOCAL_CPP_FEATURES := exceptions\n");
 	o.append("LOCAL_CPP_EXTENSION := .cxx .cpp .cc\n");
-	o.append("#LOCAL_STATIC_LIBRARIES := libax\n");
-	o.append("#LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz\n");
 
 	for (auto& config : proj.configs) {
 		String cpp_defines;
@@ -77,14 +76,20 @@ void Generator_android::gen_project(Project& proj) {
 		for (auto& q : config.include_files._final) {
 			include_files.append("\\\n\t-include ", quotePath(q.path()));
 		}
+
+		if (proj.pch_header) {
+			include_files.append("\\\n\t-include ", quotePath(proj.pch_header->path()));
+		}
+
 		for (auto& q : config.include_dirs._final) {
 			include_dirs.append("\\\n\t-I", quotePath(q.path()));
 		}
 
-		o.append(config.name, "__LOCAL_CFLAGS := ", cpp_flags, cpp_defines, include_dirs, include_files, "\n\n");
+		o.append(config.name, "__LOCAL_CFLAGS  := ", cpp_flags, cpp_defines, include_dirs, include_files, "\n\n");
 		o.append(config.name, "__LOCAL_LDFLAGS := ", link_flags, link_libs, link_files, "\n\n");
 	}
-	o.append("LOCAL_CFLAGS := $($(config)__LOCAL_CFLAGS)\n");
+	o.append("LOCAL_CFLAGS  := $($(config)__LOCAL_CFLAGS)\n");
+	o.append("LOCAL_LDFLAGS := $($(config)__LOCAL_LDFLAGS)\n");
 
 	{
 		String dep_libs;
@@ -134,7 +139,13 @@ void Generator_android::gen_AndroidManifest() {
 
 	String filename(g_ws->buildDir, "/AndroidManifest.xml");
 	FileUtil::writeTextFile(filename, o);
+}
 
+void Generator_android::gen_Application_mk() {
+	String o =	"APP_STL := c++_static\n";
+
+	String filename(g_ws->buildDir, "/AndroidManifest.xml");
+	FileUtil::writeTextFile(filename, o);
 }
 
 String Generator_android::quotePath(const StrView& v) {
