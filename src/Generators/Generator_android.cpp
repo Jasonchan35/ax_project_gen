@@ -98,13 +98,14 @@ void Generator_android::gen_project(Project& proj) {
 		o.append(config.name, "__LOCAL_CFLAGS  := ", cpp_flags, cpp_defines, include_dirs, include_files, "\n\n");
 		o.append(config.name, "__LOCAL_LDFLAGS := ", link_flags, link_dirs, link_files, "\n\n");
 		o.append(config.name, "__LOCAL_LDLIBS := ", link_libs, "\n\n");
-	}
-	o.append("LOCAL_CFLAGS   := $($(config)__LOCAL_CFLAGS)\n");
-	o.append("LOCAL_CPPFLAGS := -std=c++14\n");
 
-	if (!proj.type_is_lib()) {
-		o.append("LOCAL_LDFLAGS := $($(config)__LOCAL_LDFLAGS)\n");
-		o.append("LOCAL_LDLIBS  := $($(config)__LOCAL_LDLIBS)\n");
+		o.append("LOCAL_CFLAGS   := $($(config)__LOCAL_CFLAGS)\n");
+		o.append("LOCAL_CPPFLAGS := -std=", config.cpp_std, "\n");
+
+		if (!proj.type_is_lib()) {
+			o.append("LOCAL_LDFLAGS := $($(config)__LOCAL_LDFLAGS)\n");
+			o.append("LOCAL_LDLIBS  := $($(config)__LOCAL_LDLIBS)\n");
+		}
 	}
 
 	{
@@ -166,7 +167,9 @@ void Generator_android::gen_AndroidManifest() {
 }
 
 void Generator_android::gen_Application_mk() {
-	String o("APP_STL := c++_static\n");
+	String o;
+	o.append("APP_STL := c++_static\n");
+	o.append("APP_PLATFORM := android-18\n");
 	String filename(g_ws->buildDir, "/jni/Application.mk");
 	FileUtil::writeTextFile(filename, o);
 }

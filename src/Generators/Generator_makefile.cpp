@@ -121,23 +121,6 @@ void Generator_makefile::gen_common_var(String& o) {
 	o.append("\n");
 	o.append("\n");
 
-	pch_suffix = ".gch";
-
-	if (g_ws->compiler == "clang") {
-		pch_suffix = ".pch";
-		o.append("cmd_cpp   := clang++ -std=c++14","\n");
-		o.append("cmd_c     := clang",  "\n");
-		o.append("cmd_link  := clang++","\n");
-	}else if (g_ws->compiler == "gcc") {
-		o.append("cmd_cpp   := g++ -std=gnu++14",  "\n");
-		o.append("cmd_c     := gcc",  "\n");
-		o.append("cmd_link  := g++",  "\n");
-	}else{
-		throw Error("Unsupported compiler ", g_ws->compiler);
-	}
-
-	o.append("cmd_ar    := ar rcs \n");
-
 	if (g_ws->host_os == "windows") {
 		o.append("cmd_mkdir := cmd.exe /c mkdir.bat","\n");
 		o.append("cmd_rmdir := rm -rf",   "\n");
@@ -193,6 +176,25 @@ void Generator_makefile::gen_project(Project& proj) {
 
 	String o;
 	gen_common_var(o);
+	{
+		pch_suffix = ".gch";
+		auto cpp_std = proj.defaultConfig().cpp_std;
+
+		if (g_ws->compiler == "clang") {
+			pch_suffix = ".pch";
+			o.append("cmd_cpp   := clang++ -std=", cpp_std, "\n");
+			o.append("cmd_c     := clang",  "\n");
+			o.append("cmd_link  := clang++","\n");
+		}else if (g_ws->compiler == "gcc") {
+			o.append("cmd_cpp   := g++ -std=", cpp_std, "\n");
+			o.append("cmd_c     := gcc",  "\n");
+			o.append("cmd_link  := g++",  "\n");
+		}else{
+			throw Error("Unsupported compiler ", g_ws->compiler);
+		}
+
+		o.append("cmd_ar    := ar rcs \n");
+	}
 
 	if (g_ws->os_has_objc() && proj.input.cpp_as_objcpp) {
 		o.append("pch_header_compiler_language = objective-c++-header\n");

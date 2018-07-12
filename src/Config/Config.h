@@ -23,7 +23,9 @@ public:
 
 	bool			isDebug {false};
 
+	String			cpp_std;
 	bool			cpp_enable_modules = false;
+
 	bool			warning_as_error {false};
 	String			warning_level;
 

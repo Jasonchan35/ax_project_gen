@@ -29,6 +29,8 @@ Config::Config() {
 	link_libs.isPath	 = false;
 	link_files.isPath    = true;
 
+	cpp_std = "c++14";
+
 	if (g_ws->os == "windows") {
 		exe_target_suffix = ".exe";
 		dll_target_suffix = ".dll";
@@ -57,6 +59,7 @@ void Config::init(Project* proj, Config* source, StrView name_) {
 	}
 
 	if (source) {
+		cpp_std				= source->cpp_std;
 		cpp_enable_modules	= source->cpp_enable_modules;
 		warning_as_error	= source->warning_as_error;
 		warning_level		= source->warning_level;
@@ -103,7 +106,7 @@ void Config::_init_xcode_settings() {
 	}
 	
 //-----------
-	xcode_settings.add("CLANG_CXX_LANGUAGE_STANDARD"   )->set("c++14");
+	xcode_settings.add("CLANG_CXX_LANGUAGE_STANDARD"   )->set(cpp_std);
 	xcode_settings.add("CLANG_ENABLE_OBJC_ARC"         )->set("YES");
 	xcode_settings.add("GCC_SYMBOLS_PRIVATE_EXTERN"    )->set("YES");
 
@@ -150,6 +153,7 @@ void Config::dump(StringStream& s) {
 	ax_dump(s, outputTarget);
 	ax_dump(s, outputLib);
 
+	if (cpp_std)			ax_dump(s, cpp_std);
 	if (cpp_enable_modules)	ax_dump(s, cpp_enable_modules);
 	if (warning_as_error)	ax_dump(s, warning_as_error);
 	if (xcode_settings)		ax_dump(s, xcode_settings);
@@ -241,6 +245,7 @@ void Config::readJson(JsonReader& r) {
 		//---------
 		#define ReadMember(Value) if (r.member(#Value, Value)) continue;
 		ReadMember(cpp_enable_modules);
+		ReadMember(cpp_std);
 		ReadMember(warning_as_error);
 		ReadMember(warning_level);
 		ReadMember(exe_target_prefix);

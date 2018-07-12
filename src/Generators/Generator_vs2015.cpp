@@ -487,7 +487,19 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 		wr.attr("Condition", cond);
 		{
 			auto tag = wr.tagScope("ClCompile");
-				
+
+			String cpp_std = "stdcpp14";
+
+			if (config.cpp_std == "c++11") {
+				wr.tagWithBody("LanguageStandard", "stdcpp14");
+			} else if (config.cpp_std == "c++14") {
+				wr.tagWithBody("LanguageStandard", "stdcpp14");
+			} else if (config.cpp_std == "c++17") {
+				wr.tagWithBody("LanguageStandard", "stdcpp17");
+			} else if (config.cpp_std == "latest") {
+				wr.tagWithBody("LanguageStandard", "stdcpplatest");
+			}
+
 			wr.tagWithBody("PreprocessorDefinitions", "%(PreprocessorDefinitions)");
 
 			if (vsForLinux()) {
