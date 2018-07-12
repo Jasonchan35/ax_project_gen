@@ -488,7 +488,7 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 		{
 			auto tag = wr.tagScope("ClCompile");
 
-			String cpp_std = "stdcpp14";
+			String cpp_std("stdcpp14");
 
 			if (config.cpp_std == "c++11") {
 				wr.tagWithBody("LanguageStandard", "stdcpp14");

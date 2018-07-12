@@ -178,7 +178,7 @@ void Generator_makefile::gen_project(Project& proj) {
 	gen_common_var(o);
 	{
 		pch_suffix = ".gch";
-		auto cpp_std = proj.defaultConfig().cpp_std;
+		auto& cpp_std = proj.defaultConfig().cpp_std;
 
 		if (g_ws->compiler == "clang") {
 			pch_suffix = ".pch";
