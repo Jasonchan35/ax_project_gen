@@ -329,6 +329,8 @@ void Project::resolve_files() {
 		resolve_genUniteFiles(FileType::c_source,   ".c");
 	}
 
+	g_app->_generator->onProjectGenFiles(*this);
+
 	// virtual folder
 	for (auto& f : fileEntries) {
 		if (f.generated) {

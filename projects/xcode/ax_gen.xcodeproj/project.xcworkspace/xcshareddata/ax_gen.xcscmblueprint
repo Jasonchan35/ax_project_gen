@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "20BADD1DED99BDF960DDF5E332DA89E7FB93668A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "F1159CEE561BEF78255C3EA1B5D376322CE55D23" : 9223372036854775807,
+    "20BADD1DED99BDF960DDF5E332DA89E7FB93668A" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "6FA9CB0F-9406-423D-A612-9FBADC00FC15",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "F1159CEE561BEF78255C3EA1B5D376322CE55D23" : "",
+    "20BADD1DED99BDF960DDF5E332DA89E7FB93668A" : "ax_gen\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "ax_gen",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "projects\/xcode\/ax_gen.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Jasonchan35\/ax_project_gen",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "20BADD1DED99BDF960DDF5E332DA89E7FB93668A"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/bitbucket.org\/aweapp\/anon3.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "F1159CEE561BEF78255C3EA1B5D376322CE55D23"
+    }
+  ]
+}

@@ -9,6 +9,7 @@ class Generator_xcode : public Generator {
 public:
 	void onInit		() override;
 	void onGenerate	() override;
+	void onProjectGenFiles(Project& proj) override;
 	void onBuild	() override;
 	void onIde		() override;
 

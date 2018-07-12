@@ -57,6 +57,15 @@ void Generator_xcode::onIde() {
 #endif
 }
 
+void Generator_xcode::onProjectGenFiles(Project& proj) {
+	if (proj.input.gui_app) {
+		String o("/* foo.strings */");
+		String filename(proj._generatedFileDir, "/foo.strings");
+		FileUtil::writeTextFile(filename, o);
+		proj.fileEntries.add(filename, g_ws->buildDir, true);
+	}
+}
+
 void Generator_xcode::gen_workspace() {
 	g_ws->genData_xcode.xcworkspace.set(g_ws->buildDir, g_ws->workspace_name, ".xcworkspace");
 
@@ -141,7 +150,7 @@ void Generator_xcode::gen_project(Project& proj) {
 	Log::info("gen_proejct ", gd.xcodeproj);
 
 	if (proj.input.gui_app) {
-		if (g_ws->os == "iOS") {
+		if (g_ws->os == "ios") {
 			gen_info_plist_iOS(proj);
 		} else {
 			gen_info_plist_MacOSX(proj);

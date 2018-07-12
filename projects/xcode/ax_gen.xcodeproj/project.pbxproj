@@ -75,6 +75,8 @@
 		96C812621E916EF0008B34C6 /* Path.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Path.h; sourceTree = "<group>"; };
 		96C812C71E91965E008B34C6 /* Glob.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Glob.cpp; sourceTree = "<group>"; };
 		96C812C81E91965E008B34C6 /* Glob.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Glob.h; sourceTree = "<group>"; };
+		96CB169620F7087300167690 /* Generator_android.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Generator_android.cpp; sourceTree = "<group>"; };
+		96CB169720F7087400167690 /* Generator_android.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Generator_android.h; sourceTree = "<group>"; };
 		96DA8F751E944C5700625579 /* UtfUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UtfUtil.h; sourceTree = "<group>"; };
 		96DFFE241E9596DA00AA02DF /* System.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = System.cpp; sourceTree = "<group>"; };
 		96DFFE251E9596DA00AA02DF /* System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = System.h; sourceTree = "<group>"; };
@@ -157,6 +159,8 @@
 		961AAE161E8F775600A2C441 /* Generators */ = {
 			isa = PBXGroup;
 			children = (
+				96CB169620F7087300167690 /* Generator_android.cpp */,
+				96CB169720F7087400167690 /* Generator_android.h */,
 				961AAE171E8F775600A2C441 /* Generator.cpp */,
 				961AAE181E8F775600A2C441 /* Generator.h */,
 				961AAE191E8F775600A2C441 /* Generator_makefile.cpp */,

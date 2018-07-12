@@ -25,6 +25,7 @@ public:
 
 	virtual void onInit	() = 0;
 	virtual void onGenerate	() = 0;
+	virtual void onProjectGenFiles(Project& proj) {}
 	virtual void onBuild	() { Log::warning("this generator doesn't support action [-build]"); }
 	virtual void onIde		() { Log::warning("this generator doesn't support action [-ide]"); }
 			void onRun		();
