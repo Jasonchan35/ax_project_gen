@@ -29,8 +29,8 @@ private:
 
 	void gen_file_reference					(XCodePbxWriter& wr, Project& proj, FileEntry& f);
 
-
-	void gen_info_plist(Project& proj);
+	void gen_info_plist_MacOSX(Project& proj);
+	void gen_info_plist_iOS(Project& proj);
 
 	void genUuid(String& o);
 

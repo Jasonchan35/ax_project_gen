@@ -141,7 +141,11 @@ void Generator_xcode::gen_project(Project& proj) {
 	Log::info("gen_proejct ", gd.xcodeproj);
 
 	if (proj.input.gui_app) {
-		gen_info_plist(proj);
+		if (g_ws->os == "iOS") {
+			gen_info_plist_iOS(proj);
+		} else {
+			gen_info_plist_MacOSX(proj);
+		}
 	}
 	
 	XCodePbxWriter wr;
@@ -648,7 +652,7 @@ void Generator_xcode::gen_project_XCConfigurationList(XCodePbxWriter& wr, Projec
 	}
 }
 
-void Generator_xcode::gen_info_plist(Project& proj) {
+void Generator_xcode::gen_info_plist_iOS(Project& proj) {
 	auto& gd = proj.genData_xcode;
 
 	gd.info_plist_file.set(proj.name, "_info.plist");
@@ -668,6 +672,48 @@ void Generator_xcode::gen_info_plist(Project& proj) {
 			wr.tagWithBody("key", "CFBundleDevelopmentRegion");
 			wr.tagWithBody("string", "en");
 
+			wr.tagWithBody("key", "CFBundleExecutable");
+			wr.tagWithBody("string", "$(EXECUTABLE_NAME)");
+		
+			wr.tagWithBody("key", "CFBundleIdentifier");
+			wr.tagWithBody("string", proj.input.xcode_bundle_identifier); //# $(PRODUCT_BUNDLE_IDENTIFIER)
+
+			wr.tagWithBody("key", "CFBundleInfoDictionaryVersion");
+			wr.tagWithBody("string", "6.0");
+
+			wr.tagWithBody("key", "CFBundleName");
+			wr.tagWithBody("string", "$(PRODUCT_NAME)");
+
+			wr.tagWithBody("key", "CFBundlePackageType");
+			wr.tagWithBody("string", "APPL");
+
+			wr.tagWithBody("key", "CFBundleShortVersionString");
+			wr.tagWithBody("string", "1.0");
+
+			wr.tagWithBody("key", "CFBundleVersion");
+			wr.tagWithBody("string", "1");
+		}
+	}
+	FileUtil::writeTextFile(String(g_ws->buildDir, gd.info_plist_file), wr.buffer());	
+}
+
+void Generator_xcode::gen_info_plist_MacOSX(Project& proj) {
+	auto& gd = proj.genData_xcode;
+
+	gd.info_plist_file.set(proj.name, "_info.plist");
+
+
+	XmlWriter wr;
+	wr.writeHeader();
+	wr.writeDocType("plist", 
+		"-//Apple//DTD PLIST 1.0//EN", 
+		"http://www.apple.com/DTDs/PropertyList-1.0.dtd");
+
+	{
+		auto tag = wr.tagScope("plist");
+		wr.attr("version", "1.0");
+		{
+			auto tag = wr.tagScope("dict");
 			wr.tagWithBody("key", "CFBundleDevelopmentRegion");
 			wr.tagWithBody("string", "en");
 
