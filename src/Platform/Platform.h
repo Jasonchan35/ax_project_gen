@@ -41,17 +41,17 @@ libax_platform:
 
 #if ax_CPU_x86_64
 	#define ax_CPU_LP64				1
-	#define ax_CPU_LITTLE_ENDIAN	1
+	#define ax_CPU_ENDIAN_LITTLE	1
 #endif
 
 #if ax_CPU_x86
 	#define ax_CPU_LP32				1
-	#define ax_CPU_LITTLE_ENDIAN	1
+	#define ax_CPU_ENDIAN_LITTLE	1
 #endif
 
 #if ax_CPU_PowerPC
 	#define ax_CPU_LP32				1
-	#define ax_CPU_BIG_ENDIAN		1
+	#define ax_CPU_ENDIAN_BIG		1
 #endif
 
 #if ax_CPU_ARM
@@ -63,7 +63,7 @@ libax_platform:
 #endif
 
 
-#if ax_CPU_BIG_ENDIAN + ax_CPU_LITTLE_ENDIAN != 1
+#if ax_CPU_ENDIAN_BIG + ax_CPU_ENDIAN_LITTLE != 1
 	#error CPU endian should be specified
 #endif
 

@@ -29,9 +29,9 @@
 	#define ax_CPU_ARM 1
 
 	#if __ARMEL__
-		#define ax_CPU_LITTLE_ENDIAN	1
+		#define ax_CPU_ENDIAN_LITTLE	1
 	#elif defined( __ARMEB__ )
-		#define ax_CPU_BIG_ENDIAN		1
+		#define ax_CPU_ENDIAN_BIG		1
 	#else
 		#error unknown ARM CPU endian
 	#endif
