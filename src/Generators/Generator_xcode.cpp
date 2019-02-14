@@ -536,6 +536,9 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 			{
 				auto scope = wr.objectScope("buildSettings");
 				//cc_flags
+				for (auto& q : config.xcode_settings.pairs()) {
+					wr.member(q.key, quoteString(*q.value));
+				}
 			}
 			wr.member("name", config.name);
 		}

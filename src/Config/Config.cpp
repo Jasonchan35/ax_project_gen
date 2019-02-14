@@ -109,6 +109,7 @@ void Config::_init_xcode_settings() {
 	xcode_settings.add("CLANG_CXX_LANGUAGE_STANDARD"   )->set(cpp_std);
 	xcode_settings.add("CLANG_ENABLE_OBJC_ARC"         )->set("YES");
 	xcode_settings.add("GCC_SYMBOLS_PRIVATE_EXTERN"    )->set("YES");
+	xcode_settings.add("ENABLE_STRICT_OBJC_MSGSEND"    )->set("YES");
 
 	// clang warning flags
 	xcode_settings.add("CLANG_WARN_BOOL_CONVERSION"                            )->set("YES");
@@ -123,6 +124,12 @@ void Config::_init_xcode_settings() {
 	xcode_settings.add("CLANG_WARN_IMPLICIT_SIGN_CONVERSION"                   )->set("YES");
 	xcode_settings.add("CLANG_WARN_ASSIGN_ENUM"                                )->set("YES");
 	xcode_settings.add("CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION"             )->set("YES");
+	xcode_settings.add("CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING"                )->set("YES");
+	xcode_settings.add("CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF"                  )->set("YES");
+	xcode_settings.add("CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS"            )->set("YES");
+	xcode_settings.add("CLANG_WARN_RANGE_LOOP_ANALYSIS"                        )->set("YES");
+	xcode_settings.add("CLANG_WARN_STRICT_PROTOTYPES"                          )->set("YES");
+	xcode_settings.add("CLANG_WARN_COMMA"                                      )->set("YES");
 	
 	// gcc warning flags
 	xcode_settings.add("GCC_WARN_FOUR_CHARACTER_CONSTANTS"                     )->set("YES");
@@ -133,6 +140,14 @@ void Config::_init_xcode_settings() {
 	xcode_settings.add("GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS"    )->set("YES");
 	xcode_settings.add("GCC_WARN_UNUSED_LABEL"                                 )->set("YES");
 //	xcode_settings.add("GCC_WARN_ABOUT_MISSING_PROTOTYPES"                     )->set("YES");
+
+	xcode_settings.add("GCC_WARN_64_TO_32_BIT_CONVERSION"                      )->set("YES");
+	xcode_settings.add("GCC_NO_COMMON_BLOCKS"                                  )->set("YES");
+	xcode_settings.add("GCC_WARN_ABOUT_RETURN_TYPE"                            )->set("YES");
+	xcode_settings.add("GCC_WARN_UNDECLARED_SELECTOR"                          )->set("YES");
+	xcode_settings.add("GCC_WARN_UNINITIALIZED_AUTOS"                          )->set("YES");
+	xcode_settings.add("GCC_WARN_UNUSED_FUNCTION"                              )->set("YES");
+	xcode_settings.add("GCC_WARN_UNUSED_VARIABLE"                              )->set("YES");
 }
 
 void Config::_init_vs2015_settings() {
