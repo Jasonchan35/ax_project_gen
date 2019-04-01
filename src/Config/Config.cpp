@@ -112,6 +112,7 @@ void Config::_init_xcode_settings() {
 	xcode_settings.add("ENABLE_STRICT_OBJC_MSGSEND"    )->set("YES");
 
 	// clang warning flags
+	xcode_settings.add("CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED"            )->set("YES");
 	xcode_settings.add("CLANG_WARN_BOOL_CONVERSION"                            )->set("YES");
 	xcode_settings.add("CLANG_WARN_CONSTANT_CONVERSION"                        )->set("YES");
 	xcode_settings.add("CLANG_WARN_EMPTY_BODY"                                 )->set("YES");
