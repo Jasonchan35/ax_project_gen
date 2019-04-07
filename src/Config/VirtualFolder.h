@@ -30,10 +30,10 @@ public:
 	
 	void sortTree() {
 		files.sort(
-			[](auto a, auto b){ return a->path() < b->path(); }
+			[](auto* a, auto* b){ return a->path() < b->path(); }
 		);
 		children.sort(
-		//	[](auto a, auto b) { return a->path() < b->path(); }
+			[](auto* a, auto* b) { return a->path < b->path; }
 		);
 		
 		for (auto* c : children) {
