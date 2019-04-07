@@ -252,6 +252,10 @@ void Project::resolve() {
 	_resolving = true;
 	resolve_internal();
 	_resolving = false;
+	
+	fileEntries.sort();
+	
+	virtualFolders.sort();
 }
 
 void Project::resolve_internal() {

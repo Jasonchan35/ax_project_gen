@@ -48,7 +48,9 @@ public:
 		return strncmp(_data, rhs._data, (size_t)_size) == 0;
 	}
 	bool operator!=(const StrView& rhs) const { return !operator==(rhs); }
-
+	bool operator< (const StrView& rhs) const { return compare(rhs, true) < 0; }
+	
+	int  compare(const StrView& rhs, bool ignoreCase) const;
 	bool equals(const StrView& rhs, bool ignoreCase) const;
 
 	bool matchWildcard(const StrView& wildcard, bool ignoreCase) const;

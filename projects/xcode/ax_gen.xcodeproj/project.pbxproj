@@ -67,6 +67,8 @@
 		961AAE341E8F775600A2C441 /* XmlWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XmlWriter.h; sourceTree = "<group>"; };
 		9645160B1E93159F00331DA0 /* ProjectGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProjectGroup.cpp; sourceTree = "<group>"; };
 		9645160C1E93159F00331DA0 /* ProjectGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectGroup.h; sourceTree = "<group>"; };
+		968E7CC9225AAC7B002B2433 /* StrView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrView.h; sourceTree = "<group>"; };
+		968E7CCA225AAC7B002B2433 /* StrView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StrView.cpp; sourceTree = "<group>"; };
 		96C80CA61E90CFE4008B34C6 /* VirtualFolder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualFolder.cpp; sourceTree = "<group>"; };
 		96C80CA71E90CFE4008B34C6 /* VirtualFolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualFolder.h; sourceTree = "<group>"; };
 		96C80CA91E90D02E008B34C6 /* FileEntry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileEntry.cpp; sourceTree = "<group>"; };
@@ -195,12 +197,14 @@
 				96C812621E916EF0008B34C6 /* Path.h */,
 				961AAE2E1E8F775600A2C441 /* String.cpp */,
 				961AAE2F1E8F775600A2C441 /* String.h */,
+				968E7CCA225AAC7B002B2433 /* StrView.cpp */,
+				968E7CC9225AAC7B002B2433 /* StrView.h */,
+				96DFFE241E9596DA00AA02DF /* System.cpp */,
+				96DFFE251E9596DA00AA02DF /* System.h */,
 				96DA8F751E944C5700625579 /* UtfUtil.h */,
 				961AAE321E8F775600A2C441 /* Vector.h */,
 				961AAE331E8F775600A2C441 /* XmlWriter.cpp */,
 				961AAE341E8F775600A2C441 /* XmlWriter.h */,
-				96DFFE241E9596DA00AA02DF /* System.cpp */,
-				96DFFE251E9596DA00AA02DF /* System.h */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -245,6 +249,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 961AADF61E8F770400A2C441;
@@ -359,6 +364,7 @@
 		961AAE071E8F770500A2C441 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_ASSIGN_ENUM = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
@@ -382,6 +388,7 @@
 		961AAE081E8F770500A2C441 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_ASSIGN_ENUM = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;

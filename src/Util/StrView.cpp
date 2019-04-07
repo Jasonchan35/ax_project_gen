@@ -17,13 +17,37 @@ std::ostream& StrView::onStreamOut(std::ostream& s) const {
 	return s;
 }
 
+int StrView::compare(const StrView& rhs, bool ignoreCase) const {
+	auto* a = data();
+	auto* b = rhs.data();
+	auto n = _size < rhs._size ? _size : rhs._size;
+	
+	if (ignoreCase) {
+		for (int i=0; i<n; i++, a++, b++) {
+			auto la = std::tolower(*a);
+			auto lb = std::tolower(*b);
+			if (la < lb) return -1;
+			if (la > lb) return  1;
+		}
+	} else {
+		for (int i=0; i<n; i++, a++, b++) {
+			if (*a < *b) return -1;
+			if (*a > *b) return  1;
+		}
+	}
+
+	if (_size < rhs._size) return -1;
+	if (_size > rhs._size) return  1;
+	return 0;
+}
+
 bool StrView::equals(const StrView& rhs, bool ignoreCase) const {
 	if (!ignoreCase) return operator==(rhs);
 
 	if (_size != rhs._size) return false;
 	auto* a = data();
 	auto* b = rhs.data();
-	for (int i = 0; i < _size; i++) {
+	for (int i = 0; i < _size; i++, a++, b++) {
 		if (std::tolower(*a) != std::tolower(*b)) return false;
 	}
 	return true;

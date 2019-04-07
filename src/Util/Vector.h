@@ -34,6 +34,10 @@ public:
 	const	T*	end			() const		{ return _p.data() + _p.size(); }
 
 		void	clear		()				{ _p.clear(); }
+		void	sort		()				{ std::sort(_p.begin(), _p.end()); }
+	
+		template<class Compare>
+		void	sort		(const Compare& comp) 	{ std::sort(_p.begin(), _p.end(), comp); }
 
 	void uniqueAppend(const T& v)			{ if (indexOf(v) >= 0) return; append(v); }
 	void uniqueExtend(const Vector<T>& rhs)	{ for (auto& p : rhs) uniqueAppend(p); }

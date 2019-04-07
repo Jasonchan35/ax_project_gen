@@ -49,18 +49,16 @@ public:
 
 	bool operator==(const StrView& v) const { return view() == v; } 
 	bool operator!=(const StrView& v) const { return view() != v; }
+	// needed by Map key
+	bool operator< (const StrView& v) const { return compare(v, true) < 0; }
+	
+	int compare(const StrView& v, bool ignoreCase) const 	{ return view().compare(v, ignoreCase); }
 
 	bool equals(const StrView& v, bool ignoreCase) const     { return view().equals(v, ignoreCase); }
 	bool matchWildcard(const StrView& wildcard, bool ignoreCase) const { return view().matchWildcard(wildcard, ignoreCase); }
 
 	const char* 	c_str	() const	{ return _p.c_str(); }
 			int		size	() const	{ return (int)_p.size(); }
-
-	bool operator<(const StrView& v) const {
-		int c = strncmp(c_str(), v.data(), (size_t)v.size());
-		if (c == 0) return size() < v.size();
-		return c < 0;
-	}
 
 	void operator=(const StrView& v) { _p.assign(v.data(), (size_t)v.size()); }
 

@@ -307,7 +307,7 @@ void Generator_xcode::gen_project_PBXBuildFile(XCodePbxWriter& wr, Project& proj
 	wr.newline(); wr.commentBlock("----- PBXFrameworksBuildPhase -----------------");
 	wr.newline(); wr.commentBlock(" Product Group ");
 	{
-		auto scope = wr.objectScope( build_phase_frameworks_uuid);
+		auto scope = wr.objectScope(build_phase_frameworks_uuid);
 		wr.member("isa", "PBXFrameworksBuildPhase");
 		{
 			auto scope = wr.objectScope("file");

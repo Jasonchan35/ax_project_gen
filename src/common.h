@@ -70,7 +70,7 @@ enum class ConditionResult {
 } //namespace
 
 //---------
-
+#include "Util/String.h"
 #include "Util/Vector.h"
 #include "Util/Dict.h"
 #include "Util/FileUtil.h"

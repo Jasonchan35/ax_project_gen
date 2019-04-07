@@ -2,6 +2,7 @@
 
 #include "Vector.h"
 #include "Error.h"
+#include <algorithm>
 
 namespace ax_gen {
 
@@ -34,8 +35,9 @@ public:
 			operator=(std::move(rhs));
 		}
 		~Pair() { delete value; }
-
 		void operator=(Pair && rhs);
+
+		bool operator<(const Pair& r) const { return key < r.key; }
 
 		Key		key;
 		Value*	value{nullptr};
@@ -145,6 +147,8 @@ public:
 			*dst = *p.value;
 		}
 	}
+	
+	void sort() { _pairs.sort(); }
 
 protected:
 	Vector<Pair>			_pairs; // keep add order

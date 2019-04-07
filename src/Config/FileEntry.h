@@ -70,6 +70,8 @@ public:
 
 	FileEntry* find(const StrView& key) { return _dict.find(key); }
 
+	void sort() { _dict.sort(); }
+
 private:
 	StringDict<FileEntry> _dict;
 };
