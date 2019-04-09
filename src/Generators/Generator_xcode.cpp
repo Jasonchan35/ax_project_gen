@@ -58,13 +58,13 @@ void Generator_xcode::onIde() {
 }
 
 void Generator_xcode::onProjectGenFiles(Project& proj) {
-	if (proj.input.gui_app) {
-		String o("/* foo.strings */");
-		String filename("foo.strings");
-		String fullname(proj._generatedFileDir, "/", filename);
-		FileUtil::writeTextFile(filename, o);
-		proj.fileEntries.add(filename, proj._generatedFileDir, true);
-	}
+//	if (proj.input.gui_app) {
+//		String o("/* foo.strings */");
+//		String filename("foo.strings");
+//		String fullname(proj._generatedFileDir, "/", filename);
+//		FileUtil::writeTextFile(fullname, o);
+//		proj.fileEntries.add(filename, proj._generatedFileDir, true);
+//	}
 }
 
 void Generator_xcode::gen_workspace() {
