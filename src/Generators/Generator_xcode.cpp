@@ -60,9 +60,10 @@ void Generator_xcode::onIde() {
 void Generator_xcode::onProjectGenFiles(Project& proj) {
 	if (proj.input.gui_app) {
 		String o("/* foo.strings */");
-		String filename(proj._generatedFileDir, "/foo.strings");
+		String filename("foo.strings");
+		String fullname(proj._generatedFileDir, "/", filename);
 		FileUtil::writeTextFile(filename, o);
-		proj.fileEntries.add(filename, g_ws->buildDir, true);
+		proj.fileEntries.add(filename, proj._generatedFileDir, true);
 	}
 }
 
