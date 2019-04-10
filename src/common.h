@@ -17,6 +17,7 @@
 #include <assert.h>
 #include <stdint.h>
 #include <thread>
+#include <algorithm>
 
 //#define ax_fallthrough [[fallthrough]]
 #define ax_fallthrough //nothing
