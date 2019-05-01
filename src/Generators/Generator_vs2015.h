@@ -56,9 +56,9 @@ public:
 
 class Generator_vs2017 : public Generator_vs2015 {
 public:
-	virtual StrView slnFileHeader();
-	virtual StrView vcxprojToolsVersion() { return StrView("15.0"); }
-	virtual StrView visualc_PlatformToolset() { 
+	virtual StrView slnFileHeader() override;
+	virtual StrView vcxprojToolsVersion() override { return StrView("15.0"); }
+	virtual StrView visualc_PlatformToolset() override { 
 		if (g_ws->compiler == "clang") {
 			return StrView("v141_clang_c2");
 		}
@@ -69,6 +69,15 @@ public:
 class Generator_vs2017_linux : public Generator_vs2017 {
 public:
 	virtual bool vsForLinux() override { return true; }
+};
+
+class Generator_vs2019 : public Generator_vs2015 {
+public:
+	virtual StrView slnFileHeader() override;
+	virtual StrView vcxprojToolsVersion() override { return StrView("16.0"); }
+	virtual StrView visualc_PlatformToolset() override {
+		return StrView("v142");
+	}
 };
 
 } //namespace

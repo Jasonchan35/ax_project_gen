@@ -101,6 +101,9 @@ int App::_run(int argc, char* argv[]) {
 	}else if (workspace.generator == "vs2017_linux") {
 		_generator.reset(new Generator_vs2017_linux());
 
+	}else if (workspace.generator == "vs2019") {
+		_generator.reset(new Generator_vs2019());
+
 	}else if (workspace.generator == "makefile") { 
 		_generator.reset(new Generator_makefile());
 
@@ -146,7 +149,7 @@ int App::_run(int argc, char* argv[]) {
 			"  ax_gen ws=my.axworkspace gen=vs2015 -gen\n"
 			"\n"
 			"Options:\n"
-			"  gen=<Geneartor>  - [vs2015, vs2015_linux, vs2017, vs2017_linux, xcode, makefile]\n"
+			"  gen=<Geneartor>  - [vs2019, vs2017, vs2017_linux, vs2015, xcode, makefile]\n"
 			"  os=<target OS>   - [windows, macosx, ios, linux]\n"
 			"  cpu=<target CPU> - [x86_64, x86] \n"
 			"  config=<Name>    - Configuration name for action -build / -run \n"

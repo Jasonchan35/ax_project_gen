@@ -72,6 +72,14 @@ StrView Generator_vs2017::slnFileHeader() {
 					"\r\n");
 }
 
+StrView Generator_vs2019::slnFileHeader() {
+	return  StrView("Microsoft Visual Studio Solution File, Format Version 12.00\r\n"
+		"# Visual Studio 16\r\n"
+		"VisualStudioVersion = 16.0.28803.352\r\n"
+		"MinimumVisualStudioVersion = 10.0.40219.1\r\n"
+		"\r\n");
+}
+
 void Generator_vs2015::onBuild() {
 	auto* proj = g_ws->startupProject;
 	if (!proj) {
