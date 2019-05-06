@@ -583,6 +583,13 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 					}
 				}
 				{
+					auto scope = wr.arrayScope("OTHER_CFLAGS");
+					for (auto& q : config.cpp_flags._final) {
+						wr.newline();
+						wr.write(quoteString(q.path()));
+					}
+				}
+				{
 					auto scope = wr.arrayScope("OTHER_CPLUSPLUSFLAGS");
 					for (auto& q : config.cpp_flags._final) {
 						wr.newline();
