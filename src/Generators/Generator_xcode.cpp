@@ -416,9 +416,9 @@ void Generator_xcode::gen_project_PBXProject(XCodePbxWriter& wr, Project& proj) 
 		}
 	}
 	wr.member("compatibilityVersion", quoteString("Xcode 3.2"));
-	wr.member("developmentRegion", "English");
+	wr.member("developmentRegion", "en");
 	wr.member("hasScannedForEncodings", "0");
-	wr.member("knownRegions", "(en,)");
+	wr.member("knownRegions", "(Base, en,)");
 	wr.member("buildConfigurationList", proj.genData_xcode.configListUuid);
 	wr.member("mainGroup", main_group_uuid);
 	wr.member("productRefGroup", product_group_uuid );
