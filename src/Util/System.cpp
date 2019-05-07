@@ -44,12 +44,10 @@ int System::createProcess(const StrView& exe, const StrView& args) {
 	WString cmdW;
 	cmdW.appendUtf(cmd);
 
-	STARTUPINFOW si; 
-	ZeroMemory(&si, sizeof(STARTUPINFO));
+	STARTUPINFOW si = {};
     si.cb = sizeof(STARTUPINFO);
 
-	PROCESS_INFORMATION pi; 
-	ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
+	PROCESS_INFORMATION pi = {};
 
 	if (!::CreateProcess(exeW.c_str(), cmdW.data(), nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi)) {
 		auto dw = GetLastError();
