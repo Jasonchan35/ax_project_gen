@@ -603,6 +603,10 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 						wr.newline();
 						wr.write(quoteString(q.path()));
 					}
+					for (auto& q : config.link_dirs._final) {
+						wr.newline();
+						wr.write(quoteString(String("-L", q.path())));
+					}
 					for (auto& q : config.link_libs._final) {
 						wr.newline();						;
 						wr.write(quoteString(String("-l", q.path())));
