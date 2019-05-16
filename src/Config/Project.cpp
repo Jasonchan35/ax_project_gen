@@ -164,6 +164,7 @@ void Project::readJson(JsonReader& r) {
 			ReadMember(multithread_build);
 			ReadMember(xcode_bundle_identifier);
 			ReadMember(visualc_PlatformToolset);
+			ReadMember(cpp_as_objcpp)
 		#undef ReadMember
 
 		if (r.member("dependencies")) {
