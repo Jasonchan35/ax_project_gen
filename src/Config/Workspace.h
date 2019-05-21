@@ -49,6 +49,7 @@ public:
 		String				cuda_vs2015_props;
 		String				cuda_vs2015_targets;
 		String				visualc_PlatformToolset;
+		String				visualc_WindowsTargetPlatformVersion;
 	};
 	Input	input;
 

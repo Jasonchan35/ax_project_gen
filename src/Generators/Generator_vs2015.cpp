@@ -179,11 +179,18 @@ void Generator_vs2015::writeCacheFile(const StrView& filename) {
 	FileUtil::writeTextFile(filename, wr.buffer());
 }
 
-ax_gen::StrView Generator_vs2015::_visualc_PlatformToolset(Project& proj) {
+StrView Generator_vs2015::_visualc_PlatformToolset(Project& proj) {
 	if (proj.input.visualc_PlatformToolset) {
 		return proj.input.visualc_PlatformToolset;
 	}
 	return visualc_PlatformToolset();
+}
+
+StrView Generator_vs2015::_visualc_WindowsTargetPlatformVersion(Project& proj) {
+	if (proj.input.visualc_WindowsTargetPlatformVersion) {
+		return proj.input.visualc_WindowsTargetPlatformVersion;
+	}
+	return visualc_WindowsTargetPlatformVersion();
 }
 
 void Generator_vs2015::genUuid(String& outStr) {
@@ -246,7 +253,7 @@ void Generator_vs2015::gen_project(Project& proj) {
 				wr.tagWithBody("TargetLinuxPlatform",		"Generic");
 				wr.tagWithBody("LinuxProjectType",			"{D51BCBC9-82E9-4017-911E-C93873C4EA2B}");
 			}else{
-				wr.tagWithBody("WindowsTargetPlatformVersion", "8.1");
+				wr.tagWithBody("WindowsTargetPlatformVersion", _visualc_WindowsTargetPlatformVersion(proj));
 			}
 		}
 

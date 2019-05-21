@@ -130,6 +130,7 @@ void Project::init(const StrView& name_) {
 	input.cuda_vs2015_props   = g_ws->input.cuda_vs2015_props;
 	input.cuda_vs2015_targets = g_ws->input.cuda_vs2015_targets;
 	input.visualc_PlatformToolset = g_ws->input.visualc_PlatformToolset;
+	input.visualc_WindowsTargetPlatformVersion = g_ws->input.visualc_WindowsTargetPlatformVersion;
 	
 	for (auto& src : g_ws->configs) {
 		auto* dst = configs.add(src.name);
@@ -164,6 +165,7 @@ void Project::readJson(JsonReader& r) {
 			ReadMember(multithread_build);
 			ReadMember(xcode_bundle_identifier);
 			ReadMember(visualc_PlatformToolset);
+			ReadMember(visualc_WindowsTargetPlatformVersion);
 			ReadMember(cpp_as_objcpp)
 		#undef ReadMember
 

@@ -53,6 +53,7 @@ public:
 
 		//---
 		String				visualc_PlatformToolset;
+		String				visualc_WindowsTargetPlatformVersion;
 
 		void dump(StringStream& s);
 	};

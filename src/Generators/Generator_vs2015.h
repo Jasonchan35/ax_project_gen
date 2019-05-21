@@ -16,6 +16,7 @@ public:
 	virtual StrView slnFileHeader();
 	virtual StrView vcxprojToolsVersion() { return StrView("14.0"); }
 	virtual StrView visualc_PlatformToolset() { return StrView("v140"); } // v140_xp doesn't work with CUDA' compiler
+	virtual StrView visualc_WindowsTargetPlatformVersion() { return StrView("10.0"); }
 private:
 	bool isClang() { return g_ws->compiler == "clang"; }
 
@@ -33,6 +34,7 @@ private:
 	void writeCacheFile(const StrView& filename);
 
 	StrView _visualc_PlatformToolset(Project& proj);
+	StrView _visualc_WindowsTargetPlatformVersion(Project& proj);
 
 	void genUuid(String& outStr);
 

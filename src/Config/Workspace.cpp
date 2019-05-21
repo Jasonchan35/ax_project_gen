@@ -147,6 +147,7 @@ void Workspace::readJson(JsonReader& r) {
 			ReadMember(cuda_vs2015_props)
 			ReadMember(cuda_vs2015_targets)
 			ReadMember(visualc_PlatformToolset)
+			ReadMember(visualc_WindowsTargetPlatformVersion)
 		#undef ReadMember
 
 		if (r.member("config_list", input.config_list)) {
