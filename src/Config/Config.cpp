@@ -63,10 +63,12 @@ void Config::init(Project* proj, Config* source, StrView name_) {
 		cpp_enable_modules	= source->cpp_enable_modules;
 		warning_as_error	= source->warning_as_error;
 		warning_level		= source->warning_level;
+		xcode_settings		= source->xcode_settings;
+		vs2015_ClCompile	= source->vs2015_ClCompile;
+	} else {
+		_init_xcode_settings();
+		_init_vs2015_settings();
 	}
-
-	_init_xcode_settings();
-	_init_vs2015_settings();
 }
 
 void Config::_init_xcode_settings() {

@@ -150,6 +150,13 @@ public:
 	
 	void sort() { _pairs.sort(); }
 
+	void operator=(const Dict& r) {
+		clear();
+		for (auto& e : r._pairs) {
+			*add(e.key) = *e.value;
+		}
+	}
+
 protected:
 	Vector<Pair>			_pairs; // keep add order
 	std::map<Key, Value*>	_map;
