@@ -11,3 +11,4 @@ xcuserdata
 
 /examples/001/_build
 bin/ax_gen
+projects/xcode/DerivedData

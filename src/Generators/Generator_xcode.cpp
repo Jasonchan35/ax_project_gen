@@ -579,7 +579,11 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 					auto scope = wr.arrayScope("HEADER_SEARCH_PATHS");
 					for (auto& q : config.include_dirs._final) {
 						wr.newline();
-						wr.write(quoteString2(q.path()));
+						if (Path::isAbs(q.path())) {
+							wr.write(quoteString2(String(q.path())));
+						} else {
+							wr.write(quoteString2(String("$(PROJECT_DIR)/", q.path())));
+						}
 					}
 				}
 				{
