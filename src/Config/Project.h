@@ -64,6 +64,7 @@ public:
 	ProjectGroup*			group {nullptr};
 
 	FileEntryDict			fileEntries;
+	FileEntryDict			resourceDirs;
 	
 	int						_uniteFileCount {0};
 	bool					hasOutputTarget {false};

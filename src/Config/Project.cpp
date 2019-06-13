@@ -215,6 +215,15 @@ void Project::readJson(JsonReader& r) {
 			}
 		}
 
+		if (r.member("resource_dirs")) {
+			Vector<String> arr;
+			r.getValue(arr);
+
+			for (auto& f : arr) {
+				resourceDirs.add(f, axprojDir, false);
+			}
+		}
+
 		if (r.member("config")) {
 			if (!configs.size()) {
 				r.error("please specify config_list before config");

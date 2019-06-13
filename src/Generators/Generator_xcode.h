@@ -23,12 +23,14 @@ private:
 	void gen_project_PBXBuildFile			(XCodePbxWriter& wr, Project& proj);
 	void gen_project_PBXProject				(XCodePbxWriter& wr, Project& proj);
 	void gen_project_PBXGroup				(XCodePbxWriter& wr, Project& proj);
+	void gen_project_PBXResourcesBuildPhase (XCodePbxWriter& wr, Project& proj);
 	void gen_project_PBXSourcesBuildPhase	(XCodePbxWriter& wr, Project& proj);
 	void gen_project_PBXNativeTarget		(XCodePbxWriter& wr, Project& proj);
 	void gen_project_XCBuildConfiguration	(XCodePbxWriter& wr, Project& proj);
 	void gen_project_XCConfigurationList	(XCodePbxWriter& wr, Project& proj);
 
 	void gen_file_reference					(XCodePbxWriter& wr, Project& proj, FileEntry& f);
+	void gen_build_file_reference			(XCodePbxWriter& wr, Project& proj, FileEntry& f);
 
 	void gen_info_plist_MacOSX(Project& proj);
 	void gen_info_plist_iOS(Project& proj);
@@ -54,11 +56,14 @@ private:
 	static const StrView build_phase_sources_uuid;
 	static const StrView build_phase_frameworks_uuid;
 	static const StrView build_phase_headers_uuid;
+	static const StrView build_phase_resources_uuid;
 
 	static const StrView main_group_uuid;
 	static const StrView product_group_uuid;
 	static const StrView dependencies_group_uuid;
-	
+	static const StrView resources_group_uuid;
+
+	static const StrView kSourceTreeProject;
 	static const StrView kSourceTreeGroup;
 	static const StrView kSourceTreeAbsolute;
 };

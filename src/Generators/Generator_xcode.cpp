@@ -6,10 +6,13 @@ namespace ax_gen {
 const StrView Generator_xcode::build_phase_sources_uuid		= "B0000000B0000000B0000002";
 const StrView Generator_xcode::build_phase_frameworks_uuid	= "B0000000B0000000B0000003";
 const StrView Generator_xcode::build_phase_headers_uuid 	= "B0000000B0000000B0000004";
+const StrView Generator_xcode::build_phase_resources_uuid	= "B0000000B0000000B0000005";
 
 const StrView Generator_xcode::main_group_uuid   			= "C0000000B0000000B0000001";
 const StrView Generator_xcode::product_group_uuid			= "C0000000B0000000B0000002";
 const StrView Generator_xcode::dependencies_group_uuid		= "C0000000B0000000B0000003";
+const StrView Generator_xcode::resources_group_uuid			= "C0000000B0000000B0000004";
+const StrView Generator_xcode::kSourceTreeProject			= "SOURCE_ROOT";
 const StrView Generator_xcode::kSourceTreeGroup				= "\"<group>\"";
 const StrView Generator_xcode::kSourceTreeAbsolute			= "\"<absolute>\"";
 
@@ -133,6 +136,11 @@ void Generator_xcode::gen_project_genUuid(Project& proj) {
 		genUuid(f.genData_xcode.buildUuid);
 	}
 
+	for (auto& f : proj.resourceDirs) {
+		genUuid(f.genData_xcode.uuid);
+		genUuid(f.genData_xcode.buildUuid);
+	}
+
 	for (auto& f : proj.virtualFolders.dict) {
 		genUuid(f.genData_xcode.uuid);
 	}
@@ -174,6 +182,7 @@ void Generator_xcode::gen_project(Project& proj) {
 			gen_project_PBXGroup(wr, proj);
 			gen_project_PBXProject(wr, proj);
 			gen_project_PBXSourcesBuildPhase(wr, proj);
+			gen_project_PBXResourcesBuildPhase(wr, proj);
 			gen_project_PBXNativeTarget(wr, proj);
 			gen_project_XCBuildConfiguration(wr, proj);
 			gen_project_XCConfigurationList(wr, proj);
@@ -183,6 +192,14 @@ void Generator_xcode::gen_project(Project& proj) {
 	}
 
 	FileUtil::writeTextFile(gd.pbxproj, wr.buffer());
+}
+
+void Generator_xcode::gen_build_file_reference(XCodePbxWriter& wr, Project& proj, FileEntry& f) {
+	wr.newline();
+	wr.commentBlock(f.path());
+	auto scope = wr.objectScope(f.genData_xcode.buildUuid);
+	wr.member("isa", "PBXBuildFile");
+	wr.member("fileRef", f.genData_xcode.uuid);
 }
 
 void Generator_xcode::gen_file_reference(XCodePbxWriter& wr, Project& proj, FileEntry& f) {
@@ -280,26 +297,59 @@ void Generator_xcode::gen_project_dependencies(XCodePbxWriter& wr, Project& proj
 		wr.member("sourceTree", kSourceTreeGroup);
 		wr.member("name", "_dependencies_");
 	}
+
+	{
+		wr.newline(); wr.commentBlock("------ Folder resources");
+		auto scope = wr.objectScope(resources_group_uuid);
+		wr.member("isa", "PBXGroup");
+		{
+			auto scope = wr.arrayScope("children");
+			for (auto& f : proj.resourceDirs) {
+				wr.write(f.genData_xcode.uuid);
+			}
+		}
+		wr.member("sourceTree", kSourceTreeGroup);
+		wr.member("name", "_resources_");
+	}
+
 }
 
 void Generator_xcode::gen_project_PBXBuildFile(XCodePbxWriter& wr, Project& proj) {
 	wr.newline();
 	wr.newline(); wr.commentBlock("------ Begin PBXBuildFile section");
+
 	for (auto& f : proj.fileEntries) {
 		if (f.excludedFromBuild) continue;
-	
-		wr.newline();
-		wr.commentBlock(f.path());
-		auto scope = wr.objectScope(f.genData_xcode.buildUuid);
-		wr.member("isa", "PBXBuildFile");
-		wr.member("fileRef", f.genData_xcode.uuid);
+		gen_build_file_reference(wr, proj, f);
 	}
+
+	for (auto& f : proj.resourceDirs) {
+		gen_build_file_reference(wr, proj, f);
+	}
+
 	wr.newline(); wr.commentBlock("------ End PBXBuildFile section");
 	//-------
 	wr.newline();
 	wr.newline(); wr.commentBlock("------ Begin PBXFileReference section");
+
 	for (auto& f : proj.fileEntries) {
 		gen_file_reference(wr, proj, f);
+	}
+
+	for (auto& f : proj.resourceDirs) {
+		wr.newline();
+		wr.commentBlock(f.path());
+		auto scope = wr.objectScope(f.genData_xcode.uuid);
+		auto basename = Path::basename(f.path(), true);
+
+		wr.member("isa", StrView("PBXFileReference"));
+		wr.member("name", quoteString(basename));
+
+		String rel;
+		Path::getRel(rel, f.absPath(), g_ws->buildDir);
+
+		wr.member("path", rel);
+		wr.member("sourceTree", kSourceTreeProject);
 	}
 	wr.newline(); wr.commentBlock("------ End PBXFileReference section");
 
@@ -358,7 +408,7 @@ void Generator_xcode::gen_project_PBXGroup(XCodePbxWriter& wr, Project& proj) {
 			wr.member("name", quoteString(basename));
 						
 			if (v.parent == root) {
-				wr.member("sourceTree", "SOURCE_ROOT");
+				wr.member("sourceTree", kSourceTreeProject);
 				String rel;
 				Path::getRel(rel, v.diskPath, g_ws->buildDir);
 				wr.member("path", quoteString(rel));
@@ -377,6 +427,7 @@ void Generator_xcode::gen_project_PBXGroup(XCodePbxWriter& wr, Project& proj) {
 			auto scope = wr.arrayScope("children");
 			wr.write(product_group_uuid);
 			wr.write(dependencies_group_uuid);
+			wr.write(resources_group_uuid);
 
 			for (auto& c : v.children) {
 				wr.write(c->genData_xcode.uuid);
@@ -385,8 +436,8 @@ void Generator_xcode::gen_project_PBXGroup(XCodePbxWriter& wr, Project& proj) {
 				wr.write(f->genData_xcode.uuid);
 			}
 		}
-		
-		wr.member("sourceTree", "SOURCE_ROOT");
+
+		wr.member("sourceTree", kSourceTreeProject);
 		String rel;
 		Path::getRel(rel, proj.axprojDir, g_ws->buildDir);
 		wr.member("path", quoteString(rel));
@@ -452,6 +503,25 @@ void Generator_xcode::gen_project_PBXSourcesBuildPhase(XCodePbxWriter& wr, Proje
 	}
 }
 
+void Generator_xcode::gen_project_PBXResourcesBuildPhase(XCodePbxWriter& wr, Project& proj) {
+	wr.newline(); wr.commentBlock("------ PBXResourcesBuildPhase section");
+	{
+		auto scope = wr.objectScope(build_phase_resources_uuid);
+		{
+			wr.member("isa", "PBXResourcesBuildPhase");
+			wr.member("buildActionMask", "2147483647");
+			wr.member("runOnlyForDeploymentPostprocessing", "0");
+
+			{
+				auto scope = wr.arrayScope("files");
+				for (auto& f : proj.resourceDirs) {
+					wr.write(f.genData_xcode.buildUuid);
+				}
+			}
+		}
+	}
+}
+
 void Generator_xcode::gen_project_PBXNativeTarget(XCodePbxWriter& wr, Project& proj) {		StrView productType;
 	if (!proj.hasOutputTarget)
 		return;
@@ -508,6 +578,7 @@ void Generator_xcode::gen_project_PBXNativeTarget(XCodePbxWriter& wr, Project& p
 			wr.write(build_phase_sources_uuid);
 			wr.write(build_phase_frameworks_uuid);
 			wr.write(build_phase_headers_uuid);
+			wr.write(build_phase_resources_uuid);
 		}
 		{
 			auto scope = wr.arrayScope("buildRules");
@@ -902,7 +973,28 @@ void Generator_xcode::readCacheFile(const StrView& filename) {
 							}
 						}
 					}
-					
+
+					if (reader.member("resourceDirs")) {
+						reader.beginObject();
+						String path;
+						String fullpath;
+						while(!reader.endObject()) {
+							reader.getMemberName(path);
+							Path::makeFullPath(fullpath, g_ws->buildDir, path);
+							auto* f = proj->resourceDirs.find(fullpath);
+							if (!f) {
+								reader.skipValue();
+								continue;
+							}
+
+							reader.beginObject();
+							while(!reader.endObject()) {
+								reader.member("uuid",		f->genData_xcode.uuid);
+								reader.member("buildUuid",	f->genData_xcode.buildUuid);
+							}
+						}
+					}
+
 					if (reader.member("virtualFolders")) {
 						reader.beginObject();
 						while(!reader.endObject()) {
@@ -959,6 +1051,14 @@ void Generator_xcode::writeCacheFile(const StrView& filename) {
 				{
 					auto scope = wr.objectScope("fileEntries");
 					for (auto& f : proj.fileEntries) {
+						auto scope = wr.objectScope(f.path());
+						wr.member("uuid",		f.genData_xcode.uuid);
+						wr.member("buildUuid",	f.genData_xcode.buildUuid);
+					}
+				}
+				{
+					auto scope = wr.objectScope("resourceDirs");
+					for (auto& f : proj.resourceDirs) {
 						auto scope = wr.objectScope(f.path());
 						wr.member("uuid",		f.genData_xcode.uuid);
 						wr.member("buildUuid",	f.genData_xcode.buildUuid);
