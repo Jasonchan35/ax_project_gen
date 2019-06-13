@@ -131,6 +131,8 @@ void Project::init(const StrView& name_) {
 	input.cuda_vs2015_targets = g_ws->input.cuda_vs2015_targets;
 	input.visualc_PlatformToolset = g_ws->input.visualc_PlatformToolset;
 	input.visualc_WindowsTargetPlatformVersion = g_ws->input.visualc_WindowsTargetPlatformVersion;
+
+	input.xcode_bundle_identifier = "$(PROJECT_NAME)";
 	
 	for (auto& src : g_ws->configs) {
 		auto* dst = configs.add(src.name);

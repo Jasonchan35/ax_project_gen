@@ -150,7 +150,7 @@ void Generator_xcode::gen_project(Project& proj) {
 	assert(gd.xcodeproj);
 	Log::info("gen_proejct ", gd.xcodeproj);
 
-	if (proj.input.gui_app) {
+	if (proj.type_is_exe_or_dll()) {
 		if (g_ws->os == "ios") {
 			gen_info_plist_iOS(proj);
 		} else {
@@ -623,10 +623,8 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 								
 				//-----------
 				if (proj.type_is_exe_or_dll()) {
-					if (proj.input.gui_app) {
-						wr.member("PRODUCT_BUNDLE_IDENTIFIER",	quoteString(proj.input.xcode_bundle_identifier));
-						wr.member("INFOPLIST_FILE",				quoteString(proj.genData_xcode.info_plist_file));
-					}
+					wr.member("PRODUCT_BUNDLE_IDENTIFIER",	quoteString(proj.input.xcode_bundle_identifier));
+					wr.member("INFOPLIST_FILE",				quoteString(proj.genData_xcode.info_plist_file));
 				}
 				
 				if (proj.pch_header) {
