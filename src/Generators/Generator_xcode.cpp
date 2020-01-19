@@ -611,6 +611,7 @@ void Generator_xcode::gen_project_XCBuildConfiguration(XCodePbxWriter& wr, Proje
 				for (auto& q : config.xcode_settings.pairs()) {
 					wr.member(q.key, quoteString(*q.value));
 				}
+				wr.member("CLANG_CXX_LANGUAGE_STANDARD", quoteString(config.cpp_std));
 			}
 			wr.member("name", config.name);
 		}

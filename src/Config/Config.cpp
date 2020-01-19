@@ -110,7 +110,6 @@ void Config::_init_xcode_settings() {
 //-----------
 	xcode_settings.add("CODE_SIGN_IDENTITY"				)->set("-");
 	xcode_settings.add("ALWAYS_SEARCH_USER_PATHS"		)->set("NO");
-	xcode_settings.add("CLANG_CXX_LANGUAGE_STANDARD"	)->set(cpp_std);
 	xcode_settings.add("CLANG_ENABLE_OBJC_ARC"			)->set("YES");
 	xcode_settings.add("GCC_SYMBOLS_PRIVATE_EXTERN"		)->set("YES");
 	xcode_settings.add("ENABLE_STRICT_OBJC_MSGSEND"		)->set("YES");
