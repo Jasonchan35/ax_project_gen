@@ -586,6 +586,10 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 		{
 			auto tag = wr.tagScope("Link");
 
+			if (proj.type_is_dll()) {
+				wr.tagWithBody("ImportLibrary", String("$(OutDir)/../../lib/", config.name, "/$(TargetName).lib"));
+			}
+
 			if (proj.type_is_exe_or_dll()) {
 				gen_config_option(wr, "AdditionalLibraryDirectories",	config.link_dirs._final);
 
