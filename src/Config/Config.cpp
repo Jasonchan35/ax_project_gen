@@ -246,7 +246,11 @@ void Config::resolve() {
 
 		}else if (proj.type_is_dll()) {
 			tmp.set(g_ws->buildDir, "bin/", name, "/", dll_target_prefix, proj.name, dll_target_suffix);
-			outputLib.init(String(g_ws->buildDir, "lib/", name, "/", lib_target_prefix, proj.name, lib_target_suffix), false, false);
+			if (g_ws->os == "windows") {
+				outputLib.init(String(g_ws->buildDir, "lib/", name, "/", lib_target_prefix, proj.name, lib_target_suffix), false, false);
+			} else {
+				outputLib.init(String(g_ws->buildDir, "bin/", name, "/", dll_target_prefix, proj.name, dll_target_suffix), false, false);
+			}
 		}else if (proj.type_is_lib()) {
 			tmp.set(g_ws->buildDir, "lib/", name, "/", lib_target_prefix, proj.name, lib_target_suffix);
 			outputLib.init(tmp, false, false);

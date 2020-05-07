@@ -423,6 +423,16 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 		o.append(config.name, "__run: ", escapeString(outputTarget), "\n");
 		o.append("\t", quotePath(outputTarget), "\n");
 		o.append("\n");
+	 } else if (proj.type == ProjectType::cpp_dll || proj.type == ProjectType::c_dll) {
+		o.append(escapeString(outputTarget), ": $(LINK_FILES)\n");
+		o.append("\t@echo \"-------------------------------------------------------------\"\n");
+		o.append("\t@echo \"[cpp_dll] $@\"\n");
+		o.append("\t$(cmd_mkdir) ", quotePath(outputTargetDir), "\n"); //gmake cannot handle path contain 'space' in function $(@D)
+		o.append("\t$(cmd_link) -shared -fPIC -o \"$@\" $(CPP_OBJ_FILES) -lstdc++ -Wl,--start-group $(LINK_FILES) $(LINK_LIBS) -Wl,--end-group $(LINK_FLAGS)\n");
+		o.append("\n");
+		o.append(config.name, "__run: ", escapeString(outputTarget), "\n");
+		o.append("\t", quotePath(outputTarget), "\n");
+		o.append("\n");
 	} else if (proj.type == ProjectType::cpp_lib || proj.type == ProjectType::c_lib) {
 		o.append(escapeString(outputTarget), ": $(LINK_FILES)\n");
 		o.append("\t@echo \"-------------------------------------------------------------\"\n");
