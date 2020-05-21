@@ -104,7 +104,7 @@ public:
 	void resolve_internal();
 	void resolve_files();
 	void resolve_genUniteFiles(FileType targetType, const StrView& ext);
-	void write_uniteFile(const StrView& code, const StrView& ext);
+	void write_uniteFile(FileEntryDict& uniteFiles, const StrView& code, const StrView& ext);
 
 	bool _resolved  : 1;
 	bool _resolving : 1;

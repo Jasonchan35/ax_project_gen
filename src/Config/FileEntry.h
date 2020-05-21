@@ -66,6 +66,8 @@ public:
 	ValueIterator begin	() { return _dict.begin(); }
 	ValueIterator end	() { return _dict.end(); }
 
+	void append(FileEntryDict& r) { _dict.append(r._dict); }
+
 	void remove(const StrView& key) { _dict.remove(key); }
 
 	FileEntry* find(const StrView& key) { return _dict.find(key); }

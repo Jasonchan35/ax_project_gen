@@ -27,6 +27,13 @@ public:
 	VALUE* add(const InKey& key);
 	VALUE* addIfNotExists(const InKey& key);
 
+	void append(Dict& r) {
+		for (auto& p : r.pairs()) {
+			auto* e = add(p.key);
+			*e = *p.value;
+		}
+	}
+
 	class Pair : NonCopyable {
 	public:
 		Pair(const InKey& key_, Value* value_) : key(key_), value(value_) {}

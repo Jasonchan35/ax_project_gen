@@ -363,6 +363,8 @@ void Project::resolve_genUniteFiles(FileType targetType, const StrView& ext) {
 	String code;
 	String filename;
 
+	FileEntryDict	uniteFiles;
+
 	for (auto& f : fileEntries) {
 		if (f.excludedFromBuild) continue;
 		if (f.type() != targetType) continue;
@@ -376,7 +378,7 @@ void Project::resolve_genUniteFiles(FileType targetType, const StrView& ext) {
 		code.append("#include \"", filename, "\"\n");
 
 		if (code.size() > input.unite_filesize) {
-			write_uniteFile(code, ext);
+			write_uniteFile(uniteFiles, code, ext);
 			code.clear();
 		}
 
@@ -384,11 +386,13 @@ void Project::resolve_genUniteFiles(FileType targetType, const StrView& ext) {
 	}
 
 	if (code) {
-		write_uniteFile(code, ext);
+		write_uniteFile(uniteFiles, code, ext);
 	}
+
+	fileEntries.append(uniteFiles);
 }
 
-void Project::write_uniteFile(const StrView& code, const StrView& ext) {
+void Project::write_uniteFile(FileEntryDict& uniteFiles, const StrView& code, const StrView& ext) {
 
 	char index[60+1];
 	snprintf(index, 60, "%03d", _uniteFileCount);
@@ -401,7 +405,7 @@ void Project::write_uniteFile(const StrView& code, const StrView& ext) {
 	
 	_uniteFileCount++;
 	
-	fileEntries.add(filename, _generatedFileDir, true);
+	uniteFiles.add(filename, _generatedFileDir, true);
 }
 
 } //namespace
