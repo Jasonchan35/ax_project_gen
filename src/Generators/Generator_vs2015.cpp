@@ -535,19 +535,19 @@ void Generator_vs2015::gen_project_config(XmlWriter& wr, Project& proj, Config& 
 				wr.tagWithBody("SDLCheck", "true");
 				wr.tagWithBodyBool("MultiProcessorCompilation", proj.multithread_build());
 
+				if (isClang()) {
+					wr.tagWithBody("DebugInformationFormat",	"None");
+				} else {
+					wr.tagWithBody("DebugInformationFormat",	"ProgramDatabase");
+				}
+
 				if (config.isDebug) {
 					wr.tagWithBody("Optimization",				"Disabled");
-					if (isClang()) {
-						wr.tagWithBody("DebugInformationFormat",	"None");
-					} else {
-						wr.tagWithBody("DebugInformationFormat",	"ProgramDatabase");
-					}
 					wr.tagWithBody("RuntimeLibrary",			"MultiThreadedDebugDLL");
 					wr.tagWithBody("LinkIncremental",			"true");
 				}
 				else {
 					wr.tagWithBody("Optimization",				"MaxSpeed");
-					wr.tagWithBody("DebugInformationFormat",	"None");
 					wr.tagWithBody("WholeProgramOptimization",	"true");
 					wr.tagWithBody("RuntimeLibrary",			"MultiThreadedDLL");
 					wr.tagWithBody("FunctionLevelLinking",		"true");
