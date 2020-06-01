@@ -20,6 +20,7 @@ enum class FileType {
 	cu_header,	// cuda header
 	cu_source,	// cuda source
 	ixx, // cpp modules
+	mxx, // cpp module implementation
 };
 
 class VirtualFolder;
@@ -36,6 +37,7 @@ public:
 	bool			type_is_c	() const { return _type == FileType::c_source; }
 	bool			type_is_cpp	() const { return _type == FileType::cpp_source; }
 	bool			type_is_c_or_cpp() const { return type_is_c() || type_is_cpp(); }
+	bool			type_is_ixx	() const { return _type == FileType::ixx; }
 
 	struct GenData_xcode {
 		String		uuid;

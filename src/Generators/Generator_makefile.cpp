@@ -389,7 +389,7 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 			o.append("\t\t-o \"$@\" -c ", quotePath(cpp_src), "\\\n");
 			o.append("\t\t-MMD -MQ \"$@\" -MF ", quotePath(cpp_dep), "\\\n");
 			o.append("\n");
-		}else if (f.type_is_cpp()) {
+		} else if (f.type_is_cpp()) {
 			if (proj.pch_header) {
 				o.append(escapeString(cpp_obj), ": ", escapeString(pch_header_pch), "\n");
 			}
@@ -402,6 +402,15 @@ void Generator_makefile::gen_project_config(String& o, Config& config) {
 			o.append("\t$(cmd_mkdir) ", quotePath(Path::dirname(cpp_obj)), "\n");
 			o.append("\t$(cmd_cpp) -x $(cpp_source_compiler_language) $(PCH_CC_FLAGS) $(CPP_DEFINES) $(CPP_FLAGS) $(CPP_INCLUDE_DIRS) $(CPP_INCLUDE_FILES) \\\n");
 			o.append("\t\t-o \"$@\" -c ", quotePath(cpp_src), "\\\n");
+			o.append("\t\t-MMD -MQ \"$@\" -MF ", quotePath(cpp_dep), "\\\n");
+			o.append("\n");
+		} else if (f.type_is_ixx()) {
+			o.append(escapeString(cpp_obj), ":", escapeString(cpp_src), "\n");
+			o.append("\t@echo \"-------------------------------------------------------------\"\n");
+			o.append("\t@echo \"[compile ixx] => $@\"\n");
+			o.append("\t$(cmd_mkdir) ", quotePath(Path::dirname(cpp_obj)), "\n");
+			o.append("\t$(cmd_c) -x $(cpp_source_compiler_language) $(CPP_DEFINES) $(CPP_FLAGS) $(CPP_INCLUDE_DIRS) $(CPP_INCLUDE_FILES) \\\n");
+			o.append("\t\t-o \"$@\" --precompile ", quotePath(cpp_src), "\\\n");
 			o.append("\t\t-MMD -MQ \"$@\" -MF ", quotePath(cpp_dep), "\\\n");
 			o.append("\n");
 		}
