@@ -100,6 +100,8 @@ public:
 
 	};
 
+	String		out_target_dir;
+
 	String		exe_target_prefix;
 	String		exe_target_suffix;
 

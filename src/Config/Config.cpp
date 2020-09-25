@@ -242,17 +242,17 @@ void Config::resolve() {
 		String tmp;
 
 		if (proj.type_is_exe()) {
-			tmp.set(g_ws->buildDir, "bin/", name, "/", exe_target_prefix, proj.name, exe_target_suffix);
+			tmp.set(g_ws->buildDir, "bin/", name, "/", out_target_dir, exe_target_prefix, proj.name, exe_target_suffix);
 
 		}else if (proj.type_is_dll()) {
-			tmp.set(g_ws->buildDir, "bin/", name, "/", dll_target_prefix, proj.name, dll_target_suffix);
+			tmp.set(g_ws->buildDir, "bin/", name, "/", out_target_dir, dll_target_prefix, proj.name, dll_target_suffix);
 			if (g_ws->os == "windows") {
 				outputLib.init(String(g_ws->buildDir, "lib/", name, "/", lib_target_prefix, proj.name, lib_target_suffix), false, false);
 			} else {
-				outputLib.init(String(g_ws->buildDir, "bin/", name, "/", dll_target_prefix, proj.name, dll_target_suffix), false, false);
+				outputLib.init(String(g_ws->buildDir, "bin/", name, "/", out_target_dir, dll_target_prefix, proj.name, dll_target_suffix), false, false);
 			}
 		}else if (proj.type_is_lib()) {
-			tmp.set(g_ws->buildDir, "lib/", name, "/", lib_target_prefix, proj.name, lib_target_suffix);
+			tmp.set(g_ws->buildDir, "lib/", name, "/", out_target_dir, lib_target_prefix, proj.name, lib_target_suffix);
 			outputLib.init(tmp, false, false);
 		}
 
@@ -273,6 +273,7 @@ void Config::readJson(JsonReader& r) {
 		ReadMember(cpp_std);
 		ReadMember(warning_as_error);
 		ReadMember(warning_level);
+		ReadMember(out_target_dir);
 		ReadMember(exe_target_prefix);
 		ReadMember(exe_target_suffix);
 		ReadMember(lib_target_prefix);
