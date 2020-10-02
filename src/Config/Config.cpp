@@ -227,17 +227,17 @@ void Config::resolve() {
 
 	if (!_project) return;
 
-	cpp_defines._final.add(String("ax_GEN_CPU_",				g_ws->cpu));
-	cpp_defines._final.add(String("ax_GEN_OS_",					g_ws->os));
-	cpp_defines._final.add(String("ax_GEN_GENERATOR_",			g_ws->generator));
-	cpp_defines._final.add(String("ax_GEN_COMPILER_",			g_ws->compiler));
-	cpp_defines._final.add(String("ax_GEN_CONFIG_",				this->name));
-	cpp_defines._final.add(String("ax_GEN_PLATFORM_NAME=\"",	g_ws->_platformName,"\""));
+	cpp_defines._final.add(String("AX_GEN_CPU_",				g_ws->cpu));
+	cpp_defines._final.add(String("AX_GEN_OS_",					g_ws->os));
+	cpp_defines._final.add(String("AX_GEN_GENERATOR_",			g_ws->generator));
+	cpp_defines._final.add(String("AX_GEN_COMPILER_",			g_ws->compiler));
+	cpp_defines._final.add(String("AX_GEN_CONFIG_",				this->name));
+	cpp_defines._final.add(String("AX_GEN_PLATFORM_NAME=\"",	g_ws->_platformName,"\""));
 
 	if (_project) {
 		auto& proj = *_project;
-		cpp_defines._final.add(String("ax_GEN_PROJECT_",		proj.name));
-		cpp_defines._final.add(String("ax_GEN_TYPE_",			proj.input.type));
+		cpp_defines._final.add(String("AX_GEN_PROJECT_",		proj.name));
+		cpp_defines._final.add(String("AX_GEN_TYPE_",			proj.input.type));
 
 		String tmp;
 
