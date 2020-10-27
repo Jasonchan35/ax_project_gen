@@ -9,13 +9,13 @@ Workspace::Workspace() {
 	g_ws = this;
 
 //======== CPU ========
-#if ax_CPU_x86
+#if AX_CPU_X86
 	host_cpu = "x86";
 
-#elif ax_CPU_x86_64
+#elif AX_CPU_X86_64
 	host_cpu = "x86_64";
 
-#elif ax_CPU_ARM
+#elif AX_CPU_ARM
 	host_cpu = "arm";
 
 #else
@@ -23,27 +23,27 @@ Workspace::Workspace() {
 #endif
 
 //======== OS ==========
-#if ax_OS_Windows
+#if AX_OS_WINDOWS
 	host_os = "windows";
 	generator = "vs2015";
 
-#elif ax_OS_Linux
+#elif AX_OS_LINUX
 	host_os = "linux";
 	generator = "makefile";
 
-#elif ax_OS_MacOSX
+#elif AX_OS_MACOSX
 	host_os = "macosx";
 	generator = "xcode";
 
-#elif ax_OS_MinGW
+#elif AX_OS_MINGW
 	host_os = "mingw";
 	generator = "makefile";
 
-#elif ax_OS_Cygwin
+#elif AX_OS_CYGWIN
 	host_os = "cygwin";
 	generator = "makefile";
 
-#elif ax_OS_FreeBSD
+#elif AX_OS_FREEBSD
 	host_os = "freebsd";
 	generator = "makefile";
 

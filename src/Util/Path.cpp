@@ -145,7 +145,7 @@ void Path::getRel(String& out_str, const StrView& path, const StrView& relativeT
 }
 
 void Path::getCurrentDir(String& out_dir) {
-#if ax_OS_Windows
+#if AX_OS_WINDOWS
 	wchar_t  tmp[ kPathMax + 1 ];
 	auto n = ::GetCurrentDirectory((DWORD)kPathMax, tmp);
 	tmp[n] = 0;
@@ -181,7 +181,7 @@ bool Path::makeDir(const StrView& path) {
 		makeDir(parent);
 	}
 
-#if ax_OS_Windows
+#if AX_OS_WINDOWS
 	WString pathW;
 	pathW.setUtf(path);
 	if (0 == ::CreateDirectoryW(pathW.c_str(), nullptr)) {
@@ -197,7 +197,7 @@ bool Path::makeDir(const StrView& path) {
 }
 
 bool Path::fileExists(const StrView& path) {
-#if ax_OS_Windows
+#if AX_OS_WINDOWS
 	WString pathW;
 	pathW.setUtf(path);
     DWORD dwAttrib = ::GetFileAttributes(pathW.c_str());
@@ -212,7 +212,7 @@ bool Path::fileExists(const StrView& path) {
 }
 
 bool Path::dirExists(const StrView& path) {
-#if ax_OS_Windows
+#if AX_OS_WINDOWS
 	WString pathW;
 	pathW.setUtf(path);
     DWORD dwAttrib = ::GetFileAttributes(pathW.c_str());

@@ -5,7 +5,7 @@
 namespace ax_gen {
 
 
-#if ax_OS_Windows //------------------------------------------------------------------
+#if AX_OS_WINDOWS //------------------------------------------------------------------
 
 class Dir : public NonCopyable {
 public:

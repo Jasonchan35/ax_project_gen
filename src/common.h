@@ -22,7 +22,7 @@
 //#define ax_fallthrough [[fallthrough]]
 #define ax_fallthrough //nothing
 
-#if ax_OS_Windows
+#if AX_OS_WINDOWS
 	#include <Windows.h>
 	#include <Shlwapi.h> // wnsprintf
 	#pragma comment(lib, "Shlwapi.lib")

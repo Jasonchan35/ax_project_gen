@@ -51,7 +51,7 @@ void Generator_xcode::onBuild() {
 }
 
 void Generator_xcode::onIde() {
-#if ax_OS_MacOSX
+#if AX_OS_MACOSX
 	String cmd("open \"", g_ws->genData_xcode.xcworkspace, "\"");
 	Log::info("cmd> ", cmd);
 	::system(cmd.c_str());

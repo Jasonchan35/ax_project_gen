@@ -17,12 +17,12 @@ int System::cpuCount() {
 void System::shellOpen(const StrView& path) {
 	Log::info("shellOpen> ", path);
 
-#if ax_OS_Windows
+#if AX_OS_WINDOWS
 	WString pathW;
 	pathW.setUtf(path);
 	::ShellExecute(nullptr, L"open", pathW.c_str(), nullptr, nullptr, SW_SHOW);
 
-#elif ax_OS_MacOSX
+#elif AX_OS_MACOSX
 
 	String cmd("open \"", path, "\"");
 	::system(cmd.c_str());
@@ -34,7 +34,7 @@ void System::shellOpen(const StrView& path) {
 }
 
 int System::createProcess(const StrView& exe, const StrView& args) {
-#if ax_OS_Windows
+#if AX_OS_WINDOWS
 	String cmd("\"", exe, "\" ", args);
 	Log::info("run> ", cmd);
 
