@@ -8,8 +8,8 @@ namespace ax_gen {
 class Error : public std::exception {
 public:
 	template<typename... ARGS>
-	Error(ARGS&&... args) {
-		Log::error(std::forward<ARGS>(args)...);
+	Error(const ARGS&... args) {
+		Log::error(args...);
 	}
 };
 

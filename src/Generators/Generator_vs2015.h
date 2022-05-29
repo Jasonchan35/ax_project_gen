@@ -82,4 +82,13 @@ public:
 	}
 };
 
+class Generator_vs2022 : public Generator_vs2015 {
+public:
+	virtual StrView slnFileHeader() override;
+	virtual StrView vcxprojToolsVersion() override { return StrView("17.0"); }
+	virtual StrView visualc_PlatformToolset() override {
+		return StrView("v143");
+	}
+};
+
 } //namespace

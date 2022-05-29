@@ -104,6 +104,9 @@ int App::_run(int argc, char* argv[]) {
 	}else if (workspace.generator == "vs2019") {
 		_generator.reset(new Generator_vs2019());
 
+	}else if (workspace.generator == "vs2022") {
+		_generator.reset(new Generator_vs2022());
+
 	}else if (workspace.generator == "makefile") { 
 		_generator.reset(new Generator_makefile());
 
