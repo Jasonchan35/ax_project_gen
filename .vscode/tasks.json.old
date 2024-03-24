@@ -1,0 +1,35 @@
+{
+    "version": "0.1.0",
+    "isShellCommand": true,
+    "showOutput": "always",
+    "echoCommand": true,
+    "suppressTaskName": true,
+
+    "linux": {
+        "command": "sh",
+        "args": ["examples/001/test_makefile.sh", "-build", "-run"]
+    },
+    "osx": {
+        "command": "sh",
+        "args": ["examples/001/test_xcode.sh"]
+    },
+    "windows": {
+        "command": "call",
+        "args": ["examples/001/test_vs2015.bat"]
+    },
+    "tasks": [
+        {
+            "taskName": "build",
+            "showOutput": "always",            
+            "isBuildCommand": true
+        },
+        {
+            "taskName": "test",
+            "showOutput": "always",
+            "args": ["-open"],
+            "linux": {
+                "args": ["-run"]
+            }
+        }
+    ]
+}

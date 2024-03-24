@@ -1,9 +1,6 @@
 {
-    "version": "0.1.0",
-    "isShellCommand": true,
-    "showOutput": "always",
-    "echoCommand": true,
-    "suppressTaskName": true,
+	"version": "2.0.0",
+	"echoCommand": true,
 
     "linux": {
         "command": "sh",
@@ -18,18 +15,26 @@
         "args": ["examples/001/test_vs2015.bat"]
     },
     "tasks": [
-        {
-            "taskName": "build",
-            "showOutput": "always",            
-            "isBuildCommand": true
-        },
-        {
-            "taskName": "test",
-            "showOutput": "always",
-            "args": ["-open"],
-            "linux": {
-                "args": ["-run"]
-            }
-        }
-    ]
+		{
+			"label": "build",
+			"type": "shell",
+			"problemMatcher": [],
+			"group": {
+				"_id": "build",
+				"isDefault": false
+			}
+		},
+		{
+			"label": "test",
+			"type": "shell",
+			"args": [
+				"-open"
+			],
+			"problemMatcher": [],
+			"group": {
+				"_id": "test",
+				"isDefault": false
+			}
+		}
+	]
 }

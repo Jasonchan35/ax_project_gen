@@ -138,4 +138,5 @@ run `make` under ./project/makefile folder
 * Pre / Post build step for VS, Xcode, Makefile
 
 # If you're interested to
-* [Another generator again ? Why Not XYZ ... please click here](doc/Why_Not_XYZ.md)
+* [Another generator again ? Why Not XYZ](doc/Why_Not_XYZ.md)
+* [Why Not CMake](doc/Why_Not_CMake.md)
